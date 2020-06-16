@@ -1,0 +1,46 @@
+PROFIL 
+- sejarah perusahaan
+- kontak perusahaan
+- daftar alat berat dan spessifikasinya (jml nya saja)->Tersedia,Disewa,Total
+-
+
+
+ALAT BERAT 
+- kode aset alat berat 
+(
+-nama
+-deskripsi
+-biaya_sewa_normal
+-biaya_sewa_khusus (apabila tidak 0/null kosong, maka automatis harga ini yang dipakai)
+-status (‘tersedia’, ’tidak tersedia’)
+)
+
+(ex, Hino dutro dump 110 HD dan 130 HD  = DD110HD dan DD130HD, 
+Hino ranger cargo FL 265 JW 58 WB FLAT DECK dan 265 JW 13 WB FALT DECK = RCFL26558 dan RCFL26513) dll
+- status 
+
+PEGAWAI (sopir)
+-kode pegawai (berdasarkan tahun masuk bekerja) 
+- button aksi untuk menambah data pegawai dari data awal (data yg lama tetap tersimpan, ex alamat rumah ada dua dan no tlpn ada dua atau lebih)
+- terdapat status sedang terpakai atau tidaknya pada tanggal tersebut
+
+PELANGGAN  (cuma pendataan, tidak punya akses login / cms)
+- sama kek pegawai
+-pelanggan itu dia datang langsung kedalam kantornya untuk sewa
+
+PENYEWAAN 
+- tgl pegembalian tdk boleh kurang dari tgl penyewaan (main di status)
+- nama supir dan alat berat yang tampil hanya yang tersedia saja pada range tanggal tersebut
+-popup pelunasan (if tidak lunas = ubah status transaksi)
+
+perhitungan transaksi penyewaan :
+harga alat berat di kali berapa lama sewa di tambah 2% pajak untuk setiap penyewaan alat, + sewa sopir (sopir)
+
+-biaya supir dipotong sekian % untuk operasional perusahaan (% dinamis). => Pemasukan
+-tambah biaya pengeluaran untuk perawatan alat berat => Pengeluaran
+-tiap pajak penyewaan 2% nanti Masuk kedalam daftar pajak
+
+
+
+COA 
+- semua nama akun dan nomor akun

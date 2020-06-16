@@ -1,0 +1,5 @@
+-----------------Database-----------------
+-Rombak table transaksi->ubah jadi penyewaan->ubah tgl_transaksi jadi default curdate
+-Tambah detail sewa untuk nampung kelengkapan
+-Tambah table informasi pegawai untuk nampung data pribadi yg lebih dari 1
+
