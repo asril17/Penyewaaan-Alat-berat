@@ -63,7 +63,7 @@
                         <tr>
                             <td><?= $pj['kd_penyewaan'] ?></td>
                             <td><?= $pj['nominal_pajak'] ?></td>
-                            <td><?= $pj['tgl_transaksi'] ?></td>
+                            <td><?= date("d-m-Y", strtotime($pj['tgl_transaksi']));  ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

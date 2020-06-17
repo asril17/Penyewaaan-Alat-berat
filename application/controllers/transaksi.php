@@ -285,6 +285,7 @@ class transaksi extends MY_Controller
             'pegawai' => $this->m_transaksi->getDataPegawai(),
             'tambahanBiaya' => $this->db->get('biaya_operasional')->result(),
             'pengeluaran'   => $pengeluaran,
+            'alat_berat'    => $this->db->get('alat_berat')->result(),
         ];
 
         if ($this->input->post()) {
@@ -297,6 +298,8 @@ class transaksi extends MY_Controller
 
     public function tambahPengeluaran()
     {
+
+
         $pages = 'transaksi/formpengeluaran';
         $data = [
             'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
@@ -308,16 +311,62 @@ class transaksi extends MY_Controller
         ];
 
         if ($this->input->post()) {
+            $this->form_validation->set_rules('tgl_pengeluaran', 'Tanggal Pengeluaran', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('id_alat_berat', 'Alat Berat', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('nominal', 'Nominal', 'required|numeric', [
+                'required' => 'kolom %s tidak boleh kosong',
+                'numeric' => 'kolom %s Harus berupa angka'
+            ]);
+
+            if ($this->form_validation->run() == false) {
+                $this->template->layout('transaksi/tambahPengeluaran');
+            } else {
+                $postPengeluaran = [
+                    'alat_berat_id' => $this->input->post('id_alat_berat'),
+                    'nominal' => $this->input->post('nominal'),
+                    'tgl_pengeluaran' => $this->input->post('tgl_pengeluaran'),
+                    'deskripsi' => $this->input->post('deskripsi'),
+                ];
+                $this->db->insert('transaksi_pengeluaran', $postPengeluaran);
+                $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
+                $this->session->set_flashdata('message', $alert);
+                redirect('transaksi/pengeluaran');
+            }
+        }
+
+        $this->template->layout($pages, $data);
+    }
+    public function editPengeluaran()
+    {
+
+        $this->form_validation->set_rules('tgl_pengeluaran', 'Tanggal Pengeluaran', 'required', [
+            'required' => 'kolom %s tidak boleh kosong'
+        ]);
+        $this->form_validation->set_rules('alat_berat', 'Alat Berat', 'required', [
+            'required' => 'kolom %s tidak boleh kosong'
+        ]);
+        $this->form_validation->set_rules('nominal', 'Nominal', 'required|numeric', [
+            'required' => 'kolom %s tidak boleh kosong',
+            'numeric' => 'kolom %s Harus berupa angka'
+        ]);
+
+        if ($this->form_validation->run() == false) {
+            $this->template->layout('transaksi/pengeluaran');
+        } else {
             $postPengeluaran = [
-                'alat_berat_id' => $this->input->post('id_alat_berat'),
+                'alat_berat_id' => $this->input->post('alat_berat'),
                 'nominal' => $this->input->post('nominal'),
                 'tgl_pengeluaran' => $this->input->post('tgl_pengeluaran'),
                 'deskripsi' => $this->input->post('deskripsi'),
             ];
-            $this->db->insert('transaksi_pengeluaran', $postPengeluaran);
+            $this->db->where('id', $this->input->post('id'))->update('transaksi_pengeluaran', $postPengeluaran);
+            $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
+            $this->session->set_flashdata('message', $alert);
             redirect('transaksi/pengeluaran');
         }
-
-        $this->template->layout($pages, $data);
     }
 }

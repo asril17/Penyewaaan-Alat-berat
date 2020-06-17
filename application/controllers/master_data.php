@@ -39,6 +39,39 @@
                 redirect('master_data/coa');
             }
         }
+        public function edit_coa()
+        {
+
+            $pages = 'master_data/coa';
+            $data = [
+                'title'     => 'Master Data',
+                'subtitle'     => 'Data Chart Of Account',
+                'coa'        => $this->m_master_data->get_data('coa'),
+                'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+            ];
+            $this->form_validation->set_rules('nama_akun', 'Nama Akun', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('header_akun', 'Header Akun', 'required|numeric', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('kd_akun', 'Kode Akun', 'required|numeric', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            if ($this->form_validation->run() == false) {
+                $this->template->layout($pages, $data);
+            } else {
+                $inputan = [
+                    'kode_akun'     => $_POST['kd_akun'],
+                    'nama_akun'     => $_POST['nama_akun'],
+                    'header_akun'    => $_POST['header_akun']
+                ];
+                $this->db->where('kode_akun', $_POST['kd_akun'])->update('coa', $inputan);
+                $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
+                $this->session->set_flashdata('message', $alert);
+                redirect('master_data/coa');
+            }
+        }
 
         public function alat_berat()
         {
@@ -61,10 +94,13 @@
             $this->form_validation->set_rules('kd_tipe', 'Kode tipe', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
+            $this->form_validation->set_rules('jenis', 'Jenis', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
             $this->form_validation->set_rules('harga_sewa', 'Harga Sewa', 'required|numeric', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
-            $this->form_validation->set_rules('satuan', 'Satuan', 'required|alpha_numeric', [
+            $this->form_validation->set_rules('harga_sewa_khusus', 'Harga Sewa Khusus', 'required|alpha_numeric', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
             if ($this->form_validation->run() == false) {
@@ -73,12 +109,61 @@
                 $inputan = [
                     'kd_tipe'       => $_POST['kd_tipe'],
                     'nama_alber'    => $_POST['nama_alber'],
-                    'jenis'    => $_POST['jenis'],
+                    'jenis_id'    => $_POST['jenis'],
                     'merk'          => $_POST['merk'],
                     'harga_sewa'    => $_POST['harga_sewa'],
-                    'satuan'          => $_POST['satuan']
+                    'harga_sewa_khusus'          => $_POST['harga_sewa_khusus']
                 ];
                 $this->m_master_data->insert_data('alat_berat', $inputan);
+                $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
+                $this->session->set_flashdata('message', $alert);
+                redirect('master_data/alat_berat');
+            }
+        }
+        public function edit_alat_berat()
+        {
+            $pages = 'master_data/alat_berat';
+            $data = [
+                'title'     => 'Master Data',
+                'subtitle'     => 'Data Alat Berat',
+                'alat_berat'        => $this->db->join('jenis_alat_berat', 'jenis_alat_berat.id = alat_berat.jenis_id')
+                    ->get('alat_berat')->result_array(),
+                'jenis_alat_berat'        => $this->m_master_data->get_data('jenis_alat_berat'),
+                'kode'              => $this->m_master_data->kode('kd_tipe', 'alat_berat', 'AB'),
+                'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+            ];
+            $this->form_validation->set_rules('nama_alber', 'Nama Alat Berat', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('merk', 'Merk', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('kd_tipe', 'Kode tipe', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('jenis', 'Jenis', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('harga_sewa', 'Harga Sewa', 'required|numeric', [
+                'required' => 'kolom %s tidak boleh kosong',
+                'numeric' => 'kolom %s harus berupa angka'
+            ]);
+            $this->form_validation->set_rules('harga_sewa_khusus', 'Harga Sewa Khusus', 'required|numeric', [
+                'required' => 'kolom %s tidak boleh kosong',
+                'numeric' => 'kolom %s harus berupa angka'
+            ]);
+            if ($this->form_validation->run() == false) {
+                $this->template->layout($pages, $data);
+            } else {
+                $inputan = [
+                    'kd_tipe'       => $_POST['kd_tipe'],
+                    'nama_alber'    => $_POST['nama_alber'],
+                    'jenis_id'    => $_POST['jenis'],
+                    'merk'          => $_POST['merk'],
+                    'harga_sewa'    => $_POST['harga_sewa'],
+                    'harga_sewa_khusus'          => $_POST['harga_sewa_khusus']
+                ];
+                $this->db->where('id', $_POST['id'])->update('alat_berat', $inputan);
                 $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
                 $this->session->set_flashdata('message', $alert);
                 redirect('master_data/alat_berat');

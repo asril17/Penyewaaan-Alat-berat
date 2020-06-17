@@ -1,9 +1,9 @@
 <div class="form-error mt-2">
-    <?php echo form_error('kd_tipe', '<div class="alert alert-danger" role="alert">', '</div>') ?>
-    <?php echo form_error('nama_alber', '<div class="alert alert-danger" role="alert">', '</div>') ?>
-    <?php echo form_error('merk', '<div class="alert alert-danger" role="alert">', '</div>') ?>
-    <?php echo form_error('harga_sewa', '<div class="alert alert-danger" role="alert">', '</div>') ?>
-    <?php echo form_error('satuan', '<div class="alert alert-danger" role="alert">', '</div>') ?>
+    <?php if (validation_errors()) { ?>
+        <div class="alert alert-danger" role="alert">
+            <?php echo validation_errors(); ?>
+        </div>
+    <?php } ?>
     <?php echo $this->session->flashdata('message'); ?>
 </div>
 <div class="card mt-3">
@@ -32,7 +32,11 @@
                         <td><?= $row['kode_jenis'] ?></td>
                         <td><?= $row['jenis'] ?></td>
                         <td>
-                            <a href="javascript:void(0)" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" title="edit" onclick="edit('<?= $row['id'] ?>', '<?= $row['kode_jenis'] ?>', '<?= $row['jenis'] ?>',)"><i class="fa fa-edit"></i></a>
+                            <a href="javascript:void(0)" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" title="edit" onclick="edit(
+                                '<?= $row['id'] ?>',
+                                '<?= $row['kode_jenis'] ?>',
+                                '<?= $row['jenis'] ?>',
+                                )"><i class="fa fa-edit"></i></a>
                         </td>
                     </tr>
                 <?php } ?>
