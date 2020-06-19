@@ -13,7 +13,7 @@
         <div class="sidebar-menu">
             <div class="sidebar-header">
                 <div class="logo">
-                    <a href="index.html"><img src="<?= base_url('assets/images/icon/logonew.png') ;?>" ></a>
+                    <a href="index.html"><img src="<?= base_url('assets/images/icon/logonew.png'); ?>"></a>
                 </div>
             </div>
             <div class="main-menu">
@@ -30,31 +30,69 @@
                         $menu = $this->db->query($queryMenu)->result_array();
                         ?>
                         <ul class="metismenu" id="menu">
-                            <?php foreach ($menu as $m) : ?>
-                                <?php
-                                    $menuId = $m['id'];
-                                    $querySubmenu = "SELECT * 
-                      From `user_sub_menu` JOIN `user_menu`
-                      on `user_sub_menu`.`menu_id`=`user_menu`.`id`
-                      where `user_sub_menu`.`menu_id`=$menuId
-                      and `user_sub_menu`.`is_active`=1";
-                                    $submenu = $this->db->query($querySubmenu)->result_array();
-                                    ?>
-                                <?php foreach ($submenu as $sm) : ?>
-                                    <?php if ($title == $sm['title']) : ?>
-                                        <li class="active">
-                                        <?php else : ?>
-                                        <li>
-                                        <?php endif; ?>
-                                        <a href="<?= base_url($sm['url']) ?>">
-                                            <i class="<?= $sm['icon'] ?>"></i> <span><?php echo $sm['title'] ?></span></a>
-
-                                        </span>
-                                        </a>
-                                        </li>
-                                    <?php endforeach; ?>
-                                <?php endforeach; ?>
+                            <?php foreach ($menu as $m) :
+                                $menuId = $m['id'];
+                                $querySubmenu = "SELECT * From `user_sub_menu` JOIN `user_menu` on `user_sub_menu`.`menu_id`=`user_menu`.`id` where `user_sub_menu`.`menu_id`=$menuId and `user_sub_menu`. `is_active`=1";
+                                $submenu = $this->db->query($querySubmenu)->result_array();
+                                if ($m['id'] == '2') : ?>
+                                    <li class="active">
+                                        <a href="<?= base_url('dashboard') ?>" aria-expanded="true"><i class="ti-dashboard"></i><span>dashboard</span></a>
+                                    </li>
+                                <?php elseif ($m['id'] == '5') : ?>
+                                    <li>
+                                        <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>Master Data</span></a>
+                                        <ul class="collapse">
+                                            <?php foreach ($submenu as $sm) : ?>
+                                                <?php if ($title == $sm['title']) : ?>
+                                                    <li class="active">
+                                                    <?php else : ?>
+                                                    <li>
+                                                    <?php endif; ?>
+                                                    <a href="<?= base_url($sm['url']) ?>">
+                                                        <i class="<?= $sm['icon'] ?>"></i> <span><?php echo $sm['title'] ?></span>
+                                                    </a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                <?php elseif ($m['id'] == '6') : ?>
+                                    <li>
+                                        <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>Transaksi</span></a>
+                                        <ul class="collapse">
+                                            <?php foreach ($submenu as $sm) : ?>
+                                                <?php if ($title == $sm['title']) : ?>
+                                                    <li class="active">
+                                                    <?php else : ?>
+                                                    <li>
+                                                    <?php endif; ?>
+                                                    <a href="<?= base_url($sm['url']) ?>">
+                                                        <i class="<?= $sm['icon'] ?>"></i> <span><?php echo $sm['title'] ?></span>
+                                                    </a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                <?php elseif ($m['id'] == '7') : ?>
+                                    <li>
+                                        <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>Laporan</span></a>
+                                        <ul class="collapse">
+                                            <?php foreach ($submenu as $sm) : ?>
+                                                <?php if ($title == $sm['title']) : ?>
+                                                    <li class="active">
+                                                    <?php else : ?>
+                                                    <li>
+                                                    <?php endif; ?>
+                                                    <a href="<?= base_url($sm['url']) ?>">
+                                                        <i class="<?= $sm['icon'] ?>"></i> <span><?php echo $sm['title'] ?></span>
+                                                    </a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
                         </ul>
+
                     </nav>
                 </div>
             </div>

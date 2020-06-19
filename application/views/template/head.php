@@ -27,4 +27,9 @@
     <!-- modernizr css -->
     <script src="<?= base_url('assets') ?>/js/vendor/modernizr-2.8.3.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/jquery-3.4.1.min.js"></script>
+    <style>
+        tr>th {
+            text-align: center;
+        }
+    </style>
 </head>

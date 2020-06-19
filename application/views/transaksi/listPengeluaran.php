@@ -26,11 +26,11 @@
                     $no++; ?>
                     <tr>
                         <th><?= $no ?></th>
-                        <td><?= date("d-m-Y", strtotime($row['tgl_pengeluaran']));  ?></td>
+                        <td class="text-right"><?= date("d-m-Y", strtotime($row['tgl_pengeluaran']));  ?></td>
                         <td><?= $row['nama_alber'] ?></td>
-                        <td><?= format_rp($row['nominal']) ?></td>
+                        <td class="text-right"><?= format_rp($row['nominal']) ?></td>
                         <td><?= $row['deskripsi'] ?></td>
-                        <td>
+                        <td class="text-center">
                             <a href="javascript:void()" data-toggle="modal" data-target="#exampleModal" class="btn btn-sm btn-warning" title="edit" onclick="edit(
                                 '<?= $row['id'] ?>',
                                 '<?= $row['tgl_pengeluaran'] ?>',

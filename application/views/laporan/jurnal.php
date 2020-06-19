@@ -62,27 +62,27 @@
                 </thead>
                 <tbody>
                     <?php
-                        $spasi = '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
-                        foreach ($jurnal as $row) : ?>
+                    $spasi = '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
+                    foreach ($jurnal as $row) : ?>
                         <tr>
                             <td><?php echo $row['tgl_jurnal'] ?></td>
                             <?php if ($row['posisi_dr_cr'] == 'debit') : ?>
                                 <td><?php echo $row['nama_akun'] ?></td>
                                 <td><?php echo $row['kode_akun'] ?></td>
-                                <td><?php echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.') ?></td>
+                                <td class="text-right"><?php echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.') ?></td>
                                 <td></td>
                             <?php else : ?>
                                 <td><?php echo $spasi . $row['nama_akun'] ?></td>
                                 <td><?php echo $row['kode_akun'] ?></td>
                                 <td></td>
-                                <td><?php echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.') ?></td>
+                                <td class="text-right"><?php echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.') ?></td>
                             <?php endif ?>
                         </tr>
                     <?php endforeach; ?>
                     <tr>
                         <td colspan="3" align="center"><b>Total</b></td>
-                        <td><?php echo "Rp. " . number_format($debit, 2, ',', '.') ?></td>
-                        <td><?php echo 'Rp. ' . number_format($credit, 2, ',', '.') ?></td>
+                        <td class="text-right"><?php echo "Rp. " . number_format($debit, 2, ',', '.') ?></td>
+                        <td class="text-right"><?php echo 'Rp. ' . number_format($credit, 2, ',', '.') ?></td>
                     </tr>
                 </tbody>
             </table>

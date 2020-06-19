@@ -26,6 +26,7 @@ class auth extends CI_controller
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 		$user = $this->db->get_where('user', ['username' => $username])->row_array();
+		$role = $this->db->get_where('user_role', ['id' => $user['role_id']])->row_array();
 		//cek email apakah sudah teregister atau belum
 		if ($user) {
 			//cek akun apakah aktif atau tidak aktiv
@@ -36,12 +37,13 @@ class auth extends CI_controller
 						'email'   => $user['email'],
 						'role_id' => $user['role_id'],
 						'userId'  => $user['id_user'],
+						'role' => $role['role']
 					];
 					$this->session->set_userdata($data);
 					if ($user['role_id'] == 1) {
-						redirect('index.php/admin');
+						redirect('index.php/dashboard');
 					} else {
-						redirect('index.php/laporan/lihat_jurnal');
+						redirect('index.php/dashboard');
 					}
 				} else {
 					$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">

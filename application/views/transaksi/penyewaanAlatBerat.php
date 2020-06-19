@@ -9,7 +9,7 @@
         </a>
     </div>
     <div class="card-body">
-        <table id="example" class="table table-bordered">
+        <table id="example" class="table-responsive table-bordered">
             <thead class="text-capitalize">
                 <tr>
                     <th>No</th>
@@ -32,21 +32,19 @@
                         <td><?= $row['kd_penyewaan'] ?></td>
                         <td><?= $row['tgl_mulai'] ?></td>
                         <td><?= $row['tgl_berakhir'] ?></td>
-                        <td><?= format_rp($row['nominal']) ?></td>
-                        <td><?= format_rp($row['jml_bayar']) ?></td>
-                        <td><?= format_rp($row['sisa']) ?></td>
-                        <td><?php echo ($row['status'] == 0)?'Belum Lunas':'Sudah Lunas' ?></td>
-                        <td align="center"> 
-
-                            
-                        <?php if ($row['status']==1) { ?>
-                                <button type="button" class="btn btn-primary" disabled  > Sudah Lunas </button> 
+                        <td class="text-right"><?= format_rp($row['nominal']) ?></td>
+                        <td class="text-right"><?= format_rp($row['jml_bayar']) ?></td>
+                        <td class="text-right"><?= format_rp($row['sisa']) ?></td>
+                        <td class="text-right"><?php echo ($row['status'] == 0) ? 'Belum Lunas' : 'Sudah Lunas' ?></td>
+                        <td align="center">
+                            <?php if ($row['status'] == 1) { ?>
+                                <button type="button" class="btn btn-primary" disabled> Sudah Lunas </button>
                             <?php } else { ?>
-                                <button type="button" class="btn btn-Warning" onclick="location.assign('<?php echo base_url()?>index.php/transaksi/acc/<?php echo $row['kd_penyewaan'] ?>')" > Lakukan Pelunasan </button> 
-                             <?php } ?>   
+                                <button type="button" class="btn btn-Warning" onclick="location.assign('<?php echo base_url() ?>index.php/transaksi/acc/<?php echo $row['kd_penyewaan'] ?>')"> Lakukan Pelunasan </button>
+                            <?php } ?>
                         </td>
 
-                        
+
                     </tr>
                 <?php } ?>
             </tbody>

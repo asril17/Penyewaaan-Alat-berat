@@ -59,15 +59,24 @@ class transaksi extends MY_Controller
                 $diff = date_diff($date1, $date2);
                 $hari = $diff->d;
 
-                if (!empty($this->input->post('harga_umum'))) {
+                // if (!empty($this->input->post('harga_umum'))) {
+                //     $harga_umum  = intval($this->input->post('harga_umum'));
+
+                //     $harga_sewa = $harga_umum;
+                // }
+
+                // //jika harga khusus
+                // if (!empty($this->input->post('harga_khusus')) && $this->input->post('harga_khusus') !== 0) {
+                //     $harga_khusus = intval($this->input->post('harga_khusus'));
+                //     $harga_umum = 0;
+                //     $harga_sewa = $harga_khusus;
+                // }
+
+                if ($this->input->post('harga_khusus') <= 0) {
                     $harga_umum  = intval($this->input->post('harga_umum'));
-
                     $harga_sewa = $harga_umum;
-                }
-
-                //jika harga khusus
-                if (!empty($this->input->post('harga_sewa_khusus')) && $this->input->post('harga_sewa_khusus') !== 0) {
-                    $harga_khusus = intval($this->input->post('harga_sewa_khusus'));
+                } else {
+                    $harga_khusus = intval($this->input->post('harga_khusus'));
                     $harga_umum = 0;
                     $harga_sewa = $harga_khusus;
                 }

@@ -36,8 +36,8 @@
                         <td><?= $row['nama_alber'] ?></td>
                         <td><?= $row['jenis'] ?></td>
                         <td><?= $row['merk'] ?></td>
-                        <td><?= format_rp($row['harga_sewa'])  ?></td>
-                        <td>
+                        <td class="text-right"><?= format_rp($row['harga_sewa'])  ?></td>
+                        <td class="text-center">
                             <a href="javascript:void(0)" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" title="edit" onclick="edit(
                                 '<?= $row['id'] ?>',
                                 '<?= $row['kd_tipe'] ?>',
@@ -68,7 +68,7 @@
                     <div class="form-group">
                         <label>Kode tipe</label>
                         <input type="hidden" name="id" id="id">
-                        <input type="text" class="form-control" id="kd_tipe" name="kd_tipe" value="<?= $kode ?>" readonly>
+                        <input type="text" class="form-control" id="kd_tipe" name="kd_tipe" readonly>
                     </div>
                     <div class="form-group">
                         <label>Nama Alat Berat</label>
@@ -122,9 +122,11 @@
     }
 
     function tambah() {
-        let url_tambah = "<?= base_url('master_data/alat_berat') ?>"
-        $('#form').attr('action', url_tambah)
         $('#form').find('input[type="text"],select').val('');
+        let url_tambah = "<?= base_url('master_data/alat_berat') ?>"
+        $('#form').attr('action', url_tambah);
+        let kode = "<?= $kode ?>";
+        $('#kd_tipe').val(kode)
     }
     $(function() {
         $('#example').DataTable();

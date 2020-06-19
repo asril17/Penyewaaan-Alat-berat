@@ -257,7 +257,8 @@
                     'kd_pegawai'     => $_POST['kd_pegawai'],
                     'nama_pegawai'     => $_POST['nama_pegawai'],
                     'biaya'    => $_POST['biaya'],
-                    'no_telp'    => $_POST['no_telp']
+                    'no_telp'    => $_POST['no_telp'],
+                    'alamat'    => $_POST['alamat'],
                 ];
                 $this->m_master_data->insert_data('pegawai', $inputan);
                 $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
@@ -265,6 +266,43 @@
                 redirect('master_data/pegawai');
             }
         }
+        public function edit_pegawai()
+        {
+
+            $this->form_validation->set_rules('kd_pegawai', 'Kode Pegawai', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('nama_pegawai', 'Nama Pegawai', 'required|alpha', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('alamat', 'Alamat Pegawai', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('no_telp', 'No Telfon Pegawai', 'required|numeric', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            $this->form_validation->set_rules('biaya', 'Tarif Pegawai', 'required|numeric', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
+            if ($this->form_validation->run() == false) {
+                redirect('master_data/pegawai');
+            } else {
+                $inputan = [
+                    'kd_pegawai'     => $_POST['kd_pegawai'],
+                    'nama_pegawai'     => $_POST['nama_pegawai'],
+                    'biaya'    => $_POST['biaya'],
+                    'no_telp'    => $_POST['no_telp'],
+                    'alamat'    => $_POST['alamat'],
+                ];
+                $this->db->where('id', $_POST['id'])
+                    ->update('pegawai', $inputan);
+                $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
+                $this->session->set_flashdata('message', $alert);
+                redirect('master_data/pegawai');
+            }
+        }
+
+
         public function pelanggan()
         {
             $pages = 'master_data/pelanggan';

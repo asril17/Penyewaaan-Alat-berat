@@ -31,7 +31,7 @@
                         <th><?= $no ?></th>
                         <td><?= $row['kode_jenis'] ?></td>
                         <td><?= $row['jenis'] ?></td>
-                        <td>
+                        <td class="text-center">
                             <a href="javascript:void(0)" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" title="edit" onclick="edit(
                                 '<?= $row['id'] ?>',
                                 '<?= $row['kode_jenis'] ?>',
