@@ -33,7 +33,7 @@
                         <td><?= $row['jenis'] ?></td>
                         <td class="text-center">
                             <a href="javascript:void(0)" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" title="edit" onclick="edit(
-                                '<?= $row['id'] ?>',
+                                '<?= $row['id_jenis'] ?>',
                                 '<?= $row['kode_jenis'] ?>',
                                 '<?= $row['jenis'] ?>',
                                 )"><i class="fa fa-edit"></i></a>

@@ -45,7 +45,6 @@
                                 '<?= $row['jenis_id'] ?>',
                                 '<?= $row['merk'] ?>',
                                 '<?= $row['harga_sewa'] ?>',
-                                '<?= $row['harga_sewa_khusus'] ?>',
                                 )"><i class="fa fa-edit"></i></a>
                         </td>
                     </tr>
@@ -79,7 +78,7 @@
                         <select name="jenis" id="jenis" class="form-control">
                             <option value="" disabled selected>Pilih....</option>
                             <?php foreach ($jenis_alat_berat as $jab) : ?>
-                                <option value="<?= $jab['id'] ?>"><?= $jab['jenis'] ?></option>
+                                <option value="<?= $jab['id_jenis'] ?>"><?= $jab['jenis'] ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -91,10 +90,10 @@
                         <label>Harga Sewa</label>
                         <input type="text" class="form-control" name="harga_sewa" id="harga_sewa">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Harga Sewa khusus</label>
                         <input type="text" class="form-control" name="harga_sewa_khusus" id="harga_sewa_khusus">
-                    </div>
+                    </div> -->
                     <!-- <div class="form-group">
                         <label>Satuan</label>
                         <input type="text" class="form-control" name="satuan">
@@ -109,7 +108,7 @@
     </div>
 </div>
 <script>
-    function edit(id, kd_tipe, nama_alber, jenis, merk, harga_sewa, harga_sewa_khusus) {
+    function edit(id, kd_tipe, nama_alber, jenis, merk, harga_sewa) {
         let url_edit = "<?= base_url('master_data/edit_alat_berat') ?>"
         $('#form').attr('action', url_edit)
         $('#id').val(id)
@@ -118,7 +117,7 @@
         $('#jenis').val(jenis)
         $('#merk').val(merk)
         $('#harga_sewa').val(harga_sewa)
-        $('#harga_sewa_khusus').val(harga_sewa_khusus)
+        // $('#harga_sewa_khusus').val(harga_sewa_khusus)
     }
 
     function tambah() {

@@ -51,7 +51,7 @@ class laporan extends CI_controller
         $data = [
             'user'          => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             'title'         => 'Laporan',
-            'subtitle'      => 'List Data Jurnal',
+            'subtitle'      => 'List Data Daftar Pajak',
         ];
         $data['pajak'] = $this->db->join('transaksi', 'transaksi.id = daftar_pajak.transaksi_id')
             ->where('DATE_FORMAT(transaksi.tgl_transaksi,"%m")', $bulan)
@@ -92,6 +92,48 @@ class laporan extends CI_controller
         // var_dump($data['akun']);
         // die;
         $data['menu'] = 'ledger';
+        $this->template->layout($pages, $data);
+    }
+
+    public function laba_rugi()
+    {
+        $pages = 'laporan/laba_rugi';
+        if (isset($_POST['bulan']) && $_POST['tahun']) {
+            $bulan = $_POST['bulan'];
+            $tahun = $_POST['tahun'];
+        } else {
+            $bulan = '0';
+            $tahun = '0';
+        }
+        $data = [
+            'title' => 'Laporan',
+            'subtitle' => 'Laba Rugi',
+        ];
+        $data = [
+            'user'          => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+            'title'         => 'Laporan',
+            'subtitle'      => 'List Data Laba Rugi',
+        ];
+        $data['pendapatan_sewa'] = $this->db->select('SUM(jml_bayar) AS total_pendapatan')
+            ->where('MONTH(tgl_transaksi)', $bulan)
+            ->where('YEAR(tgl_transaksi)', $tahun)
+            ->get('transaksi')->row_array();
+        $data['pengeluaran'] = $this->db->select('SUM(nominal) AS total_pengeluaran')
+            ->where('MONTH(tgl_pengeluaran)', $bulan)
+            ->where('YEAR(tgl_pengeluaran)', $tahun)
+            ->get('transaksi_pengeluaran')->row_array();
+
+        $data['pendapatan_dll'] = $this->db->select('SUM(daftar_pemasukan_pegawai.nominal) AS total_dll')
+            ->join('daftar_pemasukan_pegawai', 'daftar_pemasukan_pegawai.transaksi_id = transaksi.id')
+            ->where('MONTH(tgl_transaksi)', $bulan)
+            ->where('YEAR(tgl_transaksi)', $tahun)
+            ->get('transaksi')->row_array();
+
+
+
+        // var_dump($data['sewa_supir']);
+        // die;
+        $data['menu'] = 'laba_rugi';
         $this->template->layout($pages, $data);
     }
 }

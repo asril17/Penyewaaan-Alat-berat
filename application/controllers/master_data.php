@@ -79,7 +79,7 @@
             $data = [
                 'title'     => 'Master Data',
                 'subtitle'     => 'Data Alat Berat',
-                'alat_berat'        => $this->db->join('jenis_alat_berat', 'jenis_alat_berat.id = alat_berat.jenis_id')
+                'alat_berat'        => $this->db->join('jenis_alat_berat', 'jenis_alat_berat.id_jenis = alat_berat.jenis_id')
                     ->get('alat_berat')->result_array(),
                 'jenis_alat_berat'        => $this->m_master_data->get_data('jenis_alat_berat'),
                 'kode'              => $this->m_master_data->kode('kd_tipe', 'alat_berat', 'AB'),
@@ -100,9 +100,9 @@
             $this->form_validation->set_rules('harga_sewa', 'Harga Sewa', 'required|numeric', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
-            $this->form_validation->set_rules('harga_sewa_khusus', 'Harga Sewa Khusus', 'required|alpha_numeric', [
-                'required' => 'kolom %s tidak boleh kosong'
-            ]);
+            // $this->form_validation->set_rules('harga_sewa_khusus', 'Harga Sewa Khusus', 'required|alpha_numeric', [
+            //     'required' => 'kolom %s tidak boleh kosong'
+            // ]);
             if ($this->form_validation->run() == false) {
                 $this->template->layout($pages, $data);
             } else {
@@ -112,7 +112,7 @@
                     'jenis_id'    => $_POST['jenis'],
                     'merk'          => $_POST['merk'],
                     'harga_sewa'    => $_POST['harga_sewa'],
-                    'harga_sewa_khusus'          => $_POST['harga_sewa_khusus']
+                    'harga_sewa_khusus'          => 0
                 ];
                 $this->m_master_data->insert_data('alat_berat', $inputan);
                 $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
@@ -122,11 +122,12 @@
         }
         public function edit_alat_berat()
         {
+
             $pages = 'master_data/alat_berat';
             $data = [
                 'title'     => 'Master Data',
                 'subtitle'     => 'Data Alat Berat',
-                'alat_berat'        => $this->db->join('jenis_alat_berat', 'jenis_alat_berat.id = alat_berat.jenis_id')
+                'alat_berat'        => $this->db->join('jenis_alat_berat', 'jenis_alat_berat.id_jenis = alat_berat.jenis_id')
                     ->get('alat_berat')->result_array(),
                 'jenis_alat_berat'        => $this->m_master_data->get_data('jenis_alat_berat'),
                 'kode'              => $this->m_master_data->kode('kd_tipe', 'alat_berat', 'AB'),
@@ -148,20 +149,22 @@
                 'required' => 'kolom %s tidak boleh kosong',
                 'numeric' => 'kolom %s harus berupa angka'
             ]);
-            $this->form_validation->set_rules('harga_sewa_khusus', 'Harga Sewa Khusus', 'required|numeric', [
-                'required' => 'kolom %s tidak boleh kosong',
-                'numeric' => 'kolom %s harus berupa angka'
-            ]);
+            // $this->form_validation->set_rules('harga_sewa_khusus', 'Harga Sewa Khusus', 'required|numeric', [
+            //     'required' => 'kolom %s tidak boleh kosong',
+            //     'numeric' => 'kolom %s harus berupa angka'
+            // ]);
             if ($this->form_validation->run() == false) {
                 $this->template->layout($pages, $data);
             } else {
+                // var_dump($_POST['harga_sewa']);
+                // die;
                 $inputan = [
                     'kd_tipe'       => $_POST['kd_tipe'],
                     'nama_alber'    => $_POST['nama_alber'],
                     'jenis_id'    => $_POST['jenis'],
                     'merk'          => $_POST['merk'],
                     'harga_sewa'    => $_POST['harga_sewa'],
-                    'harga_sewa_khusus'          => $_POST['harga_sewa_khusus']
+                    // 'harga_sewa_khusus'          => $_POST['harga_sewa_khusus']
                 ];
                 $this->db->where('id', $_POST['id'])->update('alat_berat', $inputan);
                 $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');

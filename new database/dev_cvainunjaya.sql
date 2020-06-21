@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 11 Jun 2020 pada 11.55
+-- Waktu pembuatan: 22 Jun 2020 pada 01.31
 -- Versi server: 10.4.6-MariaDB
 -- Versi PHP: 7.3.8
 
@@ -67,7 +67,8 @@ CREATE TABLE `alat_berat` (
 --
 
 INSERT INTO `alat_berat` (`id`, `kd_tipe`, `nama_alber`, `jenis_id`, `merk`, `harga_sewa`, `harga_sewa_khusus`, `biaya_sopir`, `foto`, `status`) VALUES
-(3, 'AB-001', 'Excava 200', 1, 'Pindad', 6720000, 0, 200000, NULL, 0);
+(3, 'AB-001', 'Excava 200', 1, 'Pindad', 6820000, 0, 200000, NULL, 0),
+(5, 'AB-002', 'Dump Truck', 2, 'dump dump', 10000000, 20000000, 0, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -166,7 +167,7 @@ INSERT INTO `daftar_pemasukan_pegawai` (`id`, `nominal`, `persen`, `transaksi_id
 --
 
 CREATE TABLE `jenis_alat_berat` (
-  `id` int(11) NOT NULL,
+  `id_jenis` int(11) NOT NULL,
   `kode_jenis` varchar(56) NOT NULL,
   `jenis` varchar(56) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -175,9 +176,10 @@ CREATE TABLE `jenis_alat_berat` (
 -- Dumping data untuk tabel `jenis_alat_berat`
 --
 
-INSERT INTO `jenis_alat_berat` (`id`, `kode_jenis`, `jenis`) VALUES
+INSERT INTO `jenis_alat_berat` (`id_jenis`, `kode_jenis`, `jenis`) VALUES
 (1, 'JB-001', 'EXCAVATOR'),
-(2, 'JB-002', 'DUMP TRUCK');
+(2, 'JB-002', 'DUMP TRUCK'),
+(4, 'JB-003', 'mole');
 
 -- --------------------------------------------------------
 
@@ -246,7 +248,7 @@ CREATE TABLE `pegawai` (
   `kd_pegawai` varchar(30) DEFAULT NULL,
   `nama_pegawai` varchar(30) DEFAULT NULL,
   `no_telp` varchar(12) DEFAULT NULL,
-  `no_hp` varchar(15) DEFAULT NULL,
+  `alamat` varchar(15) DEFAULT NULL,
   `status_sopir` int(1) NOT NULL,
   `biaya` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -255,11 +257,12 @@ CREATE TABLE `pegawai` (
 -- Dumping data untuk tabel `pegawai`
 --
 
-INSERT INTO `pegawai` (`id`, `kd_pegawai`, `nama_pegawai`, `no_telp`, `no_hp`, `status_sopir`, `biaya`) VALUES
-(1, 'SPR-001', 'Topik', '087675786876', NULL, 1, 0),
+INSERT INTO `pegawai` (`id`, `kd_pegawai`, `nama_pegawai`, `no_telp`, `alamat`, `status_sopir`, `biaya`) VALUES
+(1, 'SPR-001', 'Topik', '087675786876', NULL, 0, 0),
 (2, 'SPR-002', 'Bohim', '0989889494', NULL, 0, 200000),
 (4, 'SPR-003', 'Asril', '08814539943', NULL, 0, 0),
-(5, 'SPR-004', 'Bon', '098341234', NULL, 1, 250000);
+(5, 'SPR-004', 'Bon', '098341234', NULL, 0, 250000),
+(6, 'SPR-001', 'Topik', '087675786876', 'sadsad', 0, 500000);
 
 -- --------------------------------------------------------
 
@@ -458,7 +461,8 @@ CREATE TABLE `transaksi_pengeluaran` (
 
 INSERT INTO `transaksi_pengeluaran` (`id`, `alat_berat_id`, `nominal`, `deskripsi`, `tgl_pengeluaran`, `user_id`) VALUES
 (1, 3, 200000, 'Perbaikan Oli', '2020-05-30 17:00:00', NULL),
-(2, 3, 39000, 'Gani casing', '2020-06-09 17:00:00', NULL);
+(2, 3, 39000, 'Gani casing', '2020-06-09 17:00:00', NULL),
+(3, 3, 500000, 'sd', '2020-06-16 17:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -586,8 +590,7 @@ CREATE TABLE `user_sub_menu` (
 --
 
 INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active`) VALUES
-(1, 1, 'Hak Akses', 'index.php/admin/role', 'fa fa-lock', 1),
-(3, 4, 'Profil', 'index.php/master_data/profil', 'fa fa-user', 1),
+(3, 4, 'Profile', 'index.php/profile', 'fa fa-user', 1),
 (6, 5, 'Chart Of Account', 'index.php/master_data/coa', 'fa fa-book', 1),
 (7, 5, 'Alat Berat', 'index.php/master_data/alat_berat', 'fa fa-cog', 1),
 (8, 5, 'Pegawai', 'index.php/master_data/pegawai', 'fa fa-users', 1),
@@ -597,7 +600,9 @@ INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active
 (12, 7, 'Buku Besar', 'index.php/laporan/buku_besar', 'fa fa-book', 1),
 (13, 6, 'Transaksi Pengeluaran', 'index.php/transaksi/pengeluaran', 'fa fa-credit-card', 1),
 (14, 5, 'Jenis Alat Berat', 'index.php/master_data/jenis_alat_berat', 'fa fa-cog', 1),
-(15, 7, 'Daftar Pajak', 'index.php/laporan/daftar_pajak', 'fa fa-book', 1);
+(15, 7, 'Daftar Pajak', 'index.php/laporan/daftar_pajak', 'fa fa-book', 1),
+(16, 2, 'Dashboard', 'index.php/dashboard', 'fa fa-home', 1),
+(17, 7, 'Laba rugi', 'index.php/laporan/laba_rugi', 'fa fa-book', 1);
 
 -- --------------------------------------------------------
 
@@ -664,7 +669,7 @@ ALTER TABLE `daftar_pemasukan_pegawai`
 -- Indeks untuk tabel `jenis_alat_berat`
 --
 ALTER TABLE `jenis_alat_berat`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id_jenis`);
 
 --
 -- Indeks untuk tabel `jurnal`
@@ -770,7 +775,7 @@ ALTER TABLE `alamat_pegawai`
 -- AUTO_INCREMENT untuk tabel `alat_berat`
 --
 ALTER TABLE `alat_berat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `biaya_operasional`
@@ -794,7 +799,7 @@ ALTER TABLE `daftar_pemasukan_pegawai`
 -- AUTO_INCREMENT untuk tabel `jenis_alat_berat`
 --
 ALTER TABLE `jenis_alat_berat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_jenis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `jurnal`
@@ -806,7 +811,7 @@ ALTER TABLE `jurnal`
 -- AUTO_INCREMENT untuk tabel `pegawai`
 --
 ALTER TABLE `pegawai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `pelanggan`
@@ -842,7 +847,7 @@ ALTER TABLE `transaksi_new`
 -- AUTO_INCREMENT untuk tabel `transaksi_pengeluaran`
 --
 ALTER TABLE `transaksi_pengeluaran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`
@@ -872,7 +877,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT untuk tabel `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT untuk tabel `user_token`

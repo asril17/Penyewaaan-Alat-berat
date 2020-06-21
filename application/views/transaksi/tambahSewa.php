@@ -1,7 +1,7 @@
 <div class="form-error mt-2">
     <?php echo $this->session->flashdata('message'); ?>
 </div>
-<div class="card mt-3">
+<div class="card mt-3" id="sewa" style="display: block;">
     <div class="card-header">
         <?= $subtitle ?>
     </div>
@@ -22,7 +22,7 @@
                             <label for="">Nama Pelanggan * </label>
                         </div>
                         <div class="col-sm-8">
-                            <select name="kd_pelanggan" id="" class="form-control pelanggan">
+                            <select name="kd_pelanggan" id="" class="form-control pelanggan" required>
                                 <option value="">--Pilih Nama Pelanggan--</option>
                                 <?php foreach ($pl as $row) { ?>
                                     <option value="<?= $row['id'] ?>"><?= $row['nama_pelanggan'] ?></option>
@@ -38,7 +38,7 @@
                             <label for="">Tanggal Penyewaan *</label>
                         </div>
                         <div class="col-md-8">
-                            <input type="date" name="tgl_sewa" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>" class="form-control tgl_sewa">
+                            <input type="date" name="tgl_sewa" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>" class="form-control tgl_sewa" required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -46,7 +46,7 @@
                             <label for="">Tanggal Pengembalian *</label>
                         </div>
                         <div class="col-md-8">
-                            <input type="date" name="tgl_expired" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>" class="form-control tgl_expired">
+                            <input type="date" name="tgl_expired" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>" class="form-control tgl_expired" required>
                             <div class="text-danger"><?= form_error('tgl_expired', '<small class="text-danger pl-3">', '</small>') ?></div>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
                                 <label for="">Nama Alat Berat *</label>
                             </div>
                             <div class="col-sm-8">
-                                <select name="id_alatberat" id="" class="form-control alat_berat unique">
+                                <select name="id_alatberat" id="" class="form-control alat_berat unique" required>
                                     <option value="">--Pilih Nama Alat Berat--</option>
                                     <?php foreach ($alber as $row) { ?>
                                         <option value="<?= $row['id'] ?>"><?= $row['nama_alber'] ?></option>
@@ -95,7 +95,7 @@
                                 <label for="">Harga Sewa Khusus</label>
                             </div>
                             <div class="col-sm-8">
-                                <input readonly type="text" class="form-control harga_khusus" name="harga_khusus">
+                                <input type="text" class="form-control harga_khusus" name="harga_khusus" required>
                             </div>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                                 <label for="">Nama Supir *</label>
                             </div>
                             <div class="col-sm-8">
-                                <select name="kd_pegawai" class="form-control pegawai">
+                                <select name="kd_pegawai" class="form-control pegawai" required>
                                     <option value="">--Pilih Nama Supir--</option>
                                     <option value="1">Tanpa supir</option>
                                     <?php foreach ($pegawai as $row) { ?>
@@ -183,6 +183,10 @@
             </div> -->
         </form>
     </div>
+</div>
+
+<div class="row" id="setelah_sewa">
+
 </div>
 
 <script>
