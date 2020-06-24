@@ -23,6 +23,19 @@
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-3">
+					<label for="">Jenis Pengeluaran</label>
+				</div>
+				<div class="col-sm-9">
+					<select name="jenis_pengeluaran" id="" class="form-control">
+						<option value="" selected disabled>Plih jenis pengeluaran</option>
+						<option value="Alat berat">Alat Berat</option>
+						<option value="Pegawai">Pegawai</option>
+						<option value="Operasional">Operasional</option>
+					</select>
+				</div>
+			</div>
+			<!-- <div class="form-group row">
+				<div class="col-sm-3">
 					<label for="">Alat Berat*</label>
 				</div>
 				<div class="col-sm-9">
@@ -33,7 +46,7 @@
 						<?php endforeach ?>
 					</select>
 				</div>
-			</div>
+			</div> -->
 			<div class="form-group row">
 				<div class="col-sm-3">
 					<label for="">Nominal *</label>

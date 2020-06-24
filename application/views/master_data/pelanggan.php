@@ -96,10 +96,44 @@
         $('#kd_pelanggan').val(kd_pelanggan);
         $('#nama_pelanggan').val(nama_pelanggan);
         $('#alamat').val(alamat);
-        $('#no_telp').val(no_telp);
+        // $('#no_telp').val(no_telp);
         $('#no_telp_sebelum').val(no_telp);
     }
     $(function() {
         $('#example').DataTable();
+    });
+    $(document).ready(function() {
+        $('#form').validate({
+            rules: {
+                nama_pelanggan: {
+                    required: true
+                },
+                alamat: {
+                    required: true
+                },
+                no_telp: {
+                    required: true,
+                    digits: true
+                }
+            },
+            messages: {
+                nama_pelanggan: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                alamat: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                no_telp: {
+                    required: "Inputan tidak boleh kosong",
+                    digits: "Inputan harus angka"
+                }
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+            }
+        });
     });
 </script>

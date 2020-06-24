@@ -22,7 +22,7 @@
                     <th>Nama Alat Berat</th>
                     <th>Jenis Alat Berat</th>
                     <th>Merk</th>
-                    <th>Harga Sewa</th>
+                    <th>Harga Sewa per hari</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -129,5 +129,45 @@
     }
     $(function() {
         $('#example').DataTable();
+    });
+    $(document).ready(function() {
+        $('#form').validate({
+            rules: {
+                nama_alber: {
+                    required: true
+                },
+                jenis: {
+                    required: true
+                },
+                merk: {
+                    required: true
+                },
+                harga_sewa: {
+                    required: true,
+                    digits: true
+                }
+            },
+            messages: {
+                nama_alber: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                jenis: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                merk: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                harga_sewa: {
+                    required: "Inputan tidak boleh kosong",
+                    digits: "Inputan harus angka"
+                }
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+            }
+        });
     });
 </script>

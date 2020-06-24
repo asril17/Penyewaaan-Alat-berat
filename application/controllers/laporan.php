@@ -85,6 +85,17 @@ class laporan extends CI_controller
             'title'         => 'Laporan',
             'subtitle'      => 'List Data Buku Besar',
         ];
+        $getAwal = $this->m_laporan->get_buku_besar($akun, ($bulan - 1), $tahun);
+        $data['saldoo'] = 0;
+        foreach ($getAwal as $ga) {
+            if ($ga['posisi_dr_cr'] == 'debit') {
+                $data['saldoo'] += $ga['nominal'];
+            } else {
+                $data['saldoo'] -= $ga['nominal'];
+            }
+        }
+
+
         $data['inisial']     = $tahun . '-' . $bulan . '-01';
         $data['coa']         = $this->m_laporan->get_akun();
         $data['akun']         = $this->m_laporan->get_dataAkun($akun);

@@ -63,7 +63,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="<?= base_url('master_data/pegawai') ?>" method="post">
+                <form action="<?= base_url('master_data/pegawai') ?>" method="post" id="form">
                     <div class="form-group">
                         <label>Kode pegawai</label>
                         <input type="hidden" name="id" id="id">
@@ -84,6 +84,7 @@
                     <div class="form-group">
                         <label>Tarif</label>
                         <input type="text" class="form-control" id="biaya" name="biaya">
+                        <b class="error" id="errtarif"></b>
                     </div>
 
             </div>
@@ -115,5 +116,61 @@
     }
     $(function() {
         $('#example').DataTable();
+    });
+    $('#biaya').keyup(function() {
+        let val = $(this).val();
+        let min = 200000;
+        if (val < min) {
+            $(this).addClass('is-invalid')
+            $('#errtarif').html('Tarif minimal Rp 200.000')
+        } else {
+            $('#errtarif').html('')
+            $(this).removeClass('is-invalid')
+
+        }
+        console.log('dsfsdfds')
+
+    });
+    $(document).ready(function() {
+        $('#form').validate({
+            rules: {
+                nama_pegawai: {
+                    required: true
+                },
+                alamat: {
+                    required: true
+                },
+                no_telp: {
+                    required: true,
+                    digits: true
+                },
+                biaya: {
+                    required: true,
+                    digits: true
+                }
+            },
+            messages: {
+                nama_pegawai: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                alamat: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                no_telp: {
+                    required: "Inputan tidak boleh kosong",
+                    digits: "Inputan harus angka"
+                },
+                biaya: {
+                    required: "Inputan tidak boleh kosong",
+                    digits: "Inputan harus angka"
+                }
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+            }
+        });
     });
 </script>

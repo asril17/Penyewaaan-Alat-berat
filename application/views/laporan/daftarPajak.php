@@ -53,20 +53,30 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Kode Penyewaan</th>
-                        <th>Nominal Pajak</th>
                         <th>Tanggal</th>
+                        <th>Nominal Pajak</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($pajak as $pj) : ?>
+                    <?php $no = 1;
+                    $total = 0;
+                    foreach ($pajak as $pj) :
+                        $total += $pj['nominal_pajak'];
+                    ?>
                         <tr>
+                            <td><?= $no++ ?></td>
                             <td><?= $pj['kd_penyewaan'] ?></td>
-                            <td class="text-right"><?= format_rp($pj['nominal_pajak']) ?></td>
                             <td><?= date("d-m-Y", strtotime($pj['tgl_transaksi']));  ?></td>
+                            <td class="text-right"><?= format_rp($pj['nominal_pajak']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
+                <tr>
+                    <th class="text-left" colspan="3">Total</th>
+                    <th class="text-right" colspan="2"><?= format_rp($total) ?></th>
+                </tr>
             </table>
             <br>
         <?php endif ?>

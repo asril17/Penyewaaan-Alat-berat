@@ -14,7 +14,7 @@
                 <tr>
                     <th>No</th>
                     <th>Tanggal Pengeluaran</th>
-                    <th>Alat Berat</th>
+                    <th>Jenis Pengeluaran</th>
                     <th>Nominal</th>
                     <th>Keterangan</th>
                     <th>Aksi</th>
@@ -27,14 +27,14 @@
                     <tr>
                         <th><?= $no ?></th>
                         <td class="text-right"><?= date("d-m-Y", strtotime($row['tgl_pengeluaran']));  ?></td>
-                        <td><?= $row['nama_alber'] ?></td>
+                        <td><?= $row['jenis_pengeluaran'] ?></td>
                         <td class="text-right"><?= format_rp($row['nominal']) ?></td>
                         <td><?= $row['deskripsi'] ?></td>
                         <td class="text-center">
                             <a href="javascript:void()" data-toggle="modal" data-target="#exampleModal" class="btn btn-sm btn-warning" title="edit" onclick="edit(
                                 '<?= $row['id'] ?>',
                                 '<?= $row['tgl_pengeluaran'] ?>',
-                                '<?= $row['alat_berat_id'] ?>',
+                                '<?= $row['jenis_pengeluaran'] ?>',
                                 '<?= $row['nominal'] ?>',
                                 '<?= $row['deskripsi'] ?>'
                             )"><i class="fa fa-edit"></i></a>
@@ -61,14 +61,18 @@
                         <input type="hidden" name="id" id="id">
                         <input type="datetime" class="form-control" id="tgl_pengeluaran" name="tgl_pengeluaran" required="">
                     </div>
-                    <div class="form-group">
-                        <label for="">Alat Berat*</label>
-                        <select name="alat_berat" id="alat_berat" class="form-control">
-                            <option value="">Plih Alat Berat</option>
-                            <?php foreach ($alat_berat as $key => $value) : ?>
-                                <option value="<?php echo $value->id ?>"><?php echo $value->nama_alber ?></option>
-                            <?php endforeach ?>
-                        </select>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label for="">Jenis Pengeluaran</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <select name="jenis_pengeluaran" id="jenis_pengeluaran" class="form-control">
+                                <option value="" selected disabled>Plih jenis pengeluaran</option>
+                                <option value="Alat berat">Alat Berat</option>
+                                <option value="Pegawai">Pegawai</option>
+                                <option value="Operasional">Operasional</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="">Nominal *</label>
@@ -87,10 +91,10 @@
     </div>
 </div>
 <script>
-    function edit(id, tgl_pengeluaran, nama_alber, nominal, deskripsi) {
+    function edit(id, tgl_pengeluaran, jenis_pengeluaran, nominal, deskripsi) {
         $('#id').val(id);
         $('#tgl_pengeluaran').val(tgl_pengeluaran);
-        $('#alat_berat').val(nama_alber);
+        $('#jenis_pengeluaran').val(jenis_pengeluaran);
         $('#nominal').val(nominal);
         $('#deskripsi').val(deskripsi);
     }

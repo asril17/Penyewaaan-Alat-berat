@@ -22,10 +22,11 @@ class transaksi extends MY_Controller
         $data = [
             'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             // 'kode' => $this->m_transaksi->kode('kd_penyewaan', 'penyewaan', 'PNY'),
-            'pny' => $this->m_transaksi->getData('transaksi'),
+            'pny' => $this->m_transaksi->getDataWithPajak(),
             'title' => 'Transaksi',
             'subtitle' => 'Tabel Penyewaan Alat Berat'
         ];
+
         $this->template->layout($pages, $data);
     }
     public function tambahPenyewaan()
@@ -81,13 +82,14 @@ class transaksi extends MY_Controller
                     $harga_sewa = $harga_khusus;
                 }
 
-                $pegawai = $this->db->where('id', $this->input->post('kd_pegawai'))->get('pegawai')->row();
 
+                $pegawai = $this->db->where('id', $this->input->post('kd_pegawai'))->get('pegawai')->row();
                 $pajak_pegawai = 0;
                 if (!empty($pegawai->id !== 1)) {
                     $set_pajak = $harga_umum * 2 / 100;
                     $subtotal = ($harga_sewa + $pegawai->biaya) * $hari + $set_pajak;
-                    $potongan = ($pegawai->pajak / 100) * $pegawai->biaya;
+                    // $subtotal = $subtotal + $set_pajak;
+                    // $potongan = ($pegawai->pajak / 100) * $pegawai->biaya;
                     $gaji  = $pegawai->biaya * $hari;
                     $pajak = 25;
                     $pajak_pegawai += $gaji * 25 / 100;
@@ -97,7 +99,10 @@ class transaksi extends MY_Controller
                     $set_pajak = $harga_umum * 2 / 100;
                     $subtotal = $harga_sewa  * $hari + $set_pajak;
                 }
+                // var_dump($pegawai->biaya);
+                // die;
                 $nominal_pajak = $pajak_pegawai + $set_pajak;
+                $DP = $subtotal - $this->input->post('DP');
 
                 $transaksi = $this->db->where('kd_penyewaan', $this->input->post('kd_penyewaan'))->get('transaksi')->row();
 
@@ -109,6 +114,8 @@ class transaksi extends MY_Controller
                     'tgl_mulai' => $this->input->post('tgl_sewa'),
                     'tgl_berakhir' => $this->input->post('tgl_expired'),
                     'nominal'      => $subtotal,
+                    'jml_bayar'      => $this->input->post('DP'),
+                    'sisa'      => $DP,
                     'status'       => 0,
                     'user_id'      => $this->session->userdata('userId'),
                 ];
@@ -116,24 +123,32 @@ class transaksi extends MY_Controller
                 $saveTransaksi  = $this->db->insert('transaksi', $transaksiPost);
                 $id = $this->db->insert_id();
 
-                $id_biaya = $this->input->post('id_biaya');
-                $biaya_operasional = $this->db->where_in('id', $id_biaya)->get('biaya_operasional')->result();
+                // $id_biaya = $this->input->post('id_biaya');
+                // $biaya_operasional = $this->db->where_in('id', $id_biaya)->get('biaya_operasional')->result();
 
-
+                $bensin = $this->input->post('bensin');
+                $harga_bensin = $this->input->post('harga_bensin');
                 if ($saveTransaksi) {
                     $this->db->trans_start();
                     $totalBiaya = 0;
-                    foreach ($biaya_operasional as $key => $value) {
-                        $totalBiaya += $biaya_operasional[$key]->harga;
+                    // foreach ($biaya_operasional as $key => $value) {
+                    //     $totalBiaya += $biaya_operasional[$key]->harga;
 
-                        $postTransaksiDetail = [
-                            'transaksi_id' => $id,
-                            'biaya_operasional_id' => $value->id,
-                            'harga' => $value->harga,
-                            'total' => $totalBiaya,
-                        ];
-                        $this->db->insert('transaksi_detail', $postTransaksiDetail);
-                    }
+                    //     $postTransaksiDetail = [
+                    //         'transaksi_id' => $id,
+                    //         'biaya_operasional_id' => $value->id,
+                    //         'harga' => $value->harga,
+                    //         'total' => $totalBiaya,
+                    //     ];
+                    //     $this->db->insert('transaksi_detail', $postTransaksiDetail);
+                    // }
+                    $postTransaksiDetail = [
+                        'id_transaksi' => $id,
+                        'jumlah' => $bensin,
+                        'harga' => $harga_bensin,
+                        'total' => $harga_bensin * $bensin,
+                    ];
+                    $this->db->insert('transaksi_detail_tambahan', $postTransaksiDetail);
 
                     $this->db->insert('daftar_pemasukan_pegawai', ['transaksi_id' => $id, 'nominal' => $gaji, 'persen' => $pajak]);
                     $this->db->insert('daftar_pajak', ['nominal_pajak' => $nominal_pajak, 'transaksi_id' => $id]);
@@ -286,7 +301,7 @@ class transaksi extends MY_Controller
     public function pengeluaran()
     {
         $pages = 'transaksi/listpengeluaran';
-        $pengeluaran = $this->db->join('alat_berat', 'alat_berat.id = transaksi_pengeluaran.alat_berat_id', 'left')->get('transaksi_pengeluaran')->result_array();
+        $pengeluaran = $this->db->get('transaksi_pengeluaran2')->result_array();
         $data = [
             'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             'title' => 'Transaksi',
@@ -323,7 +338,7 @@ class transaksi extends MY_Controller
             $this->form_validation->set_rules('tgl_pengeluaran', 'Tanggal Pengeluaran', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
-            $this->form_validation->set_rules('id_alat_berat', 'Alat Berat', 'required', [
+            $this->form_validation->set_rules('jenis_pengeluaran', 'Jenis Pengeluaran', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
             $this->form_validation->set_rules('nominal', 'Nominal', 'required|numeric', [
@@ -332,15 +347,18 @@ class transaksi extends MY_Controller
             ]);
 
             if ($this->form_validation->run() == false) {
-                $this->template->layout('transaksi/tambahPengeluaran');
+                // $this->template->layout($pages, $data);
+                redirect('transaksi/tambahPengeluaran');
             } else {
+                // var_dump($this->input->post('jenis_pengeluaran'));
+                // die;
                 $postPengeluaran = [
-                    'alat_berat_id' => $this->input->post('id_alat_berat'),
+                    'jenis_pengeluaran' => $this->input->post('jenis_pengeluaran'),
                     'nominal' => $this->input->post('nominal'),
                     'tgl_pengeluaran' => $this->input->post('tgl_pengeluaran'),
                     'deskripsi' => $this->input->post('deskripsi'),
                 ];
-                $this->db->insert('transaksi_pengeluaran', $postPengeluaran);
+                $this->db->insert('transaksi_pengeluaran2', $postPengeluaran);
                 $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
                 $this->session->set_flashdata('message', $alert);
                 redirect('transaksi/pengeluaran');
@@ -355,7 +373,7 @@ class transaksi extends MY_Controller
         $this->form_validation->set_rules('tgl_pengeluaran', 'Tanggal Pengeluaran', 'required', [
             'required' => 'kolom %s tidak boleh kosong'
         ]);
-        $this->form_validation->set_rules('alat_berat', 'Alat Berat', 'required', [
+        $this->form_validation->set_rules('jenis_pengeluaran', 'Jenis Pengeluaran', 'required', [
             'required' => 'kolom %s tidak boleh kosong'
         ]);
         $this->form_validation->set_rules('nominal', 'Nominal', 'required|numeric', [
@@ -364,15 +382,15 @@ class transaksi extends MY_Controller
         ]);
 
         if ($this->form_validation->run() == false) {
-            $this->template->layout('transaksi/pengeluaran');
+            redirect('transaksi/pengeluaran');
         } else {
             $postPengeluaran = [
-                'alat_berat_id' => $this->input->post('alat_berat'),
+                'jenis_pengeluaran' => $this->input->post('jenis_pengeluaran'),
                 'nominal' => $this->input->post('nominal'),
                 'tgl_pengeluaran' => $this->input->post('tgl_pengeluaran'),
                 'deskripsi' => $this->input->post('deskripsi'),
             ];
-            $this->db->where('id', $this->input->post('id'))->update('transaksi_pengeluaran', $postPengeluaran);
+            $this->db->where('id', $this->input->post('id'))->update('transaksi_pengeluaran2', $postPengeluaran);
             $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
             $this->session->set_flashdata('message', $alert);
             redirect('transaksi/pengeluaran');

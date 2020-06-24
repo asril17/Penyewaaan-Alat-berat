@@ -1,12 +1,12 @@
 <div class="form-error mt-2">
     <?php echo $this->session->flashdata('message'); ?>
 </div>
-<div class="card mt-3" id="sewa" style="display: block;">
+<div class="card mt-3" id="sewa1" style="display: block;">
     <div class="card-header">
         <?= $subtitle ?>
     </div>
     <div class="card-body">
-        <form action="<?= base_url('transaksi/tambahPenyewaan') ?>" method="post" name="myForm">
+        <form action="<?= base_url('transaksi/tambahPenyewaan') ?>" method="post" name="myForm" id="form">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group row">
@@ -22,10 +22,10 @@
                             <label for="">Nama Pelanggan * </label>
                         </div>
                         <div class="col-sm-8">
-                            <select name="kd_pelanggan" id="" class="form-control pelanggan" required>
+                            <select name="kd_pelanggan" id="pelanggan" class="form-control pelanggan" required>
                                 <option value="">--Pilih Nama Pelanggan--</option>
                                 <?php foreach ($pl as $row) { ?>
-                                    <option value="<?= $row['id'] ?>"><?= $row['nama_pelanggan'] ?></option>
+                                    <option value="<?= $row['id'] ?>" pelanggan="<?= $row['nama_pelanggan'] ?>"><?= $row['nama_pelanggan'] ?></option>
                                 <?php } ?>
                             </select>
                             <div class="text-danger"><?= form_error('kd_pelanggan', '<small class="text-danger pl-3">', '</small>') ?></div>
@@ -38,7 +38,7 @@
                             <label for="">Tanggal Penyewaan *</label>
                         </div>
                         <div class="col-md-8">
-                            <input type="date" name="tgl_sewa" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>" class="form-control tgl_sewa" required>
+                            <input type="date" id="tgl_sewa" name="tgl_sewa" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>" class="form-control tgl_sewa" required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -46,7 +46,7 @@
                             <label for="">Tanggal Pengembalian *</label>
                         </div>
                         <div class="col-md-8">
-                            <input type="date" name="tgl_expired" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>" class="form-control tgl_expired" required>
+                            <input type="date" id="tgl_expired" name="tgl_expired" min="<?php echo date("Y-m-d"); ?>" value="<?php echo date("Y-m-d"); ?>" class="form-control tgl_expired" required>
                             <div class="text-danger"><?= form_error('tgl_expired', '<small class="text-danger pl-3">', '</small>') ?></div>
                         </div>
                     </div>
@@ -62,10 +62,10 @@
                                 <label for="">Nama Alat Berat *</label>
                             </div>
                             <div class="col-sm-8">
-                                <select name="id_alatberat" id="" class="form-control alat_berat unique" required>
+                                <select name="id_alatberat" id="alat" class="form-control alat_berat unique" required>
                                     <option value="">--Pilih Nama Alat Berat--</option>
                                     <?php foreach ($alber as $row) { ?>
-                                        <option value="<?= $row['id'] ?>"><?= $row['nama_alber'] ?></option>
+                                        <option value="<?= $row['id'] ?>" alat="<?= $row['nama_alber'] ?>"><?= $row['nama_alber'] ?></option>
                                     <?php } ?>
                                 </select>
                                 <input type="hidden" name="" value="" class="harga_umum">
@@ -79,7 +79,7 @@
                                 <label for="">Harga Sewa Umum</label>
                             </div>
                             <div class="col-sm-8">
-                                <input readonly type="text" class="form-control harga_umum" name="harga_umum">
+                                <input readonly type="text" class="form-control harga_umum" id="harga_umum" name="harga_umum">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -87,7 +87,7 @@
                                 <label for="">Harga Sewa Setelah Pajak</label>
                             </div>
                             <div class="col-sm-8">
-                                <input readonly type="text" class="form-control setelah_pajak" name="setelah_pajak">
+                                <input readonly type="text" class="form-control setelah_pajak" id="setelah_pajak" name="setelah_pajak">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -95,7 +95,7 @@
                                 <label for="">Harga Sewa Khusus</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control harga_khusus" name="harga_khusus" required>
+                                <input type="text" class="form-control harga_khusus" id="harga_khusus" name="harga_khusus" required>
                             </div>
                         </div>
                     </div>
@@ -105,14 +105,14 @@
                                 <label for="">Nama Supir *</label>
                             </div>
                             <div class="col-sm-8">
-                                <select name="kd_pegawai" class="form-control pegawai" required>
+                                <select name="kd_pegawai" id="supir" class="form-control pegawai" required>
                                     <option value="">--Pilih Nama Supir--</option>
                                     <option value="1">Tanpa supir</option>
                                     <?php foreach ($pegawai as $row) { ?>
                                         <?php if ($row['status_sopir'] == 1) { ?>
-                                            <option disabled value="<?= $row['id'] ?>"><?= $row['nama_pegawai'] ?></option>
+                                            <option disabled value="<?= $row['id'] ?>" supir="<?= $row['nama_pegawai'] ?>"><?= $row['nama_pegawai'] ?></option>
                                         <?php  } else { ?>
-                                            <option value="<?= $row['id'] ?>"><?= $row['nama_pegawai'] ?></option>
+                                            <option value="<?= $row['id'] ?>" supir="<?= $row['nama_pegawai'] ?>"><?= $row['nama_pegawai'] ?></option>
 
                                         <?php } ?>
 
@@ -127,7 +127,7 @@
                                 <label for="">Biaya</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="harga_supir form-control" value="" readonly>
+                                <input type="text" class="harga_supir form-control" id="biaya" value="" readonly>
                             </div>
                         </div>
                         <!-- <div class="form-group row">
@@ -144,13 +144,20 @@
                     <div class="col-sm-2">
                         <label for="">Tambahan Lainnya</label>
                     </div>
-                    <div class="col-sm-8">
-                        <?php foreach ($tambahanBiaya as $key => $value) : ?>
-                            <input type="checkbox" class="biaya_lainnya_<?php echo $key ?>" name="id_biaya[]" value="<?php echo $value->id ?>"> <?php echo $value->nama ?> <br>
-                        <?php endforeach ?>
+                    <div class="col-sm-1">
+                        <label for="bensin">bensin</label>
+                        <input type="number" min="1" class="form-control" name="bensin" id="bensin">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="harga_bensin">Harga per liter</label>
+                        <input type="number" class="form-control" name="harga_bensin" id="harga_bensin">
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="DP" id="DP">
+            <!-- <?php foreach ($tambahanBiaya as $key => $value) : ?>
+                <input type="checkbox" class="biaya_lainnya_<?php echo $key ?>" name="id_biaya[]" value="<?php echo $value->id ?>"> <?php echo $value->nama ?> <br>
+            <?php endforeach ?> -->
             <div class="form-group row" align="right">
                 <div class="col-sm-12">
                     <!-- <button id="tambah" type="button" class="btn btn-primary btn-sm">Tambah</button> -->
@@ -160,7 +167,7 @@
             <hr>
             <div class="form-group row">
                 <div class="col-sm-12" align="right">
-                    <input type="submit" class="btn btn-primary btn-sm" value="Simpan">
+                    <input type="button" id="simpan" class="btn btn-primary btn-sm" value="Simpan">
                 </div>
             </div>
             <!-- <div class="table-responsive">
@@ -185,12 +192,148 @@
     </div>
 </div>
 
-<div class="row" id="setelah_sewa">
+<div class="card mt-3" id="sewa" style="display: none;">
+    <div class="card-header">
+        Form detail Penyewaan
+    </div>
+    <div class="card-body">
+        <div class="row" id="setelah_sewa">
+            <div class="col">
+                <table class="table">
+                    <thead>
 
+                        <tr>
+                            <th>Nama Pelanggan</th>
+                            <th>Alat yang di sewa</th>
+                            <th>Jumlah hari penyewaan</th>
+                            <th>Harga sewa umum</th>
+                            <th>Harga sewa khusus</th>
+                            <th>Tambah Lainnya</th>
+                            <th>Nama Supir</th>
+                            <th>Biaya supir</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center" id="nama_pelanggan"></td>
+                            <td class="text-center" id="alat_sewa"></td>
+                            <td class="text-center" id="jumlah_hari"></td>
+                            <td class="text-right" id="sewa_umum"></td>
+                            <td class="text-right" id="sewa_khusus"></td>
+                            <td class="text-center" id="tambahan"></td>
+                            <td class="text-center" id="nama_supir"></td>
+                            <td class="text-right" id="biaya_supir"></td>
+                            <td class="text-right" id="total"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="button" id="bayar" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary btn-sm float-right mt-4" value="Simpan">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Pembayaran DP</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label for="">Jumlah Bayar *</label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control" id="jumlah_bayarDP" name="jml_bayar" required="">
+                        <b id="err" class="error"></b>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary">Simpan Data</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+    $(document).on('click', '#simpan', function() {
+        var oneDay = 24 * 60 * 60 * 1000;
+        var firstDate = new Date($("#tgl_sewa").val());
+        var secondDate = new Date($("#tgl_expired").val());
+        var diffDays = Math.round(Math.round((secondDate.getTime() - firstDate.getTime()) / (oneDay)));
+
+        let pelanggan = $('option:selected', '#pelanggan').attr('pelanggan');
+        let alat = $('option:selected', '#alat').attr('alat');
+        let harga_umum = $('#harga_umum').val();
+        let harga_khusus = $('#harga_khusus').val();
+        let bensin = $('#bensin').val();
+        let supir = $('option:selected', '#supir').attr('supir');
+        let biaya = $('#biaya').val();
+        let harga = '';
+        let harga_sewa = '';
+
+        if (harga_khusus <= 0) {
+            harga = harga_umum;
+            harga_sewa = harga;
+        } else {
+            harga = harga_khusus;
+            harga_sewa = 0;
+        }
+
+        let set_pajak = Number(harga_sewa) * 2 / 100;
+        let subtotal = (Number(harga) + Number(biaya)) * Number(diffDays) + Number(set_pajak);
+        // $subtotal = $subtotal + $set_pajak;
+        // $potongan = ($pegawai->pajak / 100) * $pegawai->biaya;
+        // let gaji = biaya * diffDays;
+        // let pajak = 25;
+        // let pajak_pegawai += gaji * 25 / 100;
+
+
+
+        $('#jumlah_hari').html(diffDays + " hari");
+        $('#nama_pelanggan').html(pelanggan);
+        $('#alat_sewa').html(alat);
+        $('#sewa_umum').html(harga_umum);
+        $('#sewa_khusus').html(harga_khusus);
+        $('#tambahan').html('Bensin ' + bensin + ' liter');
+        $('#nama_supir').html(supir);
+        $('#biaya_supir').html(biaya);
+        $('#total').html(subtotal);
+
+        $('#sewa1').css('display', 'none')
+        $('#sewa').css('display', 'block')
+    });
+
+    $(document).on('click', '#save', function() {
+        let dp = $('#jumlah_bayarDP').val();
+        $('#DP').val(dp);
+        if (dp == '') {
+            $('#jumlah_bayarDP').addClass('is-invalid');
+            $('#err').html('Jumlah bayar tidak boleh kosong');
+        } else {
+            $('#form').trigger('submit');
+
+        }
+    });
+
+    // function CalcDiff() {
+    //     var a = $('#tgl1').data("DateTimePicker").date();
+    //     var b = $('#tgl2').data("DateTimePicker").date();
+    //     var timeDiff = 0
+    //     if (b) {
+    //         timeDiff = (b - a) / 1000;
+    //     }
+
+    //     $('#selisih').val(Math.floor(timeDiff / (86400)) + ' Hari')
+    // }
     $(function() {
+
         $('#example').DataTable();
     });
 
@@ -316,4 +459,56 @@
             $(this).val('');
         });
     }
+    $(document).ready(function() {
+        $('#form').validate({
+            rules: {
+                kd_pelanggan: {
+                    required: true
+                },
+                tgl_sewa: {
+                    required: true
+                },
+                tgl_expired: {
+                    required: true
+                },
+                id_alatberat: {
+                    required: true
+                },
+                kd_pegawai: {
+                    required: true
+                },
+                harga_khusus: {
+                    required: true,
+                    digits: true
+                }
+            },
+            messages: {
+                kd_pelanggan: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                tgl_sewa: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                tgl_expired: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                id_alatberat: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                kd_pegawai: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                harga_khusus: {
+                    required: "Inputan tidak boleh kosong",
+                    digits: "Inputan harus angka"
+                }
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+    });
 </script>

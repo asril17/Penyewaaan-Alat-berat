@@ -26,6 +26,12 @@ class m_transaksi extends CI_model
     {
         return $this->db->get_where($table)->result_array();
     }
+    public function getDataWithPajak()
+    {
+
+        return $this->db->join('daftar_pajak', 'daftar_pajak.transaksi_id = transaksi.id')
+            ->get('transaksi')->result_array();
+    }
     public function tambahDetailPny()
     {
         $this->db->where('id', $_POST['kd_alat_berat']);
@@ -37,11 +43,13 @@ class m_transaksi extends CI_model
 
         ));
         $query = $this->db->get('transaksi_detail');
+
+        $tanggal1 = time();
+        $tanggal2 = strtotime($_POST['tgl_expired']);
+        $date_diff = $tanggal2 - $tanggal1;
+        $lama = round($date_diff / (60 * 60 * 24));
         if ($query->num_rows() == 0) {
-            $tanggal1 = time();
-            $tanggal2 = strtotime($_POST['tgl_expired']);
-            $date_diff = $tanggal2 - $tanggal1;
-            $lama = round($date_diff / (60 * 60 * 24));
+
             if ($_POST['kd_pegawai'] != 1) {
                 $subtotal = ($harga + 200000) * $lama;
             } else {
@@ -93,7 +101,9 @@ class m_transaksi extends CI_model
 
         $get = $this->db->get_where('transaksi', ['kd_penyewaan' => $kd_penyewaan])->row_array();
         // $nominal_bayar = $get['jml_bayar'] + $get['sisa'];
-        $nominal_bayar = $this->input->post('sisa') - $this->input->post('jml_bayar');
+        $nominal_bayar = $this->input->post('jml_bayar');
+        // var_dump($nominal_bayar);
+        // die;
         $pajak = $get['nominal'] * 2 / 100;
         $sewa_umum = $get['nominal'] - $pajak;
 
@@ -111,10 +121,9 @@ class m_transaksi extends CI_model
         }
         $data = [
             'jml_bayar'         => $this->input->post('jml_bayar'),
-            'sisa'              => $nominal_bayar,
+            'sisa'              => 0,
             'status'            => $status,
             'tgl_pelunasan'     => $this->input->post('tgl_pelunasan'),
-
         ];
         $this->db->where('kd_penyewaan', $kd_penyewaan);
         return $this->db->update('transaksi', $data);

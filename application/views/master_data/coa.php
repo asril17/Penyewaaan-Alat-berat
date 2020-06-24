@@ -23,7 +23,7 @@
                     <th>Kode Akun</th>
                     <th>Nama Akun</th>
                     <th>Header Akun</th>
-                    <th>Aksi</th>
+                    <!-- <th>Aksi</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -35,13 +35,13 @@
                         <td><?= $row['kode_akun'] ?></td>
                         <td><?= $row['nama_akun'] ?></td>
                         <td><?= $row['header_akun'] ?></td>
-                        <td>
+                        <!-- <td>
                             <a href="javascript:void()" data-toggle="modal" data-target="#exampleModal" class="btn btn-sm btn-warning" title="edit" onclick="edit(
                                 '<?= $row['kode_akun'] ?>',
                                 '<?= $row['nama_akun'] ?>',
                                 '<?= $row['header_akun'] ?>'
                             )"><i class="fa fa-edit"></i></a>
-                        </td>
+                        </td> -->
                     </tr>
                 <?php } ?>
             </tbody>
@@ -75,7 +75,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-primary">Simpan data</button>
                 </form>
             </div>
         </div>
@@ -98,5 +98,41 @@
     }
     $(function() {
         $('#example').DataTable();
+    });
+    $(document).ready(function() {
+        $('#form').validate({
+            rules: {
+                kd_akun: {
+                    required: true,
+                    digits: true
+                },
+                nama_akun: {
+                    required: true
+                },
+                header_akun: {
+                    required: true,
+                    digits: true
+                }
+            },
+            messages: {
+                kd_akun: {
+                    required: "Inputan tidak boleh kosong",
+                    digits: true
+                },
+                nama_akun: {
+                    required: "Inputan tidak boleh kosong"
+                },
+                header_akun: {
+                    required: "Inputan tidak boleh kosong",
+                    digits: "Inputan harus angka"
+                }
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+            }
+        });
     });
 </script>

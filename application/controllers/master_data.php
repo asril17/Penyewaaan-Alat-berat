@@ -16,14 +16,17 @@
                 'coa'        => $this->m_master_data->get_data('coa'),
                 'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             ];
-            $this->form_validation->set_rules('nama_akun', 'Nama Akun', 'required', [
-                'required' => 'kolom %s tidak boleh kosong'
+            $this->form_validation->set_rules('nama_akun', 'Nama Akun', 'required|trim|is_unique[coa.nama_akun]', [
+                'required' => 'kolom %s tidak boleh kosong',
+                'is_unique' => 'Akun telah tersedia'
             ]);
             $this->form_validation->set_rules('header_akun', 'Header Akun', 'required|numeric', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
-            $this->form_validation->set_rules('kd_akun', 'Kode Akun', 'required|numeric', [
-                'required' => 'kolom %s tidak boleh kosong'
+            $this->form_validation->set_rules('kd_akun', 'Kode Akun', 'required|numeric|is_unique[coa.kode_akun]', [
+                'required' => 'kolom %s tidak boleh kosong',
+                'numeric' => 'kolom %s harus angka',
+                'is_unique' => 'Nomor akun telah tersedia'
             ]);
             if ($this->form_validation->run() == false) {
                 $this->template->layout($pages, $data);
@@ -85,8 +88,9 @@
                 'kode'              => $this->m_master_data->kode('kd_tipe', 'alat_berat', 'AB'),
                 'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             ];
-            $this->form_validation->set_rules('nama_alber', 'Nama Alat Berat', 'required', [
-                'required' => 'kolom %s tidak boleh kosong'
+            $this->form_validation->set_rules('nama_alber', 'Nama Alat Berat', 'required|trim|is_unique[alat_berat.nama_alber]', [
+                'required' => 'kolom %s tidak boleh kosong',
+                'is_unique' => 'Nama Alat Berat telah tersedia'
             ]);
             $this->form_validation->set_rules('merk', 'Merk', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'
@@ -185,8 +189,9 @@
             $data['list'] = $this->db->get('jenis_alat_berat')->result_array();
             // $this->template->layout($pages, $data);
 
-            $this->form_validation->set_rules('jenis', 'Jenis', 'required', [
-                'required' => 'kolom %s tidak boleh kosong'
+            $this->form_validation->set_rules('jenis', 'Jenis', 'required|trim|is_unique[jenis_alat_berat.jenis]', [
+                'required' => 'kolom %s tidak boleh kosong',
+                'is_unique' => 'Jenis alat berat telah tersedia'
             ]);
             if ($this->form_validation->run() == false) {
                 $this->template->layout($pages, $data);
@@ -241,8 +246,9 @@
             $this->form_validation->set_rules('kd_pegawai', 'Kode Pegawai', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
-            $this->form_validation->set_rules('nama_pegawai', 'Nama Pegawai', 'required|alpha', [
-                'required' => 'kolom %s tidak boleh kosong'
+            $this->form_validation->set_rules('nama_pegawai', 'Nama Pegawai', 'required|alpha|trim|is_unique[pegawai.nama_pegawai]', [
+                'required' => 'kolom %s tidak boleh kosong',
+                'is_unique' => 'Nama pegawai telah tersedia'
             ]);
             $this->form_validation->set_rules('alamat', 'Alamat Pegawai', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'
@@ -319,8 +325,9 @@
             $this->form_validation->set_rules('kd_pelanggan', 'Kode pelanggan', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
-            $this->form_validation->set_rules('nama_pelanggan', 'Nama pelanggan', 'required|alpha', [
-                'required' => 'kolom %s tidak boleh kosong'
+            $this->form_validation->set_rules('nama_pelanggan', 'Nama pelanggan', 'required|alpha|trim|is_unique[pelanggan.nama_pelanggan]', [
+                'required' => 'kolom %s tidak boleh kosong',
+                'is_unique' => 'Nama pelanggan telah tersedia'
             ]);
             $this->form_validation->set_rules('alamat', 'Alamat pelanggan', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'

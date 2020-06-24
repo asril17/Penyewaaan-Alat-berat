@@ -18,6 +18,7 @@
                     <th>Tanggal Pengembalian</th>
                     <th>Nominal</th>
                     <th>Uang Muka</th>
+                    <th>Pajak</th>
                     <th>Sisa</th>
                     <th>Status</th>
                     <th>Aksi</th>
@@ -34,6 +35,7 @@
                         <td><?= $row['tgl_berakhir'] ?></td>
                         <td class="text-right"><?= format_rp($row['nominal']) ?></td>
                         <td class="text-right"><?= format_rp($row['jml_bayar']) ?></td>
+                        <td class="text-right"><?= format_rp($row['nominal_pajak']) ?></td>
                         <td class="text-right"><?= format_rp($row['sisa']) ?></td>
                         <td class="text-right"><?php echo ($row['status'] == 0) ? 'Belum Lunas' : 'Sudah Lunas' ?></td>
                         <td align="center">

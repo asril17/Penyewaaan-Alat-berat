@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 22 Jun 2020 pada 01.31
+-- Waktu pembuatan: 24 Jun 2020 pada 05.30
 -- Versi server: 10.4.6-MariaDB
 -- Versi PHP: 7.3.8
 
@@ -133,7 +133,13 @@ CREATE TABLE `daftar_pajak` (
 --
 
 INSERT INTO `daftar_pajak` (`id`, `nominal_pajak`, `transaksi_id`) VALUES
-(1, 259400, 6);
+(1, 259400, 6),
+(2, 136400, 7),
+(3, 136400, 8),
+(4, 436400, 9),
+(5, 136400, 11),
+(6, 323900, 12),
+(7, 511400, 13);
 
 -- --------------------------------------------------------
 
@@ -158,7 +164,13 @@ INSERT INTO `daftar_pemasukan_pegawai` (`id`, `nominal`, `persen`, `transaksi_id
 (3, 4200000, 20, 3),
 (4, 0, 0, 4),
 (5, 600000, 20, 5),
-(6, 500000, 25, 6);
+(6, 500000, 25, 6),
+(7, 0, 25, 7),
+(8, 0, 25, 8),
+(9, 1200000, 25, 9),
+(10, 0, 25, 11),
+(11, 750000, 25, 12),
+(12, 1500000, 25, 13);
 
 -- --------------------------------------------------------
 
@@ -235,7 +247,23 @@ INSERT INTO `jurnal` (`id`, `kode_akun`, `tgl_jurnal`, `nominal`, `posisi_dr_cr`
 (33, '111', '2020-06-10', 14074400, 'kredit'),
 (34, '111', '2020-06-10', 20739936, 'debit'),
 (35, '117', '2020-06-10', 423264, 'debit'),
-(36, '411', '2020-06-10', 21163200, 'kredit');
+(36, '411', '2020-06-10', 21163200, 'kredit'),
+(37, '111', '2020-06-24', 20346400, 'debit'),
+(38, '114', '2020-06-24', 20346400, 'debit'),
+(39, '411', '2020-06-24', 20346400, 'kredit'),
+(40, '211', '2020-06-24', -20346400, 'kredit'),
+(41, '111', '2020-06-24', 41556400, 'debit'),
+(42, '114', '2020-06-24', 41556400, 'debit'),
+(43, '411', '2020-06-24', 41556400, 'kredit'),
+(44, '211', '2020-06-24', 41556400, 'kredit'),
+(45, '111', '2020-06-24', 41556400, 'debit'),
+(46, '114', '2020-06-24', 41556400, 'debit'),
+(47, '411', '2020-06-24', 41556400, 'kredit'),
+(48, '211', '2020-06-24', 41556400, 'kredit'),
+(49, '111', '2020-06-24', 41556400, 'debit'),
+(50, '114', '2020-06-24', 41556400, 'debit'),
+(51, '411', '2020-06-24', 41556400, 'kredit'),
+(52, '211', '2020-06-24', 41556400, 'kredit');
 
 -- --------------------------------------------------------
 
@@ -262,7 +290,7 @@ INSERT INTO `pegawai` (`id`, `kd_pegawai`, `nama_pegawai`, `no_telp`, `alamat`, 
 (2, 'SPR-002', 'Bohim', '0989889494', NULL, 0, 200000),
 (4, 'SPR-003', 'Asril', '08814539943', NULL, 0, 0),
 (5, 'SPR-004', 'Bon', '098341234', NULL, 0, 250000),
-(6, 'SPR-001', 'Topik', '087675786876', 'sadsad', 0, 500000);
+(6, 'SPR-001', 'Topik', '087675786876', 'sadsad', 1, 500000);
 
 -- --------------------------------------------------------
 
@@ -359,7 +387,14 @@ INSERT INTO `transaksi` (`id`, `kd_penyewaan`, `alat_berat_id`, `pelanggan_id`, 
 (3, 'PNY-003', 3, 1, 2, 148142400, 0, 0, 0, '2020-06-10 01:11:16', NULL, '2020-06-09', '2020-06-30', 38),
 (4, 'PNY-004', 3, 1, 1, 13708800, 0, 0, 0, '2020-06-10 02:44:52', NULL, '2020-06-09', '2020-06-11', 37),
 (5, 'PNY-005', 3, 1, 2, 21163200, 21163200, 0, 1, '2020-06-10 03:13:46', '2020-06-09 17:00:00', '2020-06-09', '2020-06-12', 37),
-(6, 'PNY-006', 3, 1, 5, 14074400, 4074400, 0, 0, '2020-06-10 15:13:08', '2020-06-10 17:00:00', '2020-06-10', '2020-06-12', 38);
+(6, 'PNY-006', 3, 1, 5, 14074400, 4074400, 0, 0, '2020-06-10 15:13:08', '2020-06-10 17:00:00', '2020-06-10', '2020-06-12', 38),
+(7, 'PNY-007', 3, 1, 5, 136400, 0, 0, 0, '2020-06-24 05:51:02', NULL, '2020-06-24', '2020-06-24', 38),
+(8, 'PNY-008', 3, 1, 6, 136400, 0, 0, 0, '2020-06-24 05:52:03', NULL, '2020-06-24', '2020-06-24', 38),
+(9, 'PNY-009', 3, 1, 2, 42256400, 0, 0, 0, '2020-06-24 06:05:24', NULL, '2020-06-24', '2020-06-30', 38),
+(10, 'PNY-010', 3, 1, 1, 6956400, 0, 0, 0, '2020-06-24 06:21:21', NULL, '2020-06-24', '2020-06-25', 38),
+(11, 'PNY-010', 3, 1, 1, 6956400, 0, 0, 0, '2020-06-24 06:21:50', NULL, '2020-06-24', '2020-06-25', 38),
+(12, 'PNY-011', 3, 1, 5, 21346400, 20346400, -20346400, 0, '2020-06-24 08:47:24', '2020-06-23 17:00:00', '2020-06-24', '2020-06-27', 38),
+(13, 'PNY-012', 3, 1, 5, 42556400, 41556400, 0, 0, '2020-06-24 08:51:30', '2020-06-23 17:00:00', '2020-06-24', '2020-06-30', 38);
 
 -- --------------------------------------------------------
 
@@ -399,7 +434,13 @@ INSERT INTO `transaksi_detail` (`transaksi_id`, `biaya_operasional_id`, `harga`,
 (5, 1, 55000, 55000),
 (5, 2, 10000, 65000),
 (6, 1, 55000, 55000),
-(6, 2, 10000, 65000);
+(6, 2, 10000, 65000),
+(7, 1, 55000, 55000),
+(7, 2, 10000, 65000),
+(8, 1, 55000, 55000),
+(8, 2, 10000, 65000),
+(9, 1, 55000, 55000),
+(9, 2, 10000, 65000);
 
 -- --------------------------------------------------------
 
@@ -415,6 +456,28 @@ CREATE TABLE `transaksi_detail_new` (
   `harga` int(11) DEFAULT NULL,
   `total` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `transaksi_detail_tambahan`
+--
+
+CREATE TABLE `transaksi_detail_tambahan` (
+  `id_transaksi` int(56) NOT NULL,
+  `jumlah` int(56) NOT NULL,
+  `harga` int(56) NOT NULL,
+  `total` int(56) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `transaksi_detail_tambahan`
+--
+
+INSERT INTO `transaksi_detail_tambahan` (`id_transaksi`, `jumlah`, `harga`, `total`) VALUES
+(11, 1, 9000, 9000),
+(12, 10, 12000, 120000),
+(13, 10, 12500, 125000);
 
 -- --------------------------------------------------------
 
@@ -463,6 +526,28 @@ INSERT INTO `transaksi_pengeluaran` (`id`, `alat_berat_id`, `nominal`, `deskrips
 (1, 3, 200000, 'Perbaikan Oli', '2020-05-30 17:00:00', NULL),
 (2, 3, 39000, 'Gani casing', '2020-06-09 17:00:00', NULL),
 (3, 3, 500000, 'sd', '2020-06-16 17:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `transaksi_pengeluaran2`
+--
+
+CREATE TABLE `transaksi_pengeluaran2` (
+  `id` int(11) NOT NULL,
+  `jenis_pengeluaran` varchar(56) NOT NULL,
+  `nominal` int(56) NOT NULL,
+  `deskripsi` varchar(128) NOT NULL,
+  `tgl_pengeluaran` date NOT NULL,
+  `user_id` int(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `transaksi_pengeluaran2`
+--
+
+INSERT INTO `transaksi_pengeluaran2` (`id`, `jenis_pengeluaran`, `nominal`, `deskripsi`, `tgl_pengeluaran`, `user_id`) VALUES
+(1, 'Alat berat', 50000000, 'aaaaaaaaaaaaaaaaa', '2020-06-24', NULL);
 
 -- --------------------------------------------------------
 
@@ -726,6 +811,12 @@ ALTER TABLE `transaksi_pengeluaran`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeks untuk tabel `transaksi_pengeluaran2`
+--
+ALTER TABLE `transaksi_pengeluaran2`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `user`
 --
 ALTER TABLE `user`
@@ -787,13 +878,13 @@ ALTER TABLE `biaya_operasional`
 -- AUTO_INCREMENT untuk tabel `daftar_pajak`
 --
 ALTER TABLE `daftar_pajak`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `daftar_pemasukan_pegawai`
 --
 ALTER TABLE `daftar_pemasukan_pegawai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `jenis_alat_berat`
@@ -805,7 +896,7 @@ ALTER TABLE `jenis_alat_berat`
 -- AUTO_INCREMENT untuk tabel `jurnal`
 --
 ALTER TABLE `jurnal`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT untuk tabel `pegawai`
@@ -835,7 +926,7 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT untuk tabel `transaksi_new`
@@ -848,6 +939,12 @@ ALTER TABLE `transaksi_new`
 --
 ALTER TABLE `transaksi_pengeluaran`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT untuk tabel `transaksi_pengeluaran2`
+--
+ALTER TABLE `transaksi_pengeluaran2`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`

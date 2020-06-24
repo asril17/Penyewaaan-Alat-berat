@@ -77,17 +77,26 @@
                             <th>kredit</th>
                         </tr>
                         </tr>
+                        <?php if ($akun['header_akun'] == 1 or $akun['header_akun'] == 5) {
+                            $col = 5;
+                        } else {
+                            $col = 6;
+                        } ?>
+                        <tr>
+                            <th class="text-left" colspan="<?= $col ?>">Saldo Awal</th>
+                            <th class="text-right" colspan="1"><?= 'Rp ' . number_format($saldoo, 2, ',', '.') ?></th>
+                        </tr>
                     </thead>
                     <tbody>
 
                         <?php $saldo_awal = 0;
-                            foreach ($buku_besar as $row) : ?>
+                        foreach ($buku_besar as $row) : ?>
                             <tr>
                                 <td><?php echo $row['tgl_jurnal'] ?></td>
                                 <td><?php echo $row['nama_akun'] ?></td>
                                 <?php if ($row['posisi_dr_cr'] == 'debit') :
-                                            $saldo_awal = $saldo_awal + $row['nominal'];
-                                            ?>
+                                    $saldo_awal = $saldo_awal + $row['nominal'];
+                                ?>
                                     <td>JU1</td>
                                     <td><?php echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.') ?></td>
                                     <td></td>
@@ -96,10 +105,10 @@
                             </tr>
                         <?php else : ?>
                             <?php if ($akun['header_akun'] == 1 or $akun['header_akun'] == 5) {
-                                            $saldo_awal = $saldo_awal - $row['nominal'];
-                                        } else {
-                                            $saldo_awal = $saldo_awal + $row['nominal'];
-                                        } ?>
+                                        $saldo_awal = $saldo_awal - $row['nominal'];
+                                    } else {
+                                        $saldo_awal = $saldo_awal + $row['nominal'];
+                                    } ?>
                             <td>JU1</td>
                             <td></td>
                             <td><?php echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.') ?></td>

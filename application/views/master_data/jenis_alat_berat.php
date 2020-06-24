@@ -93,4 +93,24 @@
     $(function() {
         $('#example').DataTable();
     });
+    $(document).ready(function() {
+        $('#form').validate({
+            rules: {
+                jenis: {
+                    required: true
+                }
+            },
+            messages: {
+                jenis: {
+                    required: "Inputan tidak boleh kosong"
+                }
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+    });
 </script>

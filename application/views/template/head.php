@@ -31,5 +31,9 @@
         tr>th {
             text-align: center;
         }
+
+        .error {
+            color: brown;
+        }
     </style>
 </head>

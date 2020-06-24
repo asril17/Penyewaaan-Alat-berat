@@ -13,20 +13,20 @@
 					<input type="date" max="<?= $tgl_berakhir ?>" class="form-control" name="tgl_pelunasan" required="">
 				</div>
 			</div>
-			<div class="form-group row">
+			<!-- <div class="form-group row">
 				<div class="col-sm-3">
 					<label for="">Jumlah Bayar *</label>
 				</div>
 				<div class="col-sm-9">
 					<input type="number" class="form-control" name="jml_bayar" required="">
 				</div>
-			</div>
+			</div> -->
 			<div class="form-group row">
 				<div class="col-sm-3">
 					<label for="">Sisa</label>
 				</div>
 				<div class="col-sm-9">
-					<input type="number" class="form-control" name="sisa" readonly="" value="<?php echo ($sisa == 0) ? $nominal : $sisa ?>">
+					<input type="number" class="form-control" name="jml_bayar" readonly="" value="<?php echo ($sisa == 0) ? $nominal : $sisa ?>">
 				</div>
 			</div>
 			<div class="form-group row">
