@@ -144,11 +144,11 @@
                     <div class="col-sm-2">
                         <label for="">Tambahan Lainnya</label>
                     </div>
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                         <label for="bensin">bensin</label>
                         <input type="number" min="1" class="form-control" name="bensin" id="bensin">
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <label for="harga_bensin">Harga per liter</label>
                         <input type="number" class="form-control" name="harga_bensin" id="harga_bensin">
                     </div>
@@ -206,8 +206,8 @@
                             <th>Nama Pelanggan</th>
                             <th>Alat yang di sewa</th>
                             <th>Jumlah hari penyewaan</th>
-                            <th>Harga sewa umum</th>
-                            <th>Harga sewa khusus</th>
+                            <th class="umum">Harga sewa umum</th>
+                            <th class="khusus">Harga sewa khusus</th>
                             <th>Tambah Lainnya</th>
                             <th>Nama Supir</th>
                             <th>Biaya supir</th>
@@ -219,8 +219,8 @@
                             <td class="text-center" id="nama_pelanggan"></td>
                             <td class="text-center" id="alat_sewa"></td>
                             <td class="text-center" id="jumlah_hari"></td>
-                            <td class="text-right" id="sewa_umum"></td>
-                            <td class="text-right" id="sewa_khusus"></td>
+                            <td class="text-right umum" id="sewa_umum"></td>
+                            <td class="text-right khusus" id="sewa_khusus"></td>
                             <td class="text-center" id="tambahan"></td>
                             <td class="text-center" id="nama_supir"></td>
                             <td class="text-right" id="biaya_supir"></td>
@@ -281,7 +281,11 @@
         if (harga_khusus <= 0) {
             harga = harga_umum;
             harga_sewa = harga;
+            $('.khusus').css('display', 'none');
+            $('.umum').css('display', 'block');
         } else {
+            $('.khusus').css('display', 'block');
+            $('.umum').css('display', 'none');
             harga = harga_khusus;
             harga_sewa = 0;
         }

@@ -80,6 +80,7 @@
                     <div class="form-group">
                         <label>No telfon pegawai</label>
                         <input type="text" class="form-control" id="no_telp" name="no_telp">
+                        <input type="hidden" class="form-control" id="no_telp_sebelum" name="no_telp_sebelum">
                     </div>
                     <div class="form-group">
                         <label>Tarif</label>
@@ -89,7 +90,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-primary">Simpan Data</button>
                 </form>
             </div>
         </div>
@@ -103,8 +104,10 @@
         $('#kd_pegawai').val(kd_pegawai)
         $('#nama_pegawai').val(nama_pegawai)
         $('#alamat').val(alamat)
-        $('#no_telp').val(no_telp)
+        // $('#no_telp').val(no_telp)
         $('#biaya').val(biaya)
+        $('#no_telp_sebelum').val(no_telp);
+
     }
 
     function tambah() {

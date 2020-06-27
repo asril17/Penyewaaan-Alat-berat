@@ -96,11 +96,13 @@
                                 <td><?php echo $row['nama_akun'] ?></td>
                                 <?php if ($row['posisi_dr_cr'] == 'debit') :
                                     $saldo_awal = $saldo_awal + $row['nominal'];
+
+
                                 ?>
                                     <td>JU1</td>
-                                    <td><?php echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.') ?></td>
+                                    <td class="text-right"><?php echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.') ?></td>
                                     <td></td>
-                                    <td><?php echo 'Rp. ' . number_format($saldo_awal, 2, ',', '.') ?></td>
+                                    <td class="text-right"><?php echo 'Rp. ' . number_format($saldo_awal, 2, ',', '.') ?></td>
                                     <td></td>
                             </tr>
                         <?php else : ?>
@@ -108,20 +110,37 @@
                                         $saldo_awal = $saldo_awal - $row['nominal'];
                                     } else {
                                         $saldo_awal = $saldo_awal + $row['nominal'];
-                                    } ?>
+                                    }
+                            ?>
                             <td>JU1</td>
                             <td></td>
-                            <td><?php echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.') ?></td>
+                            <td class="text-right"><?php echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.') ?></td>
+                            <?php
+                                    // if ($saldo_awal >= 0) {
+                                    //     $saldo_awal = $saldo_awal;
+                                    // } else {
+                                    //     $saldo_awal = str_replace("-", "", $saldo_awal);
+                                    // }
+
+                            ?>
                             <?php if ($akun['header_akun'] == 1 or $akun['header_akun'] == 5) : ?>
-                                <td><?php echo 'Rp. ' . number_format($saldo_awal, 2, ',', '.') ?></td>
+                                <td class="text-right"><?php echo 'Rp. ' . number_format($saldo_awal, 2, ',', '.') ?></td>
                                 <td></td>
                             <?php else : ?>
                                 <td></td>
-                                <td><?php echo 'Rp. ' . number_format(abs($saldo_awal), 2, ',', '.') ?></td>
+                                <td class="text-right"><?php echo 'Rp. ' . number_format(abs($saldo_awal), 2, ',', '.') ?></td>
                             <?php endif ?>
                         <?php endif ?>
                     <?php endforeach ?>
-                    </tbody>
+                    <?php if ($akun['header_akun'] == 1 or $akun['header_akun'] == 5) {
+                        $col = 5;
+                    } else {
+                        $col = 6;
+                    } ?>
+                    <tr>
+                        <th class="text-left" colspan="<?= $col ?>">Saldo Akhir</th>
+                        <th class="text-right" colspan="1"><?= 'Rp ' . number_format($saldo_awal, 2, ',', '.') ?></th>
+                    </tr>
                 </table>
             </div>
         <?php endif ?>

@@ -1,0 +1,20 @@
+di form saat menambahkan data baru, buttonnya di ganti ke simpan data
+
+PEGAWAI
+1. no tlpn pegawai di samaain kaya no tlpn pelanggan, pada saat aksi no tlpn lama tetap ada jadi nambah no tlpn 
+
+JENIS ALAT BERAT
+1. error db saat klik save change
+
+PENYEWAAN 
+1. alat berat dan sopir harusnya yang muncul yang ready saja, yang terpakai dari tenggat tgl penyewaan baru tidak muncul
+2. harga sewa setelah pajak harusnya dari harga sewa umum x lama penyewaan = ex 30.000.000 . nanti 30.000.000 + 2% = harga sewa setelah pajak
+3. tampilan angka liter tidak sepenuhnya muncul 
+4. di form detail antara harga sewa khusus dan umum yang muncul harusnya hrga yang terpakai sja
+5. untuk perhitungan penyewaanya nanti eca kirim excel
+
+PENGELUARAN
+1. semua pengeluaran nanti nyambung ke jurnal buku besar dan laporan laba rugi, nama akunnya di ambil dari COA. logiknya gimana ya ka pokonya kaya gitu da kak wkkw
+
+BUKU BESAR
+1. total kak dibwah

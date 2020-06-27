@@ -300,7 +300,7 @@
                     'kd_pegawai'     => $_POST['kd_pegawai'],
                     'nama_pegawai'     => $_POST['nama_pegawai'],
                     'biaya'    => $_POST['biaya'],
-                    'no_telp'    => $_POST['no_telp'],
+                    'no_telp'    => $_POST['no_telp'] . ', ' . $_POST['no_telp_sebelum'],
                     'alamat'    => $_POST['alamat'],
                 ];
                 $this->db->where('id', $_POST['id'])
