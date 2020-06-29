@@ -129,15 +129,24 @@ class laporan extends CI_controller
             ->where('MONTH(tgl_transaksi)', $bulan)
             ->where('YEAR(tgl_transaksi)', $tahun)
             ->get('transaksi')->row_array();
-        $data['pengeluaran'] = $this->db->select('SUM(nominal) AS total_pengeluaran')
-            ->where('MONTH(tgl_pengeluaran)', $bulan)
-            ->where('YEAR(tgl_pengeluaran)', $tahun)
-            ->get('transaksi_pengeluaran')->row_array();
+        // $data['pengeluaran'] = $this->db->select('SUM(nominal) AS total_pengeluaran')
+        //     ->where('MONTH(tgl_pengeluaran)', $bulan)
+        //     ->where('YEAR(tgl_pengeluaran)', $tahun)
+        //     ->get('transaksi_pengeluaran')->row_array();
+        $data['coa'] = $this->db->like('kode_akun', '5')
+            ->get('coa')->result_array();
+        // var_dump($data['coa']);
+        // die;
+
 
         $data['pendapatan_dll'] = $this->db->select('SUM(daftar_pemasukan_pegawai.nominal) AS total_dll')
             ->join('daftar_pemasukan_pegawai', 'daftar_pemasukan_pegawai.transaksi_id = transaksi.id')
             ->where('MONTH(tgl_transaksi)', $bulan)
             ->where('YEAR(tgl_transaksi)', $tahun)
+            ->get('transaksi')->row_array();
+
+        $data['pajak_sewa'] = $this->db->select('SUM(daftar_pajak.nominal_pajak) as pajak')
+            ->join('daftar_pajak', 'daftar_pajak.transaksi_id = transaksi.id')
             ->get('transaksi')->row_array();
 
 

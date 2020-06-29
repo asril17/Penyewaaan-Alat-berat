@@ -70,15 +70,33 @@
                         <tr>
                             <th class="text-left">Beban Usaha</th>
                         </tr>
-                        <tr>
-                            <td class="pl-5 text-left">Beban Perbaikan Alat Berat</td>
-                            <td class="text-right"><?= format_rp($pengeluaran['total_pengeluaran']) ?></td>
-                        </tr>
+
+                        <?php $total_pengeluaran = 0;
+                        foreach ($coa as $row) :
+
+                            $trans = $this->db->select('SUM(nominal) as nominal')
+                                ->where('id_coa', $row['kode_akun'])
+                                ->get('transaksi_pengeluaran2');
+
+                            if ($trans->num_rows() > 0) {
+                                $trans = $trans->row_array();
+                                $total_pengeluaran += $trans['nominal'];
+
+                        ?>
+
+                                <tr>
+                                    <td class="pl-5 text-left"><?= $row['nama_akun'] ?></td>
+                                    <td class="text-right"><?= format_rp($trans['nominal']) ?></td>
+                                </tr>
+
+                        <?php }
+                        endforeach; ?>
+
                         <tr>
                             <th class="text-left">Jumlah Beban Usaha</th>
-                            <th class="text-right"><?= format_rp($pengeluaran['total_pengeluaran']) ?></th>
+                            <th class="text-right"><?= format_rp($total_pengeluaran) ?></th>
                         </tr>
-                        <?php $jumlah_laba_op = $pendapatan_sewa['total_pendapatan'] + $pengeluaran['total_pengeluaran'] ?>
+                        <?php $jumlah_laba_op = $pendapatan_sewa['total_pendapatan'] + $total_pengeluaran ?>
                         <tr>
                             <th class="text-left">Jumlah Laba Operasi</th>
                             <th class="text-right"><?= format_rp($jumlah_laba_op) ?></th>
@@ -101,11 +119,11 @@
                         </tr>
                         <tr>
                             <th class="text-left">Pajak sewa</th>
-                            <th class="text-right">-</th>
+                            <th class="text-right"><?= format_rp($pajak_sewa['pajak']) ?></th>
                         </tr>
                         <tr>
                             <th class="text-left">Laba bersih setelah pajak</th>
-                            <th class="text-right">-</th>
+                            <th class="text-right"><?= format_rp($laba_sebelum_pajak + $pajak_sewa['pajak']) ?></th>
                         </tr>
                     </table>
                 </div>

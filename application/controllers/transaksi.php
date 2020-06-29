@@ -72,6 +72,8 @@ class transaksi extends MY_Controller
                 //     $harga_umum = 0;
                 //     $harga_sewa = $harga_khusus;
                 // }
+                $bensin = $this->input->post('bensin');
+                $harga_bensin = $this->input->post('harga_bensin');
 
                 if ($this->input->post('harga_khusus') <= 0) {
                     $harga_umum  = intval($this->input->post('harga_umum'));
@@ -98,6 +100,12 @@ class transaksi extends MY_Controller
                 } else {
                     $set_pajak = $harga_umum * 2 / 100;
                     $subtotal = $harga_sewa  * $hari + $set_pajak;
+                }
+                // var_dump($subtotal);
+                // die;
+
+                if ($bensin != '') {
+                    $subtotal += $bensin * $harga_bensin;
                 }
                 // var_dump($pegawai->biaya);
                 // die;
@@ -126,8 +134,8 @@ class transaksi extends MY_Controller
                 // $id_biaya = $this->input->post('id_biaya');
                 // $biaya_operasional = $this->db->where_in('id', $id_biaya)->get('biaya_operasional')->result();
 
-                $bensin = $this->input->post('bensin');
-                $harga_bensin = $this->input->post('harga_bensin');
+                // $bensin = $this->input->post('bensin');
+                // $harga_bensin = $this->input->post('harga_bensin');
                 if ($saveTransaksi) {
                     $this->db->trans_start();
                     $totalBiaya = 0;
@@ -298,6 +306,36 @@ class transaksi extends MY_Controller
         return null;
     }
 
+    public function getJenisBeban()
+    {
+        $jenis = $this->input->post('jenis');
+        // var_dump($jenis);
+        // die;
+        // $query = '';
+        if ($jenis == 'Alat berat') {
+            $this->db->where('kode_akun', '513');
+            $this->db->or_where('kode_akun', '514');
+        } else if ($jenis == 'Pegawai') {
+            $this->db->where('kode_akun', '515');
+            $this->db->or_where('kode_akun', '516');
+            $this->db->or_where('kode_akun', '517');
+        } else {
+            $this->db->where('kode_akun', '511');
+            $this->db->or_where('kode_akun', '512');
+        }
+        $this->db->select('kode_akun, nama_akun');
+        $query = $this->db->get('coa')->result_array();
+
+        if ($query != '') {
+            $response['data'] = $query;
+            $response['status'] = true;
+        } else {
+            $response['status'] = false;
+        }
+
+        echo json_encode($response);
+    }
+
     public function pengeluaran()
     {
         $pages = 'transaksi/listpengeluaran';
@@ -345,6 +383,9 @@ class transaksi extends MY_Controller
                 'required' => 'kolom %s tidak boleh kosong',
                 'numeric' => 'kolom %s Harus berupa angka'
             ]);
+            $this->form_validation->set_rules('jenis_beban', 'Jenis Beban', 'required', [
+                'required' => 'kolom %s tidak boleh kosong'
+            ]);
 
             if ($this->form_validation->run() == false) {
                 // $this->template->layout($pages, $data);
@@ -357,11 +398,19 @@ class transaksi extends MY_Controller
                     'nominal' => $this->input->post('nominal'),
                     'tgl_pengeluaran' => $this->input->post('tgl_pengeluaran'),
                     'deskripsi' => $this->input->post('deskripsi'),
+                    'id_coa' => $this->input->post('jenis_beban')
                 ];
-                $this->db->insert('transaksi_pengeluaran2', $postPengeluaran);
-                $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
-                $this->session->set_flashdata('message', $alert);
-                redirect('transaksi/pengeluaran');
+                $penge = $this->db->insert('transaksi_pengeluaran2', $postPengeluaran);
+
+                if ($penge) {
+                    $id_coa = $this->input->post('jenis_beban');
+                    $nominal = $this->input->post('nominal');
+                    $this->m_laporan->insertJurnal($id_coa, date('Y-m-d'), $nominal, 'debit');
+                    $this->m_laporan->insertJurnal('111', date('Y-m-d'), $nominal, 'kredit');
+                    $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
+                    $this->session->set_flashdata('message', $alert);
+                    redirect('transaksi/pengeluaran');
+                }
             }
         }
 

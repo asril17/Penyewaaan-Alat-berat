@@ -26,7 +26,7 @@
 					<label for="">Jenis Pengeluaran</label>
 				</div>
 				<div class="col-sm-9">
-					<select name="jenis_pengeluaran" id="" class="form-control">
+					<select name="jenis_pengeluaran" id="jenis_pengeluaran" class="form-control">
 						<option value="" selected disabled>Plih jenis pengeluaran</option>
 						<option value="Alat berat">Alat Berat</option>
 						<option value="Pegawai">Pegawai</option>
@@ -34,19 +34,16 @@
 					</select>
 				</div>
 			</div>
-			<!-- <div class="form-group row">
+			<div class="form-group row">
 				<div class="col-sm-3">
-					<label for="">Alat Berat*</label>
+					<label for="">Pengeluaran Beban</label>
 				</div>
 				<div class="col-sm-9">
-					<select name="id_alat_berat" id="" class="form-control">
-						<option value="">Plih Alat Berat</option>
-						<?php foreach ($alat_berat as $key => $value) : ?>
-							<option value="<?php echo $value->id ?>"><?php echo $value->nama_alber ?></option>
-						<?php endforeach ?>
+					<select name="jenis_beban" id="jenis_beban" class="form-control">
+						<option value="">Plih Beban ....</option>
 					</select>
 				</div>
-			</div> -->
+			</div>
 			<div class="form-group row">
 				<div class="col-sm-3">
 					<label for="">Nominal *</label>
@@ -68,7 +65,30 @@
 					<input type="submit" class="btn btn-primary" value="Simpan">
 				</div>
 			</div>
-
 		</form>
 	</div>
 </div>
+
+<script>
+	$('#jenis_pengeluaran').change(function(event) {
+		$('.bb').remove('');
+		var jenis = $(this).val();
+		$.ajax({
+			url: '<?php echo base_url() ?>transaksi/getJenisBeban',
+			type: 'POST',
+			data: {
+				jenis: jenis
+			},
+			dataType: 'json',
+			success: function(res) {
+				if (res.status == true) {
+					for (i = 0; i < res.data.length; i++) {
+						$('#jenis_beban').append('<option class="bb" value="' + res.data[i].kode_akun + '">' + res.data[i].nama_akun + '</option>')
+					}
+
+				}
+			}
+		})
+
+	});
+</script>

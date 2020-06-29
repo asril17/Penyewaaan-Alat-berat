@@ -273,6 +273,7 @@
         let harga_umum = $('#harga_umum').val();
         let harga_khusus = $('#harga_khusus').val();
         let bensin = $('#bensin').val();
+        let harga_bensin = $('#harga_bensin').val();
         let supir = $('option:selected', '#supir').attr('supir');
         let biaya = $('#biaya').val();
         let harga = '';
@@ -292,6 +293,10 @@
 
         let set_pajak = Number(harga_sewa) * 2 / 100;
         let subtotal = (Number(harga) + Number(biaya)) * Number(diffDays) + Number(set_pajak);
+
+        if (bensin != '') {
+            subtotal = subtotal + (Number(bensin) * Number(harga_bensin));
+        }
         // $subtotal = $subtotal + $set_pajak;
         // $potongan = ($pegawai->pajak / 100) * $pegawai->biaya;
         // let gaji = biaya * diffDays;
