@@ -13,9 +13,17 @@ class transaksi extends MY_Controller
         $current = date('Y-m-d');
         $trans = $this->m_transaksi->getData('transaksi');
         foreach ($trans as $row) {
-            if ($current > $row['tgl_berakhir']) {
+            if (strtotime($current) > strtotime($row['tgl_berakhir']) || $row['status'] == 1) {
                 $this->db->where('id', $row['pegawai_id'])
                     ->update('pegawai', ['status_sopir' => '0']);
+                $this->db->where('id', $row['alat_berat_id'])
+                    ->update('alat_berat', ['status' => '0']);
+            } else {
+
+                $this->db->where('id', $row['pegawai_id'])
+                    ->update('pegawai', ['status_sopir' => '1']);
+                $this->db->where('id', $row['alat_berat_id'])
+                    ->update('alat_berat', ['status' => '1']);
             }
         }
         $pages = 'transaksi/penyewaanAlatBerat';
@@ -39,7 +47,7 @@ class transaksi extends MY_Controller
             'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             'kode' => $this->m_transaksi->kode('kd_penyewaan', 'transaksi', 'PNY'),
             'pl' => $this->m_transaksi->getData('pelanggan'),
-            'alber' => $this->m_transaksi->getData('alat_berat'),
+            'alber' => $this->m_transaksi->getDataAlatBerat(),
             'title' => 'Transaksi',
             'subtitle' => 'Form Input Penyewaan',
             'pegawai' => $this->m_transaksi->getDataPegawai(),
@@ -53,25 +61,14 @@ class transaksi extends MY_Controller
             if ($validation == false) {
                 $this->template->layout($pages, $data);
             } else {
-                $ts1 = strtotime($this->input->post('tgl_sewa'));
-                $ts2 = strtotime($this->input->post('tgl_expired'));
-                $date1 = date_create($this->input->post('tgl_sewa'));
-                $date2 = date_create($this->input->post('tgl_expired'));
-                $diff = date_diff($date1, $date2);
-                $hari = $diff->d;
+                $ts1 = new DateTime($this->input->post('tgl_sewa'));
+                $ts2 = new DateTime($this->input->post('tgl_expired'));
+                // $date1 = date_create($this->input->post('tgl_sewa'));
+                // $date2 = date_create($this->input->post('tgl_expired'));
+                // $diff = date_diff($date1, $date2);
+                $diff = $ts2->diff($ts1)->days;
+                $hari = $diff;
 
-                // if (!empty($this->input->post('harga_umum'))) {
-                //     $harga_umum  = intval($this->input->post('harga_umum'));
-
-                //     $harga_sewa = $harga_umum;
-                // }
-
-                // //jika harga khusus
-                // if (!empty($this->input->post('harga_khusus')) && $this->input->post('harga_khusus') !== 0) {
-                //     $harga_khusus = intval($this->input->post('harga_khusus'));
-                //     $harga_umum = 0;
-                //     $harga_sewa = $harga_khusus;
-                // }
                 $bensin = $this->input->post('bensin');
                 $harga_bensin = $this->input->post('harga_bensin');
 
@@ -86,29 +83,28 @@ class transaksi extends MY_Controller
 
 
                 $pegawai = $this->db->where('id', $this->input->post('kd_pegawai'))->get('pegawai')->row();
+                // $alber = $this->db->where('id', $this->input->post('id_alatberat'))->get('alat_berat')->row();
                 $pajak_pegawai = 0;
                 if (!empty($pegawai->id !== 1)) {
-                    $set_pajak = $harga_umum * 2 / 100;
+                    $set_pajak = ($harga_umum * 2 / 100) * $hari;
+
                     $subtotal = ($harga_sewa + $pegawai->biaya) * $hari + $set_pajak;
+
                     // $subtotal = $subtotal + $set_pajak;
                     // $potongan = ($pegawai->pajak / 100) * $pegawai->biaya;
                     $gaji  = $pegawai->biaya * $hari;
                     $pajak = 25;
                     $pajak_pegawai += $gaji * 25 / 100;
+
                     $this->db->where('id', $this->input->post('kd_pegawai'))
                         ->update('pegawai', ['status_sopir' => '1']);
                 } else {
-                    $set_pajak = $harga_umum * 2 / 100;
+                    $set_pajak = ($harga_umum * 2 / 100) * $hari;
                     $subtotal = $harga_sewa  * $hari + $set_pajak;
                 }
-                // var_dump($subtotal);
-                // die;
-
                 if ($bensin != '') {
                     $subtotal += $bensin * $harga_bensin;
                 }
-                // var_dump($pegawai->biaya);
-                // die;
                 $nominal_pajak = $pajak_pegawai + $set_pajak;
                 $DP = $subtotal - $this->input->post('DP');
 
@@ -130,6 +126,11 @@ class transaksi extends MY_Controller
 
                 $saveTransaksi  = $this->db->insert('transaksi', $transaksiPost);
                 $id = $this->db->insert_id();
+                $pajak_dp = $DP * 2 / 100;
+                $this->m_laporan->insertJurnal('111', date('Y-m-d'), ($this->input->post('DP') - $pajak_dp), 'debit');
+                $this->m_laporan->insertJurnal('112', date('Y-m-d'), ($subtotal - $DP), 'debit');
+                $this->m_laporan->insertJurnal('114', date('Y-m-d'), $pajak_dp, 'debit');
+                $this->m_laporan->insertJurnal('411', date('Y-m-d'), $subtotal, 'kredit');
 
                 // $id_biaya = $this->input->post('id_biaya');
                 // $biaya_operasional = $this->db->where_in('id', $id_biaya)->get('biaya_operasional')->result();
@@ -157,7 +158,11 @@ class transaksi extends MY_Controller
                         'total' => $harga_bensin * $bensin,
                     ];
                     $this->db->insert('transaksi_detail_tambahan', $postTransaksiDetail);
+                    $upal = $this->db->where('id', $this->input->post('id_alatberat'))
+                        ->update('alat_berat', ['status' => '1']);
 
+                    // var_dump($this->input->post('id_alatberat'));
+                    // die;
                     $this->db->insert('daftar_pemasukan_pegawai', ['transaksi_id' => $id, 'nominal' => $gaji, 'persen' => $pajak]);
                     $this->db->insert('daftar_pajak', ['nominal_pajak' => $nominal_pajak, 'transaksi_id' => $id]);
                     $this->db->trans_complete();
@@ -316,12 +321,12 @@ class transaksi extends MY_Controller
             $this->db->where('kode_akun', '513');
             $this->db->or_where('kode_akun', '514');
         } else if ($jenis == 'Pegawai') {
+            $this->db->where('kode_akun', '511');
+            $this->db->or_where('kode_akun', '512');
+        } else {
             $this->db->where('kode_akun', '515');
             $this->db->or_where('kode_akun', '516');
             $this->db->or_where('kode_akun', '517');
-        } else {
-            $this->db->where('kode_akun', '511');
-            $this->db->or_where('kode_akun', '512');
         }
         $this->db->select('kode_akun, nama_akun');
         $query = $this->db->get('coa')->result_array();

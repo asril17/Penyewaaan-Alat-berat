@@ -22,6 +22,10 @@ class m_transaksi extends CI_model
     {
         return $this->db->get_where('pegawai', ['status_sopir' => 0])->result_array();
     }
+    public function getDataAlatBerat()
+    {
+        return $this->db->get_where('alat_berat', ['status' => 0])->result_array();
+    }
     public function getData($table)
     {
         return $this->db->get_where($table)->result_array();
@@ -100,8 +104,10 @@ class m_transaksi extends CI_model
         $this->load->model('m_laporan');
 
         $get = $this->db->get_where('transaksi', ['kd_penyewaan' => $kd_penyewaan])->row_array();
-        // $nominal_bayar = $get['jml_bayar'] + $get['sisa'];
-        $nominal_bayar = $this->input->post('jml_bayar');
+        // $nominal_bayar = $get['jml_bayar'] - $get['sisa'];
+        // var_dump($get['sisa']);
+        // die;
+        $nominal_bayar = $this->input->post('jml_bayar') - $get['sisa'];
         // var_dump($nominal_bayar);
         // die;
         $pajak = $get['nominal'] * 2 / 100;
@@ -109,9 +115,9 @@ class m_transaksi extends CI_model
 
         if ($nominal_bayar == 0) {
             $status = 1;
-            $this->m_laporan->insertJurnal('111', date('Y-m-d'), $sewa_umum, 'debit');
-            $this->m_laporan->insertJurnal('114', date('Y-m-d'), $pajak, 'debit');
-            $this->m_laporan->insertJurnal('411', date('Y-m-d'), $get['nominal'], 'kredit');
+            $this->m_laporan->insertJurnal('111', date('Y-m-d'), $get['sisa'], 'debit');
+            // $this->m_laporan->insertJurnal('114', date('Y-m-d'), $pajak, 'debit');
+            $this->m_laporan->insertJurnal('112', date('Y-m-d'), $this->input->post('jml_bayar'), 'kredit');
         } else {
             $status = 0;
             $this->m_laporan->insertJurnal('111', date('Y-m-d'), $this->input->post('jml_bayar'), 'debit');
@@ -121,7 +127,7 @@ class m_transaksi extends CI_model
         }
         $data = [
             'jml_bayar'         => $this->input->post('jml_bayar'),
-            'sisa'              => 0,
+            'sisa'              => $nominal_bayar,
             'status'            => $status,
             'tgl_pelunasan'     => $this->input->post('tgl_pelunasan'),
         ];

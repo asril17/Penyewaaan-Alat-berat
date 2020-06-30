@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 29 Jun 2020 pada 12.28
+-- Waktu pembuatan: 30 Jun 2020 pada 09.28
 -- Versi server: 10.4.6-MariaDB
 -- Versi PHP: 7.3.8
 
@@ -67,8 +67,9 @@ CREATE TABLE `alat_berat` (
 --
 
 INSERT INTO `alat_berat` (`id`, `kd_tipe`, `nama_alber`, `jenis_id`, `merk`, `harga_sewa`, `harga_sewa_khusus`, `biaya_sopir`, `foto`, `status`) VALUES
-(3, 'AB-001', 'Excava 200', 1, 'Pindad', 6820000, 0, 200000, NULL, 0),
-(5, 'AB-002', 'Dump Truck', 2, 'dump dump', 10000000, 20000000, 0, NULL, 0);
+(3, 'AB-001', 'Excava 200', 1, 'Pindad', 300000, 0, 200000, NULL, 0),
+(5, 'AB-002', 'Dump Truck', 2, 'dump dump', 10000000, 20000000, 0, NULL, 0),
+(6, 'AB-003', 'Tank', 2, 'dump dump', 300000, 0, 0, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -111,7 +112,7 @@ INSERT INTO `coa` (`kode_akun`, `nama_akun`, `header_akun`) VALUES
 (111, 'Kas', 1),
 (112, 'piutang', 1),
 (113, 'perlengkapan', 1),
-(114, 'Pajak Dibayar Dimuka', 1),
+(114, 'PPh Pasal 23', 1),
 (211, 'Utang Sewa', 2),
 (411, 'pendapatan sewa', 4),
 (511, 'Beban Gaji', 5),
@@ -140,7 +141,23 @@ CREATE TABLE `daftar_pajak` (
 
 INSERT INTO `daftar_pajak` (`id`, `nominal_pajak`, `transaksi_id`) VALUES
 (10, 286400, 16),
-(11, 698900, 17);
+(11, 698900, 17),
+(12, 286400, 18),
+(13, 511400, 19),
+(14, 336400, 20),
+(15, 323900, 21),
+(16, 261400, 22),
+(17, 150000, 23),
+(18, 1680000, 24),
+(19, 3360000, 25),
+(20, 3360000, 26),
+(21, 3360000, 27),
+(22, 3360000, 28),
+(23, 3360000, 30),
+(24, 3360000, 34),
+(25, 3360000, 35),
+(26, 3360000, 36),
+(27, 3360000, 37);
 
 -- --------------------------------------------------------
 
@@ -161,7 +178,23 @@ CREATE TABLE `daftar_pemasukan_pegawai` (
 
 INSERT INTO `daftar_pemasukan_pegawai` (`id`, `nominal`, `persen`, `transaksi_id`) VALUES
 (15, 600000, 25, 16),
-(16, 2250000, 25, 17);
+(16, 2250000, 25, 17),
+(17, 600000, 25, 18),
+(18, 1500000, 25, 19),
+(19, 800000, 25, 20),
+(20, 750000, 25, 21),
+(21, 500000, 25, 22),
+(22, 600000, 25, 23),
+(23, 6000000, 25, 24),
+(24, 12000000, 25, 25),
+(25, 12000000, 25, 26),
+(26, 12000000, 25, 27),
+(27, 12000000, 25, 28),
+(28, 12000000, 25, 30),
+(29, 12000000, 25, 34),
+(30, 12000000, 25, 35),
+(31, 12000000, 25, 36),
+(32, 12000000, 25, 37);
 
 -- --------------------------------------------------------
 
@@ -191,7 +224,7 @@ INSERT INTO `jenis_alat_berat` (`id_jenis`, `kode_jenis`, `jenis`) VALUES
 
 CREATE TABLE `jurnal` (
   `id` int(11) NOT NULL,
-  `kode_akun` varchar(30) DEFAULT NULL,
+  `kode_akun` int(11) DEFAULT NULL,
   `tgl_jurnal` date DEFAULT NULL,
   `nominal` int(11) DEFAULT NULL,
   `posisi_dr_cr` varchar(30) DEFAULT NULL
@@ -202,39 +235,122 @@ CREATE TABLE `jurnal` (
 --
 
 INSERT INTO `jurnal` (`id`, `kode_akun`, `tgl_jurnal`, `nominal`, `posisi_dr_cr`) VALUES
-(26, '112', '2020-03-04', 184840000, 'debit'),
-(27, '411', '2020-03-04', 186840000, 'kredit'),
-(28, '115', '2020-06-10', 10000000, 'debit'),
-(29, '118', '2020-06-10', 4074400, 'debit'),
-(30, '111', '2020-06-10', 14074400, 'kredit'),
-(31, '115', '2020-06-10', 4074400, 'debit'),
-(32, '118', '2020-06-10', 0, 'debit'),
-(33, '111', '2020-06-10', 14074400, 'kredit'),
-(34, '111', '2020-06-10', 20739936, 'debit'),
-(35, '117', '2020-06-10', 423264, 'debit'),
-(36, '411', '2020-06-10', 21163200, 'kredit'),
-(37, '111', '2020-06-24', 20346400, 'debit'),
-(38, '114', '2020-06-24', 20346400, 'debit'),
-(39, '411', '2020-06-24', 20346400, 'kredit'),
-(40, '211', '2020-06-24', -20346400, 'kredit'),
-(41, '111', '2020-06-24', 41556400, 'debit'),
-(42, '114', '2020-06-24', 41556400, 'debit'),
-(43, '411', '2020-06-24', 41556400, 'kredit'),
-(44, '211', '2020-06-24', 41556400, 'kredit'),
-(45, '111', '2020-06-24', 41556400, 'debit'),
-(46, '114', '2020-06-24', 41556400, 'debit'),
-(47, '411', '2020-06-24', 41556400, 'kredit'),
-(48, '211', '2020-06-24', 41556400, 'kredit'),
-(49, '111', '2020-06-24', 41556400, 'debit'),
-(50, '114', '2020-06-24', 41556400, 'debit'),
-(51, '411', '2020-06-24', 41556400, 'kredit'),
-(52, '211', '2020-06-24', 41556400, 'kredit'),
-(53, '515', '2020-06-29', 300000, 'debit'),
-(54, '111', '2020-06-29', 300000, 'kredit'),
-(55, '515', '2020-06-29', 200000000, 'debit'),
-(56, '111', '2020-06-29', 200000000, 'kredit'),
-(57, '514', '2020-06-29', 100000, 'debit'),
-(58, '111', '2020-06-29', 100000, 'kredit');
+(26, 112, '2020-03-04', 184840000, 'debit'),
+(27, 411, '2020-03-04', 186840000, 'kredit'),
+(28, 115, '2020-06-10', 10000000, 'debit'),
+(29, 118, '2020-06-10', 4074400, 'debit'),
+(30, 111, '2020-06-10', 14074400, 'kredit'),
+(31, 115, '2020-06-10', 4074400, 'debit'),
+(32, 118, '2020-06-10', 0, 'debit'),
+(33, 111, '2020-06-10', 14074400, 'kredit'),
+(34, 111, '2020-06-10', 20739936, 'debit'),
+(35, 117, '2020-06-10', 423264, 'debit'),
+(36, 411, '2020-06-10', 21163200, 'kredit'),
+(37, 111, '2020-06-24', 20346400, 'debit'),
+(38, 114, '2020-06-24', 20346400, 'debit'),
+(39, 411, '2020-06-24', 20346400, 'kredit'),
+(40, 211, '2020-06-24', -20346400, 'kredit'),
+(41, 111, '2020-06-24', 41556400, 'debit'),
+(42, 114, '2020-06-24', 41556400, 'debit'),
+(43, 411, '2020-06-24', 41556400, 'kredit'),
+(44, 211, '2020-06-24', 41556400, 'kredit'),
+(45, 111, '2020-06-24', 41556400, 'debit'),
+(46, 114, '2020-06-24', 41556400, 'debit'),
+(47, 411, '2020-06-24', 41556400, 'kredit'),
+(48, 211, '2020-06-24', 41556400, 'kredit'),
+(49, 111, '2020-06-24', 41556400, 'debit'),
+(50, 114, '2020-06-24', 41556400, 'debit'),
+(51, 411, '2020-06-24', 41556400, 'kredit'),
+(52, 211, '2020-06-24', 41556400, 'kredit'),
+(53, 515, '2020-06-29', 300000, 'debit'),
+(54, 111, '2020-06-29', 300000, 'kredit'),
+(55, 515, '2020-06-29', 200000000, 'debit'),
+(56, 111, '2020-06-29', 200000000, 'kredit'),
+(57, 514, '2020-06-29', 100000, 'debit'),
+(58, 111, '2020-06-29', 100000, 'kredit'),
+(59, 111, '2020-06-30', 62910400, 'debit'),
+(60, 114, '2020-06-30', 62910400, 'debit'),
+(61, 411, '2020-06-30', 62910400, 'kredit'),
+(62, 211, '2020-06-30', 62910400, 'kredit'),
+(63, 111, '2020-06-30', 20340400, 'debit'),
+(64, 114, '2020-06-30', 20340400, 'debit'),
+(65, 411, '2020-06-30', 20340400, 'kredit'),
+(66, 211, '2020-06-30', 20340400, 'kredit'),
+(67, 111, '2020-06-30', 21340400, 'debit'),
+(68, 114, '2020-06-30', 21340400, 'debit'),
+(69, 411, '2020-06-30', 21340400, 'kredit'),
+(70, 211, '2020-06-30', 21340400, 'kredit'),
+(71, 111, '2020-06-30', 21795592, 'debit'),
+(72, 114, '2020-06-30', 444808, 'debit'),
+(73, 411, '2020-06-30', 22240400, 'kredit'),
+(74, 111, '2020-06-30', 59529120, 'debit'),
+(75, 114, '2020-06-30', 1214880, 'debit'),
+(76, 411, '2020-06-30', 60744000, 'kredit'),
+(77, 111, '2020-06-30', 7448392, 'debit'),
+(78, 114, '2020-06-30', 152008, 'debit'),
+(79, 411, '2020-06-30', 7600400, 'kredit'),
+(80, 111, '2020-06-30', 21060592, 'debit'),
+(81, 114, '2020-06-30', 429808, 'debit'),
+(82, 411, '2020-06-30', 21490400, 'kredit'),
+(83, 111, '2020-06-30', 27793192, 'debit'),
+(84, 114, '2020-06-30', 567208, 'debit'),
+(85, 411, '2020-06-30', 28360400, 'kredit'),
+(86, 111, '2020-06-30', 15008700, 'debit'),
+(87, 114, '2020-06-30', 306300, 'debit'),
+(88, 411, '2020-06-30', 15315000, 'kredit'),
+(89, 111, '2020-06-30', 29885100, 'debit'),
+(90, 114, '2020-06-30', 609900, 'debit'),
+(91, 411, '2020-06-30', 30495000, 'kredit'),
+(92, 111, '2020-06-30', 29885100, 'debit'),
+(93, 411, '2020-06-30', 29495000, 'kredit'),
+(94, 111, '2020-06-30', 14887400, 'debit'),
+(95, 112, '2020-06-30', 15247600, 'debit'),
+(96, 114, '2020-06-30', 360000, 'debit'),
+(97, 411, '2020-06-30', 30495000, 'kredit'),
+(98, 111, '2020-06-30', 14942550, 'debit'),
+(99, 112, '2020-06-30', 15247500, 'debit'),
+(100, 114, '2020-06-30', 304950, 'debit'),
+(101, 411, '2020-06-30', 30495000, 'kredit'),
+(102, 111, '2020-06-30', 14942550, 'debit'),
+(103, 112, '2020-06-30', 15247500, 'debit'),
+(104, 114, '2020-06-30', 304950, 'debit'),
+(105, 411, '2020-06-30', 30495000, 'kredit'),
+(106, 111, '2020-06-30', 14942550, 'debit'),
+(107, 112, '2020-06-30', 15247500, 'debit'),
+(108, 114, '2020-06-30', 304950, 'debit'),
+(109, 411, '2020-06-30', 30495000, 'kredit'),
+(110, 111, '2020-06-30', 14942550, 'debit'),
+(111, 112, '2020-06-30', 15247500, 'debit'),
+(112, 114, '2020-06-30', 304950, 'debit'),
+(113, 411, '2020-06-30', 30495000, 'kredit'),
+(114, 111, '2020-06-30', 14942550, 'debit'),
+(115, 112, '2020-06-30', 15247500, 'debit'),
+(116, 114, '2020-06-30', 304950, 'debit'),
+(117, 411, '2020-06-30', 30495000, 'kredit'),
+(118, 111, '2020-06-30', 14942550, 'debit'),
+(119, 112, '2020-06-30', 15247500, 'debit'),
+(120, 114, '2020-06-30', 304950, 'debit'),
+(121, 411, '2020-06-30', 30495000, 'kredit'),
+(122, 111, '2020-06-30', 14942550, 'debit'),
+(123, 112, '2020-06-30', 15247500, 'debit'),
+(124, 114, '2020-06-30', 304950, 'debit'),
+(125, 411, '2020-06-30', 30495000, 'kredit'),
+(126, 111, '2020-06-30', 14942550, 'debit'),
+(127, 112, '2020-06-30', 15247500, 'debit'),
+(128, 114, '2020-06-30', 304950, 'debit'),
+(129, 411, '2020-06-30', 30495000, 'kredit'),
+(130, 111, '2020-06-30', 14942550, 'debit'),
+(131, 112, '2020-06-30', 15247500, 'debit'),
+(132, 114, '2020-06-30', 304950, 'debit'),
+(133, 411, '2020-06-30', 30495000, 'kredit'),
+(134, 111, '2020-06-30', 14942550, 'debit'),
+(135, 112, '2020-06-30', 15247500, 'debit'),
+(136, 114, '2020-06-30', 304950, 'debit'),
+(137, 411, '2020-06-30', 30495000, 'kredit'),
+(138, 111, '2020-06-30', 29885100, 'debit'),
+(139, 112, '2020-06-30', 15247600, 'kredit'),
+(140, 111, '2020-06-30', 15247500, 'debit'),
+(141, 112, '2020-06-30', 15247500, 'kredit');
 
 -- --------------------------------------------------------
 
@@ -257,11 +373,10 @@ CREATE TABLE `pegawai` (
 --
 
 INSERT INTO `pegawai` (`id`, `kd_pegawai`, `nama_pegawai`, `no_telp`, `alamat`, `status_sopir`, `biaya`) VALUES
-(1, 'SPR-001', 'Topik', '087675786876', NULL, 0, 0),
-(2, 'SPR-002', 'Bohim', '0989889494', NULL, 1, 200000),
-(4, 'SPR-003', 'Asril', '123123123, 34234, 4354354', 'sadsd', 0, 200000),
-(5, 'SPR-004', 'Bon', '098341234', NULL, 1, 250000),
-(6, 'SPR-001', 'Topik', '087675786876', 'sadsad', 1, 500000);
+(2, 'SPR-002', 'Bohim', '0989889494', NULL, 0, 200000),
+(4, 'SPR-003', 'Asril', '123123123, 34234, 4354354', 'sadsd', 1, 200000),
+(5, 'SPR-004', 'Bon', '098341234', NULL, 0, 250000),
+(6, 'SPR-001', 'Topik', '087675786876', 'sadsad', 0, 500000);
 
 -- --------------------------------------------------------
 
@@ -354,7 +469,27 @@ CREATE TABLE `transaksi` (
 
 INSERT INTO `transaksi` (`id`, `kd_penyewaan`, `alat_berat_id`, `pelanggan_id`, `pegawai_id`, `nominal`, `jml_bayar`, `sisa`, `status`, `tgl_transaksi`, `tgl_pelunasan`, `tgl_mulai`, `tgl_berakhir`, `user_id`) VALUES
 (16, 'PNY-001', 3, 1, 2, 144000, 1000000, -856000, 0, '2020-06-29 13:12:35', NULL, '2020-06-29', '2020-07-02', 38),
-(17, 'PNY-002', 3, 1, 5, 63910400, 1000000, 62910400, 0, '2020-06-29 13:15:11', NULL, '2020-06-29', '2020-07-08', 38);
+(17, 'PNY-002', 3, 1, 5, 63910400, 62910400, 0, 0, '2020-06-29 13:15:11', '2020-06-29 17:00:00', '2020-06-29', '2020-07-08', 38),
+(18, 'PNY-003', 3, 1, 4, 21340400, 21340400, 0, 0, '2020-06-30 10:18:15', '2020-06-29 17:00:00', '2020-06-30', '2020-07-03', 38),
+(19, 'PNY-004', 3, 1, 6, 22240400, 21240400, 0, 1, '2020-06-30 10:26:10', '2020-06-29 17:00:00', '2020-06-30', '2020-07-03', 38),
+(20, 'PNY-005', 3, 1, 4, 28360400, 27360400, 0, 1, '2020-06-30 10:34:26', '2020-06-29 17:00:00', '2020-06-30', '2020-07-04', 38),
+(21, 'PNY-006', 3, 1, 5, 21490400, 20490400, 0, 1, '2020-06-30 10:46:05', '2020-06-29 17:00:00', '2020-06-30', '2020-07-03', 38),
+(22, 'PNY-007', 3, 1, 6, 7600400, 6600400, 0, 1, '2020-06-30 10:51:33', '2020-06-29 17:00:00', '2020-06-30', '2020-07-01', 38),
+(23, 'PNY-008', 5, 1, 2, 60744000, 59744000, 0, 1, '2020-06-30 10:54:50', '2020-06-29 17:00:00', '2020-06-30', '2020-07-03', 38),
+(24, 'PNY-009', 6, 1, 4, 15315000, 14315000, 0, 1, '2020-06-30 11:48:52', '2020-06-29 17:00:00', '2020-06-30', '2020-08-29', 38),
+(25, 'PNY-010', 6, 1, 4, 30495000, 29495000, 0, 1, '2020-06-30 12:00:49', '2020-06-29 17:00:00', '2020-06-30', '2020-08-29', 38),
+(26, 'PNY-011', 6, 1, 4, 30495000, 29495000, 0, 1, '2020-06-30 12:26:42', '2020-06-29 17:00:00', '2020-06-30', '2020-08-29', 38),
+(27, 'PNY-012', 6, 1, 4, 30495000, 15247600, 0, 1, '2020-06-30 12:55:26', '2020-06-29 17:00:00', '2020-06-30', '2020-08-29', 38),
+(28, 'PNY-013', 6, 1, 4, 30495000, 15247500, 0, 1, '2020-06-30 13:02:14', '2020-06-29 17:00:00', '2020-06-30', '2020-08-29', 38),
+(29, 'PNY-014', 6, 1, 4, 30495000, 15247500, 15247500, 0, '2020-06-30 13:05:58', NULL, '2020-06-30', '2020-08-29', 38),
+(30, 'PNY-014', 6, 1, 4, 30495000, 15247500, 15247500, 0, '2020-06-30 13:06:17', NULL, '2020-06-30', '2020-08-29', 38),
+(31, 'PNY-015', 6, 1, 4, 30495000, 15247500, 15247500, 0, '2020-06-30 13:12:40', NULL, '2020-06-30', '2020-08-29', 38),
+(32, 'PNY-015', 6, 1, 4, 30495000, 15247500, 15247500, 0, '2020-06-30 13:13:44', NULL, '2020-06-30', '2020-08-29', 38),
+(33, 'PNY-015', 6, 1, 4, 30495000, 15247500, 15247500, 0, '2020-06-30 13:14:26', NULL, '2020-06-30', '2020-08-29', 38),
+(34, 'PNY-015', 6, 1, 4, 30495000, 15247500, 15247500, 0, '2020-06-30 13:14:46', NULL, '2020-06-30', '2020-08-29', 38),
+(35, 'PNY-015', 6, 1, 4, 30495000, 15247500, 15247500, 0, '2020-06-30 13:14:57', NULL, '2020-06-30', '2020-08-29', 38),
+(36, 'PNY-016', 6, 1, 4, 30495000, 15247500, 15247500, 0, '2020-06-30 13:18:06', NULL, '2020-06-30', '2020-08-29', 38),
+(37, 'PNY-017', 6, 1, 4, 30495000, 15247500, 15247500, 0, '2020-06-30 13:30:49', NULL, '2020-06-30', '2020-08-29', 38);
 
 -- --------------------------------------------------------
 
@@ -441,7 +576,23 @@ INSERT INTO `transaksi_detail_tambahan` (`id_transaksi`, `jumlah`, `harga`, `tot
 (14, 12, 9900, 118800),
 (15, 12, 12000, 144000),
 (16, 12, 12000, 144000),
-(17, 12, 12000, 144000);
+(17, 12, 12000, 144000),
+(18, 12, 12000, 144000),
+(19, 12, 12000, 144000),
+(20, 12, 12000, 144000),
+(21, 12, 12000, 144000),
+(22, 12, 12000, 144000),
+(23, 12, 12000, 144000),
+(24, 15, 9000, 135000),
+(25, 15, 9000, 135000),
+(26, 15, 9000, 135000),
+(27, 15, 9000, 135000),
+(28, 15, 9000, 135000),
+(30, 15, 9000, 135000),
+(34, 15, 9000, 135000),
+(35, 15, 9000, 135000),
+(36, 15, 9000, 135000),
+(37, 15, 9000, 135000);
 
 -- --------------------------------------------------------
 
@@ -691,7 +842,8 @@ ALTER TABLE `alamat_pegawai`
 -- Indeks untuk tabel `alat_berat`
 --
 ALTER TABLE `alat_berat`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jenis_id` (`jenis_id`);
 
 --
 -- Indeks untuk tabel `biaya_operasional`
@@ -709,13 +861,15 @@ ALTER TABLE `coa`
 -- Indeks untuk tabel `daftar_pajak`
 --
 ALTER TABLE `daftar_pajak`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `transaksi_id` (`transaksi_id`);
 
 --
 -- Indeks untuk tabel `daftar_pemasukan_pegawai`
 --
 ALTER TABLE `daftar_pemasukan_pegawai`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `transaksi_id` (`transaksi_id`);
 
 --
 -- Indeks untuk tabel `jenis_alat_berat`
@@ -751,13 +905,18 @@ ALTER TABLE `pengaturan`
 -- Indeks untuk tabel `produk`
 --
 ALTER TABLE `produk`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `alat_berat_id` (`alat_berat_id`);
 
 --
 -- Indeks untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `alat_berat_id` (`alat_berat_id`),
+  ADD KEY `pegawai_id` (`pegawai_id`),
+  ADD KEY `pelanggan_id` (`pelanggan_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indeks untuk tabel `transaksi_biaya_tambahan`
@@ -781,7 +940,9 @@ ALTER TABLE `transaksi_pengeluaran`
 -- Indeks untuk tabel `transaksi_pengeluaran2`
 --
 ALTER TABLE `transaksi_pengeluaran2`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_coa` (`id_coa`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indeks untuk tabel `user`
@@ -833,7 +994,7 @@ ALTER TABLE `alamat_pegawai`
 -- AUTO_INCREMENT untuk tabel `alat_berat`
 --
 ALTER TABLE `alat_berat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `biaya_operasional`
@@ -845,13 +1006,13 @@ ALTER TABLE `biaya_operasional`
 -- AUTO_INCREMENT untuk tabel `daftar_pajak`
 --
 ALTER TABLE `daftar_pajak`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT untuk tabel `daftar_pemasukan_pegawai`
 --
 ALTER TABLE `daftar_pemasukan_pegawai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT untuk tabel `jenis_alat_berat`
@@ -863,7 +1024,7 @@ ALTER TABLE `jenis_alat_berat`
 -- AUTO_INCREMENT untuk tabel `jurnal`
 --
 ALTER TABLE `jurnal`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
 
 --
 -- AUTO_INCREMENT untuk tabel `pegawai`
@@ -893,7 +1054,7 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT untuk tabel `transaksi_new`
@@ -948,6 +1109,50 @@ ALTER TABLE `user_sub_menu`
 --
 ALTER TABLE `user_token`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `alat_berat`
+--
+ALTER TABLE `alat_berat`
+  ADD CONSTRAINT `alat_berat_ibfk_1` FOREIGN KEY (`jenis_id`) REFERENCES `jenis_alat_berat` (`id_jenis`);
+
+--
+-- Ketidakleluasaan untuk tabel `daftar_pajak`
+--
+ALTER TABLE `daftar_pajak`
+  ADD CONSTRAINT `daftar_pajak_ibfk_1` FOREIGN KEY (`transaksi_id`) REFERENCES `transaksi` (`id`);
+
+--
+-- Ketidakleluasaan untuk tabel `daftar_pemasukan_pegawai`
+--
+ALTER TABLE `daftar_pemasukan_pegawai`
+  ADD CONSTRAINT `daftar_pemasukan_pegawai_ibfk_1` FOREIGN KEY (`transaksi_id`) REFERENCES `transaksi` (`id`);
+
+--
+-- Ketidakleluasaan untuk tabel `produk`
+--
+ALTER TABLE `produk`
+  ADD CONSTRAINT `produk_ibfk_1` FOREIGN KEY (`alat_berat_id`) REFERENCES `alat_berat` (`id`);
+
+--
+-- Ketidakleluasaan untuk tabel `transaksi`
+--
+ALTER TABLE `transaksi`
+  ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`alat_berat_id`) REFERENCES `alat_berat` (`id`),
+  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`pegawai_id`) REFERENCES `pegawai` (`id`),
+  ADD CONSTRAINT `transaksi_ibfk_3` FOREIGN KEY (`pelanggan_id`) REFERENCES `pelanggan` (`id`),
+  ADD CONSTRAINT `transaksi_ibfk_4` FOREIGN KEY (`user_id`) REFERENCES `user` (`id_user`);
+
+--
+-- Ketidakleluasaan untuk tabel `transaksi_pengeluaran2`
+--
+ALTER TABLE `transaksi_pengeluaran2`
+  ADD CONSTRAINT `transaksi_pengeluaran2_ibfk_1` FOREIGN KEY (`id_coa`) REFERENCES `coa` (`kode_akun`),
+  ADD CONSTRAINT `transaksi_pengeluaran2_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id_user`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

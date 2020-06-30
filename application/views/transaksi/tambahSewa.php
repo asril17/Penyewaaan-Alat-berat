@@ -291,12 +291,32 @@
             harga_sewa = 0;
         }
 
-        let set_pajak = Number(harga_sewa) * 2 / 100;
-        let subtotal = (Number(harga) + Number(biaya)) * Number(diffDays) + Number(set_pajak);
 
+
+        let set_pajak = (Number(harga_sewa) * 2 / 100) * Number(diffDays);
+        console.log('Pajak : ' + set_pajak);
+        let sewa = Number(harga) * Number(diffDays);
+        console.log('Sewa : ' + sewa);
+
+        let harga_setelah_pajak = Number(sewa) + Number(set_pajak);
+        console.log('Setelah Pajak : ' + harga_setelah_pajak);
+
+        let tambahan = 0;
         if (bensin != '') {
-            subtotal = subtotal + (Number(bensin) * Number(harga_bensin));
+            tambahan += (Number(bensin) * Number(harga_bensin));
+            console.log('Tambahan : ' + tambahan);
+
         }
+        let sopir = 0;
+        if (biaya != '' || biaya != 0) {
+            sopir += Number(biaya) * Number(diffDays);
+            console.log('sopir : ' + sopir);
+        }
+
+        let subtotal = harga_setelah_pajak + tambahan + sopir;
+
+        let min_bayar = subtotal * 50 / 100;
+        console.log('Total : ' + subtotal);
         // $subtotal = $subtotal + $set_pajak;
         // $potongan = ($pegawai->pajak / 100) * $pegawai->biaya;
         // let gaji = biaya * diffDays;
@@ -314,6 +334,8 @@
         $('#nama_supir').html(supir);
         $('#biaya_supir').html(biaya);
         $('#total').html(subtotal);
+        $('#jumlah_bayarDP').val(min_bayar);
+        $('#jumlah_bayarDP').attr('min', min_bayar);
 
         $('#sewa1').css('display', 'none')
         $('#sewa').css('display', 'block')
@@ -329,6 +351,22 @@
             $('#form').trigger('submit');
 
         }
+    });
+
+    $(document).on('keyup', '#jumlah_bayarDP', function() {
+        let min = $(this).attr('min');
+        let nominal = $(this).val();
+
+        if (nominal < min) {
+            $('#jumlah_bayarDP').val(min);
+            $('#jumlah_bayarDP').addClass('is-invalid');
+            $('#err').html('Jumlah pembayaran minimal' + min);
+        } else {
+            $('#jumlah_bayarDP').removeClass('is-invalid');
+            $('#err').html('');
+
+        }
+
     });
 
     // function CalcDiff() {
