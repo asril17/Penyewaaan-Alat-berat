@@ -12,20 +12,32 @@ class transaksi extends MY_Controller
     {
         $current = date('Y-m-d');
         $trans = $this->m_transaksi->getData('transaksi');
+        $valid = true;
         foreach ($trans as $row) {
-            if (strtotime($current) > strtotime($row['tgl_berakhir']) || $row['status'] == 1) {
+
+
+            if (strtotime($current) < strtotime($row['tgl_berakhir'])) {
+                $valid = false;
+            }
+            if ($row['status'] == '1') {
+                $valid = true;
+            }
+
+            if ($valid == true) {
                 $this->db->where('id', $row['pegawai_id'])
                     ->update('pegawai', ['status_sopir' => '0']);
                 $this->db->where('id', $row['alat_berat_id'])
                     ->update('alat_berat', ['status' => '0']);
             } else {
-
                 $this->db->where('id', $row['pegawai_id'])
                     ->update('pegawai', ['status_sopir' => '1']);
                 $this->db->where('id', $row['alat_berat_id'])
                     ->update('alat_berat', ['status' => '1']);
             }
         }
+        // die;
+
+
         $pages = 'transaksi/penyewaanAlatBerat';
         $data = [
             'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
@@ -77,7 +89,7 @@ class transaksi extends MY_Controller
                     $harga_sewa = $harga_umum;
                 } else {
                     $harga_khusus = intval($this->input->post('harga_khusus'));
-                    $harga_umum = 0;
+                    $harga_umum = $harga_khusus;
                     $harga_sewa = $harga_khusus;
                 }
 

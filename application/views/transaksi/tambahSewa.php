@@ -145,7 +145,7 @@
                         <label for="">Tambahan Lainnya</label>
                     </div>
                     <div class="col-sm-2">
-                        <label for="bensin">bensin</label>
+                        <label for="bensin">Solar</label>
                         <input type="number" min="1" class="form-control" name="bensin" id="bensin">
                     </div>
                     <div class="col-sm-2">
@@ -288,7 +288,7 @@
             $('.khusus').css('display', 'block');
             $('.umum').css('display', 'none');
             harga = harga_khusus;
-            harga_sewa = 0;
+            harga_sewa = harga;
         }
 
 
