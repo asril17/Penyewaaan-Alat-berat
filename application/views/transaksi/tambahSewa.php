@@ -50,6 +50,14 @@
                             <div class="text-danger"><?= form_error('tgl_expired', '<small class="text-danger pl-3">', '</small>') ?></div>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <label for="">Lama Sewa</label>
+                        </div>
+                        <div class="col-md-8">
+                            <h6 id="hariku">0 Hari</h6>
+                        </div>
+                    </div>
                 </div>
             </div>
             <hr>
@@ -80,6 +88,22 @@
                             </div>
                             <div class="col-sm-8">
                                 <input readonly type="text" class="form-control harga_umum" id="harga_umum" name="harga_umum">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label for="sewa_sebelum_pajak">Total Sewa Sebelum Pajak</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input readonly type="text" class="form-control sewa_sebelum_pajak" id="sewa_sebelum_pajak" name="sewa_sebelum_pajak">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label for="pajak_harus_dibayar">Total Pajak yang harus dibayar</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input readonly type="text" class="form-control pajak_harus_dibayar" id="pajak_harus_dibayar" name="pajak_harus_dibayar">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -206,9 +230,10 @@
                             <th>Nama Pelanggan</th>
                             <th>Alat yang di sewa</th>
                             <th>Jumlah hari penyewaan</th>
-                            <th class="umum">Harga sewa umum</th>
+                            <th class="umum">Harga sewa setelah pajak</th>
                             <th class="khusus">Harga sewa khusus</th>
                             <th>Tambah Lainnya</th>
+                            <th>Harga Tambahan</th>
                             <th>Nama Supir</th>
                             <th>Biaya supir</th>
                             <th>Total</th>
@@ -222,6 +247,7 @@
                             <td class="text-right umum" id="sewa_umum"></td>
                             <td class="text-right khusus" id="sewa_khusus"></td>
                             <td class="text-center" id="tambahan"></td>
+                            <td class="text-center" id="harga_tambahan"></td>
                             <td class="text-center" id="nama_supir"></td>
                             <td class="text-right" id="biaya_supir"></td>
                             <td class="text-right" id="total"></td>
@@ -262,6 +288,16 @@
 </div>
 
 <script>
+    $(document).on('change', '#tgl_expired, #tgl_sewa', function() {
+        var oneDay = 24 * 60 * 60 * 1000;
+        var firstDate = new Date($("#tgl_sewa").val());
+        var secondDate = new Date($("#tgl_expired").val());
+        var diffDays = Math.round(Math.round((secondDate.getTime() - firstDate.getTime()) / (oneDay)));
+
+        $('#hariku').html(diffDays + ' Hari');
+    });
+
+
     $(document).on('click', '#simpan', function() {
         var oneDay = 24 * 60 * 60 * 1000;
         var firstDate = new Date($("#tgl_sewa").val());
@@ -331,6 +367,7 @@
         $('#sewa_umum').html(harga_umum);
         $('#sewa_khusus').html(harga_khusus);
         $('#tambahan').html('Bensin ' + bensin + ' liter');
+        $('#harga_tambahan').html(harga_bensin);
         $('#nama_supir').html(supir);
         $('#biaya_supir').html(biaya);
         $('#total').html(subtotal);
@@ -386,15 +423,22 @@
 
     $('.alat_berat').change(function(event) {
         var id = $(this).val();
+        var oneDay = 24 * 60 * 60 * 1000;
+        var firstDate = new Date($("#tgl_sewa").val());
+        var secondDate = new Date($("#tgl_expired").val());
+        var diffDays = Math.round(Math.round((secondDate.getTime() - firstDate.getTime()) / (oneDay)));
         $.ajax({
             url: '<?php echo base_url() ?>transaksi/getAlatBerat/' + id,
             type: 'GET',
             dataType: 'json',
             success: function(data) {
                 if (data.status == true) {
-                    let setelah_pajak = Number(data.data.harga_sewa) * 2 / 100;
+                    let setelah_pajak = (Number(data.data.harga_sewa) * 2 / 100) * diffDays;
+                    let sebelum_pajak = Number(data.data.harga_sewa) * diffDays;
+                    $('#sewa_sebelum_pajak').val(sebelum_pajak);
+                    $('#pajak_harus_dibayar').val(Number(setelah_pajak));
                     $('.harga_umum').val(data.data.harga_sewa);
-                    $('.setelah_pajak').val(Number(data.data.harga_sewa) + Number(setelah_pajak));
+                    $('.setelah_pajak').val(Number(sebelum_pajak) + Number(setelah_pajak));
                     $('.nama_alat').val(data.data.nama_alber);
                     $('.harga_khusus').val(data.data.harga_sewa_khusus);
                 }

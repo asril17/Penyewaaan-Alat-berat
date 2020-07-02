@@ -117,7 +117,8 @@ class transaksi extends MY_Controller
                 if ($bensin != '') {
                     $subtotal += $bensin * $harga_bensin;
                 }
-                $nominal_pajak = $pajak_pegawai + $set_pajak;
+                // $nominal_pajak = $pajak_pegawai + $set_pajak;
+                $nominal_pajak = $set_pajak;
                 $DP = $subtotal - $this->input->post('DP');
 
                 $transaksi = $this->db->where('kd_penyewaan', $this->input->post('kd_penyewaan'))->get('transaksi')->row();
