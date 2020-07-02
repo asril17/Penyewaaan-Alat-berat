@@ -115,7 +115,7 @@ class transaksi extends MY_Controller
                     $subtotal = $harga_sewa  * $hari + $set_pajak;
                 }
                 if ($bensin != '') {
-                    $subtotal += $bensin * $harga_bensin;
+                    $subtotal += ($bensin * $harga_bensin) * $hari;
                 }
                 // $nominal_pajak = $pajak_pegawai + $set_pajak;
                 $nominal_pajak = $set_pajak;
@@ -361,7 +361,7 @@ class transaksi extends MY_Controller
         $data = [
             'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             'title' => 'Transaksi',
-            'subtitle' => 'Form Pelunasan',
+            'subtitle' => 'Form Pengeluaran',
             'pegawai' => $this->m_transaksi->getDataPegawai(),
             'tambahanBiaya' => $this->db->get('biaya_operasional')->result(),
             'pengeluaran'   => $pengeluaran,
@@ -384,7 +384,7 @@ class transaksi extends MY_Controller
         $data = [
             'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             'title' => 'Transaksi',
-            'subtitle' => 'Form Pelunasan',
+            'subtitle' => 'Form Pengeluaran',
             'pegawai' => $this->m_transaksi->getDataPegawai(),
             'tambahanBiaya' => $this->db->get('biaya_operasional')->result(),
             'alat_berat'    => $this->db->get('alat_berat')->result(),

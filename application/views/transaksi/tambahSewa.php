@@ -339,7 +339,7 @@
 
         let tambahan = 0;
         if (bensin != '') {
-            tambahan += (Number(bensin) * Number(harga_bensin));
+            tambahan += ((Number(bensin) * Number(harga_bensin)) * Number(diffDays));
             console.log('Tambahan : ' + tambahan);
 
         }
@@ -364,12 +364,12 @@
         $('#jumlah_hari').html(diffDays + " hari");
         $('#nama_pelanggan').html(pelanggan);
         $('#alat_sewa').html(alat);
-        $('#sewa_umum').html(harga_umum);
-        $('#sewa_khusus').html(harga_khusus);
+        $('#sewa_umum').html(harga_setelah_pajak);
+        $('#sewa_khusus').html(harga_setelah_pajak);
         $('#tambahan').html('Bensin ' + bensin + ' liter');
-        $('#harga_tambahan').html(harga_bensin);
+        $('#harga_tambahan').html(tambahan);
         $('#nama_supir').html(supir);
-        $('#biaya_supir').html(biaya);
+        $('#biaya_supir').html(sopir);
         $('#total').html(subtotal);
         $('#jumlah_bayarDP').val(min_bayar);
         $('#jumlah_bayarDP').attr('min', min_bayar);
