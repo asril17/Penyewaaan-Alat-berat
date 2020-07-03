@@ -69,6 +69,8 @@ class transaksi extends MY_Controller
         $data['detail'] = $this->m_transaksi->getDetail($data['kode']);
         if ($this->input->post()) {
 
+            // dd($this->input->post());
+            // die;
             $validation =  $this->m_transaksi->_validation();
             if ($validation == false) {
                 $this->template->layout($pages, $data);
@@ -82,16 +84,17 @@ class transaksi extends MY_Controller
                 $hari = $diff;
 
                 $bensin = $this->input->post('bensin');
-                $harga_bensin = $this->input->post('harga_bensin');
+                $harga_bensin = format_angka($this->input->post('harga_bensin'));
 
-                if ($this->input->post('harga_khusus') <= 0) {
-                    $harga_umum  = intval($this->input->post('harga_umum'));
+                if (format_angka($this->input->post('harga_khusus')) <= 0) {
+                    $harga_umum  = format_angka($this->input->post('harga_umum'));
                     $harga_sewa = $harga_umum;
                 } else {
-                    $harga_khusus = intval($this->input->post('harga_khusus'));
+                    $harga_khusus = format_angka($this->input->post('harga_khusus'));
                     $harga_umum = $harga_khusus;
                     $harga_sewa = $harga_khusus;
                 }
+
 
 
                 $pegawai = $this->db->where('id', $this->input->post('kd_pegawai'))->get('pegawai')->row();

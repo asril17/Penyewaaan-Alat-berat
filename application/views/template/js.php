@@ -32,6 +32,7 @@
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
 <script src="<?= base_url() ?>assets/plugin/jquery.validate/jquery.validate.min.js"></script>
+<script src="<?= base_url() ?>assets/js/format_rp.js"></script>
 
 
 

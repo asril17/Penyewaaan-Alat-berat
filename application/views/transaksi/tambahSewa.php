@@ -174,7 +174,7 @@
                     </div>
                     <div class="col-sm-2">
                         <label for="harga_bensin">Harga per liter</label>
-                        <input type="number" class="form-control" name="harga_bensin" id="harga_bensin">
+                        <input type="text" class="form-control rupiah" name="harga_bensin" id="harga_bensin">
                     </div>
                 </div>
             </div>
@@ -275,7 +275,7 @@
                         <label for="">Jumlah Bayar *</label>
                     </div>
                     <div class="col-sm-9">
-                        <input type="number" class="form-control" id="jumlah_bayarDP" name="jml_bayar" required="">
+                        <input type="text" class="form-control rupiah" id="jumlah_bayarDP" name="jml_bayar" required="">
                         <b id="err" class="error"></b>
                     </div>
                 </div>
@@ -306,12 +306,12 @@
 
         let pelanggan = $('option:selected', '#pelanggan').attr('pelanggan');
         let alat = $('option:selected', '#alat').attr('alat');
-        let harga_umum = $('#harga_umum').val();
-        let harga_khusus = $('#harga_khusus').val();
+        let harga_umum = format_angka($('#harga_umum').val());
+        let harga_khusus = format_angka($('#harga_khusus').val());
         let bensin = $('#bensin').val();
-        let harga_bensin = $('#harga_bensin').val();
+        let harga_bensin = format_angka($('#harga_bensin').val());
         let supir = $('option:selected', '#supir').attr('supir');
-        let biaya = $('#biaya').val();
+        let biaya = format_angka($('#biaya').val());
         let harga = '';
         let harga_sewa = '';
 
@@ -364,14 +364,14 @@
         $('#jumlah_hari').html(diffDays + " hari");
         $('#nama_pelanggan').html(pelanggan);
         $('#alat_sewa').html(alat);
-        $('#sewa_umum').html(harga_setelah_pajak);
-        $('#sewa_khusus').html(harga_setelah_pajak);
+        $('#sewa_umum').html(format_rp(harga_setelah_pajak));
+        $('#sewa_khusus').html(format_rp(harga_setelah_pajak));
         $('#tambahan').html('Bensin ' + bensin + ' liter');
-        $('#harga_tambahan').html(tambahan);
+        $('#harga_tambahan').html(format_rp(tambahan));
         $('#nama_supir').html(supir);
-        $('#biaya_supir').html(sopir);
-        $('#total').html(subtotal);
-        $('#jumlah_bayarDP').val(min_bayar);
+        $('#biaya_supir').html(format_rp(sopir));
+        $('#total').html(format_rp(subtotal));
+        $('#jumlah_bayarDP').val(format_rp(min_bayar));
         $('#jumlah_bayarDP').attr('min', min_bayar);
 
         $('#sewa1').css('display', 'none')
@@ -379,7 +379,7 @@
     });
 
     $(document).on('click', '#save', function() {
-        let dp = $('#jumlah_bayarDP').val();
+        let dp = format_angka($('#jumlah_bayarDP').val());
         $('#DP').val(dp);
         if (dp == '') {
             $('#jumlah_bayarDP').addClass('is-invalid');
@@ -435,12 +435,12 @@
                 if (data.status == true) {
                     let setelah_pajak = (Number(data.data.harga_sewa) * 2 / 100) * diffDays;
                     let sebelum_pajak = Number(data.data.harga_sewa) * diffDays;
-                    $('#sewa_sebelum_pajak').val(sebelum_pajak);
-                    $('#pajak_harus_dibayar').val(Number(setelah_pajak));
-                    $('.harga_umum').val(data.data.harga_sewa);
-                    $('.setelah_pajak').val(Number(sebelum_pajak) + Number(setelah_pajak));
+                    $('#sewa_sebelum_pajak').val(format_rp(sebelum_pajak));
+                    $('#pajak_harus_dibayar').val(format_rp(Number(setelah_pajak)));
+                    $('.harga_umum').val(format_rp(data.data.harga_sewa));
+                    $('.setelah_pajak').val(format_rp(Number(sebelum_pajak) + Number(setelah_pajak)));
                     $('.nama_alat').val(data.data.nama_alber);
-                    $('.harga_khusus').val(data.data.harga_sewa_khusus);
+                    $('.harga_khusus').val(format_rp(data.data.harga_sewa_khusus));
                 }
             }
         })
@@ -458,7 +458,7 @@
                 success: function(data) {
                     console.log(data)
                     if (data.status == true) {
-                        $('.harga_supir').val(data.data.biaya);
+                        $('.harga_supir').val(format_rp(data.data.biaya));
                         $('.pajak').val(data.data.pajak);
                         $('.nama_pegawai').val(data.data.nama_pegawai);
                     }

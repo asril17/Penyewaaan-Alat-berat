@@ -14,9 +14,18 @@ function get_prefix($table)
             break;
     }
 }
+function dd($arr)
+{
+    echo "<pre>" . print_r($arr, true) . "</pre>";
+}
+function format_angka($a)
+{
+    $angka = preg_replace("/[^0-9]/", "", $a);
+    return $angka * 1;
+}
 function format_rp($number)
 {
-    return "Rp." . number_format($number, 0, ',', '.');
+    return "Rp. " . number_format($number, 0, ',', '.');
 }
 function is_logged_in()
 {
