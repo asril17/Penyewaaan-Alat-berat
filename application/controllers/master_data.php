@@ -246,7 +246,7 @@
             $this->form_validation->set_rules('kd_pegawai', 'Kode Pegawai', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
-            $this->form_validation->set_rules('nama_pegawai', 'Nama Pegawai', 'required|alpha|trim|is_unique[pegawai.nama_pegawai]', [
+            $this->form_validation->set_rules('nama_pegawai', 'Nama Pegawai', 'required|trim|is_unique[pegawai.nama_pegawai]', [
                 'required' => 'kolom %s tidak boleh kosong',
                 'is_unique' => 'Nama pegawai telah tersedia'
             ]);

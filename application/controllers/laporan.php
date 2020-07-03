@@ -54,9 +54,11 @@ class laporan extends CI_controller
             'subtitle'      => 'List Data Daftar Pajak',
         ];
         $data['pajak'] = $this->db->join('transaksi', 'transaksi.id = daftar_pajak.transaksi_id')
+            ->join('alat_berat', 'alat_berat.id = transaksi.alat_berat_id')
             ->where('DATE_FORMAT(transaksi.tgl_transaksi,"%m")', $bulan)
             ->where('DATE_FORMAT(transaksi.tgl_transaksi,"%Y")', $tahun)
             ->get('daftar_pajak')->result_array();
+
         $data['menu'] = 'daftar_pajak';
         $this->template->layout($pages, $data);
     }

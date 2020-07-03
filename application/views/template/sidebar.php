@@ -13,7 +13,8 @@
         <div class="sidebar-menu">
             <div class="sidebar-header">
                 <div class="logo">
-                    <a href="index.html"><img src="<?= base_url('assets/images/icon/logonew.png'); ?>"></a>
+                    <!-- <a href="index.html"><img src="<?= base_url('assets/images/icon/logonew.png'); ?>"></a> -->
+                    <h3 style="color: #fff;">CV.AINUN JAYA</h3>
                 </div>
             </div>
             <div class="main-menu">

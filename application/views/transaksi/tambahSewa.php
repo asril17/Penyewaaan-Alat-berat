@@ -327,32 +327,32 @@
             harga_sewa = harga;
         }
 
+        let set_pajak = 0;
+        if (Number(diffDays) > 7) {
+            set_pajak += (Number(harga_sewa) * 2 / 100) * Number(diffDays);
 
+        }
 
-        let set_pajak = (Number(harga_sewa) * 2 / 100) * Number(diffDays);
-        console.log('Pajak : ' + set_pajak);
         let sewa = Number(harga) * Number(diffDays);
-        console.log('Sewa : ' + sewa);
 
         let harga_setelah_pajak = Number(sewa) + Number(set_pajak);
-        console.log('Setelah Pajak : ' + harga_setelah_pajak);
 
         let tambahan = 0;
         if (bensin != '') {
             tambahan += ((Number(bensin) * Number(harga_bensin)) * Number(diffDays));
-            console.log('Tambahan : ' + tambahan);
 
         }
         let sopir = 0;
         if (biaya != '' || biaya != 0) {
             sopir += Number(biaya) * Number(diffDays);
-            console.log('sopir : ' + sopir);
         }
 
         let subtotal = harga_setelah_pajak + tambahan + sopir;
 
+
+
         let min_bayar = subtotal * 50 / 100;
-        console.log('Total : ' + subtotal);
+
         // $subtotal = $subtotal + $set_pajak;
         // $potongan = ($pegawai->pajak / 100) * $pegawai->biaya;
         // let gaji = biaya * diffDays;

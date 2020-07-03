@@ -56,6 +56,7 @@
                         <th>No</th>
                         <th>Kode Penyewaan</th>
                         <th>Tanggal</th>
+                        <th>Nama Alat Berat</th>
                         <th>Nominal Pajak</th>
                     </tr>
                 </thead>
@@ -69,6 +70,7 @@
                             <td><?= $no++ ?></td>
                             <td><?= $pj['kd_penyewaan'] ?></td>
                             <td><?= date("d-m-Y", strtotime($pj['tgl_transaksi']));  ?></td>
+                            <td><?= $pj['nama_alber'] ?></td>
                             <td class="text-right"><?= format_rp($pj['nominal_pajak']) ?></td>
                         </tr>
                     <?php endforeach; ?>

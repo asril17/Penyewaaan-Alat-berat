@@ -97,8 +97,12 @@ class transaksi extends MY_Controller
                 $pegawai = $this->db->where('id', $this->input->post('kd_pegawai'))->get('pegawai')->row();
                 // $alber = $this->db->where('id', $this->input->post('id_alatberat'))->get('alat_berat')->row();
                 $pajak_pegawai = 0;
+                $set_pajak = 0;
                 if (!empty($pegawai->id !== 1)) {
-                    $set_pajak = ($harga_umum * 2 / 100) * $hari;
+
+                    if ($hari > 7) {
+                        $set_pajak += ($harga_umum * 2 / 100) * $hari;
+                    }
 
                     $subtotal = ($harga_sewa + $pegawai->biaya) * $hari + $set_pajak;
 
@@ -111,7 +115,9 @@ class transaksi extends MY_Controller
                     $this->db->where('id', $this->input->post('kd_pegawai'))
                         ->update('pegawai', ['status_sopir' => '1']);
                 } else {
-                    $set_pajak = ($harga_umum * 2 / 100) * $hari;
+                    if ($hari > 7) {
+                        $set_pajak += ($harga_umum * 2 / 100) * $hari;
+                    }
                     $subtotal = $harga_sewa  * $hari + $set_pajak;
                 }
                 if ($bensin != '') {
