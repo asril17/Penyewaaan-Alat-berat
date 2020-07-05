@@ -104,7 +104,8 @@
             rules: {
                 kd_akun: {
                     required: true,
-                    digits: true
+                    digits: true,
+                    minlength: 3
                 },
                 nama_akun: {
                     required: true
@@ -117,7 +118,8 @@
             messages: {
                 kd_akun: {
                     required: "Inputan tidak boleh kosong",
-                    digits: true
+                    digits: true,
+                    minlength: "Kode akun minimal 3 digit angka"
                 },
                 nama_akun: {
                     required: "Inputan tidak boleh kosong"

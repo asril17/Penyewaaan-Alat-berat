@@ -17,16 +17,16 @@ class m_transaksi extends CI_model
         $kodejadi = $str . '-' . $prakode;
         return $kodejadi;
     }
-    
-    public function getDataPegawai() 
+
+    public function getDataPegawai()
     {
-        return $this->db->get_where('pegawai',['status_sopir'=>0])->result_array();
+        return $this->db->get_where('pegawai', ['status_sopir' => 0])->result_array();
     }
-    public function getData($table) 
+    public function getData($table)
     {
         return $this->db->get_where($table)->result_array();
     }
-    
+
     public function tambahDetailPny()
     {
         $this->db->where('kd_tipe', $_POST['kd_alat_berat']);
@@ -38,11 +38,11 @@ class m_transaksi extends CI_model
 
         ));
         $query = $this->db->get('transaksi_detail');
+        $tanggal1 = time();
+        $tanggal2 = strtotime($_POST['tgl_expired']);
+        $date_diff = $tanggal2 - $tanggal1;
+        $lama = round($date_diff / (60 * 60 * 24));
         if ($query->num_rows() == 0) {
-            $tanggal1 = time();
-            $tanggal2 = strtotime($_POST['tgl_expired']);
-            $date_diff = $tanggal2 - $tanggal1;
-            $lama = round($date_diff / (60 * 60 * 24));
             if ($_POST['kd_pegawai'] != 1) {
                 $subtotal = ($harga + 200000) * $lama;
             } else {
@@ -58,13 +58,13 @@ class m_transaksi extends CI_model
                 'lama_penyewaan' => $lama,
                 'tgl_expired'    => $_POST['tgl_expired']
             ];
-            $data2=[
+            $data2 = [
                 'status_sopir'  => 1
             ];
             $this->db->trans_start();
             $this->db->insert('transaksi_detail', $data);
-            $this->db->where('kd_pegawai',$_POST['kd_pegawai']);
-            $this->db->update('pegawai',$data2);
+            $this->db->where('kd_pegawai', $_POST['kd_pegawai']);
+            $this->db->update('pegawai', $data2);
             $this->db->trans_complete();
         } else {
             $this->db->set('subtotal', 'subtotal + ' . $harga * $lama . '', false);
@@ -78,26 +78,27 @@ class m_transaksi extends CI_model
     }
     public function getDetail($id)
     {
-     $this->db->select('a.kd_penyewaan, nama_pelanggan, nama_alber, harga_sewa,tgl_berakhir,nama_pegawai,a.pegawai_id');
-     $this->db->from('transaksi a');
-     $this->db->join('transaksi_detail e', 'a.id=e.transaksi_id');
-     $this->db->join('alat_berat b', 'a.alat_berat_id=b.id');
-     $this->db->join('pelanggan c', 'a.pelanggan_id=c.id', 'outter');
-     $this->db->join('pegawai d', 'a.pegawai_id=d.id');
-     $this->db->where('kd_penyewaan', $id);
-     return $this->db->get()->result_array();
- }
+        $this->db->select('a.kd_penyewaan, nama_pelanggan, nama_alber, harga_sewa,tgl_berakhir,nama_pegawai,a.pegawai_id');
+        $this->db->from('transaksi a');
+        $this->db->join('transaksi_detail e', 'a.id=e.transaksi_id');
+        $this->db->join('alat_berat b', 'a.alat_berat_id=b.id');
+        $this->db->join('pelanggan c', 'a.pelanggan_id=c.id', 'outter');
+        $this->db->join('pegawai d', 'a.pegawai_id=d.id');
+        $this->db->where('kd_penyewaan', $id);
+        return $this->db->get()->result_array();
+    }
 
- public function update_status2($level, $kd_penyewaan){
-    $get = $this->db->get_where('penyewaan',['kd_penyewaan' => $kd_penyewaan])->row_array();
-    $nominal_bayar = $get['jml_bayar'] + $get['sisa'];
+    public function update_status2($level, $kd_penyewaan)
+    {
+        $get = $this->db->get_where('penyewaan', ['kd_penyewaan' => $kd_penyewaan])->row_array();
+        $nominal_bayar = $get['jml_bayar'] + $get['sisa'];
 
-    $data =[
-        'pelunasan'         => $nominal_bayar,
-        'sisa'              => 0,
-        'status'            => $level   
-    ];
-    $this->db->where('kd_penyewaan', $kd_penyewaan);
-    return $this->db->update('penyewaan',$data);
-}
+        $data = [
+            'pelunasan'         => $nominal_bayar,
+            'sisa'              => 0,
+            'status'            => $level
+        ];
+        $this->db->where('kd_penyewaan', $kd_penyewaan);
+        return $this->db->update('penyewaan', $data);
+    }
 }

@@ -34,70 +34,71 @@ class m_transaksi extends CI_model
     {
 
         return $this->db->join('daftar_pajak', 'daftar_pajak.transaksi_id = transaksi.id')
+            // ->join('alat_berat', 'alat_berat.id = transaksi.alat_berat_id')
             ->get('transaksi')->result_array();
     }
-    public function tambahDetailPny()
-    {
-        $this->db->where('id', $_POST['kd_alat_berat']);
-        $harga = $this->db->get('alat_berat')->row()->harga_sewa;
-        $this->db->where(array(
-            'kd_penyewaan' => $_POST['kd_penyewaan'],
-            'kd_pelanggan' => $_POST['kd_pelanggan'],
-            'kd_alat_berat' => $_POST['kd_alat_berat'],
+    // public function tambahDetailPny()
+    // {
+    //     $this->db->where('id', $_POST['kd_alat_berat']);
+    //     $harga = $this->db->get('alat_berat')->row()->harga_sewa;
+    //     $this->db->where(array(
+    //         'kd_penyewaan' => $_POST['kd_penyewaan'],
+    //         'kd_pelanggan' => $_POST['kd_pelanggan'],
+    //         'kd_alat_berat' => $_POST['kd_alat_berat'],
 
-        ));
-        $query = $this->db->get('transaksi_detail');
+    //     ));
+    //     $query = $this->db->get('transaksi_detail');
 
-        $tanggal1 = time();
-        $tanggal2 = strtotime($_POST['tgl_expired']);
-        $date_diff = $tanggal2 - $tanggal1;
-        $lama = round($date_diff / (60 * 60 * 24));
-        if ($query->num_rows() == 0) {
+    //     $tanggal1 = time();
+    //     $tanggal2 = strtotime($_POST['tgl_expired']);
+    //     $date_diff = $tanggal2 - $tanggal1;
+    //     $lama = round($date_diff / (60 * 60 * 24));
+    //     if ($query->num_rows() == 0) {
 
-            if ($_POST['kd_pegawai'] != 1) {
-                $subtotal = ($harga + 200000) * $lama;
-            } else {
-                $subtotal = $harga  * $lama;
-            }
-            $data = [
-                'kd_penyewaan' => $_POST['kd_penyewaan'],
-                'kd_pelanggan' => $_POST['kd_pelanggan'],
-                'kd_alat_berat' => $_POST['kd_alat_berat'],
-                'kd_pegawai' => $_POST['kd_pegawai'],
-                'harga'         => $harga,
-                'subtotal'      => $subtotal,
-                'lama_penyewaan' => $lama,
-                'tgl_expired'    => $_POST['tgl_expired']
-            ];
-            $data2 = [
-                'status_sopir'  => 1
-            ];
-            $this->db->trans_start();
-            $this->db->insert('transaksi_detail', $data);
-            $this->db->where('kd_pegawai', $_POST['kd_pegawai']);
-            $this->db->update('pegawai', $data2);
-            $this->db->trans_complete();
-        } else {
-            $this->db->set('subtotal', 'subtotal + ' . $harga * $lama . '', false);
-            $this->db->where(array(
-                'kd_penyewaan' => $_POST['kd_penyewaan'],
-                'kd_pelanggan' => $_POST['kd_pelanggan'],
-                'kd_alat_berat' => $_POST['kd_alat_berat'],
-            ));
-            $this->db->update('transaksi_detail');
-        }
-    }
-    public function getDetail($id)
-    {
-        $this->db->select('a.kd_penyewaan, nama_pelanggan, nama_alber, harga_sewa,tgl_berakhir,nama_pegawai,a.pegawai_id');
-        $this->db->from('transaksi a');
-        $this->db->join('transaksi_detail e', 'a.id=e.transaksi_id');
-        $this->db->join('alat_berat b', 'a.alat_berat_id=b.id');
-        $this->db->join('pelanggan c', 'a.pelanggan_id=c.id', 'outter');
-        $this->db->join('pegawai d', 'a.pegawai_id=d.id');
-        $this->db->where('kd_penyewaan', $id);
-        return $this->db->get()->result_array();
-    }
+    //         if ($_POST['kd_pegawai'] != 1) {
+    //             $subtotal = ($harga + 200000) * $lama;
+    //         } else {
+    //             $subtotal = $harga  * $lama;
+    //         }
+    //         $data = [
+    //             'kd_penyewaan' => $_POST['kd_penyewaan'],
+    //             'kd_pelanggan' => $_POST['kd_pelanggan'],
+    //             'kd_alat_berat' => $_POST['kd_alat_berat'],
+    //             'kd_pegawai' => $_POST['kd_pegawai'],
+    //             'harga'         => $harga,
+    //             'subtotal'      => $subtotal,
+    //             'lama_penyewaan' => $lama,
+    //             'tgl_expired'    => $_POST['tgl_expired']
+    //         ];
+    //         $data2 = [
+    //             'status_sopir'  => 1
+    //         ];
+    //         $this->db->trans_start();
+    //         $this->db->insert('transaksi_detail', $data);
+    //         $this->db->where('kd_pegawai', $_POST['kd_pegawai']);
+    //         $this->db->update('pegawai', $data2);
+    //         $this->db->trans_complete();
+    //     } else {
+    //         $this->db->set('subtotal', 'subtotal + ' . $harga * $lama . '', false);
+    //         $this->db->where(array(
+    //             'kd_penyewaan' => $_POST['kd_penyewaan'],
+    //             'kd_pelanggan' => $_POST['kd_pelanggan'],
+    //             'kd_alat_berat' => $_POST['kd_alat_berat'],
+    //         ));
+    //         $this->db->update('transaksi_detail');
+    //     }
+    // }
+    // public function getDetail($id)
+    // {
+    //     $this->db->select('a.kd_penyewaan, nama_pelanggan, nama_alber, harga_sewa,tgl_berakhir,nama_pegawai,a.pegawai_id');
+    //     $this->db->from('transaksi a');
+    //     $this->db->join('transaksi_detail e', 'a.id=e.transaksi_id');
+    //     $this->db->join('alat_berat b', 'a.alat_berat_id=b.id');
+    //     $this->db->join('pelanggan c', 'a.pelanggan_id=c.id', 'outter');
+    //     $this->db->join('pegawai d', 'a.pegawai_id=d.id');
+    //     $this->db->where('kd_penyewaan', $id);
+    //     return $this->db->get()->result_array();
+    // }
 
     public function update_status2($kd_penyewaan)
     {
@@ -107,7 +108,7 @@ class m_transaksi extends CI_model
         // $nominal_bayar = $get['jml_bayar'] - $get['sisa'];
         // var_dump($get['sisa']);
         // die;
-        $nominal_bayar = $this->input->post('jml_bayar') - $get['sisa'];
+        $nominal_bayar = format_angka($this->input->post('jml_bayar')) - $get['sisa'];
         // var_dump($nominal_bayar);
         // die;
         $pajak = $get['nominal'] * 2 / 100;
@@ -117,7 +118,7 @@ class m_transaksi extends CI_model
             $status = 1;
             $this->m_laporan->insertJurnal('111', date('Y-m-d'), $get['sisa'], 'debit');
             // $this->m_laporan->insertJurnal('114', date('Y-m-d'), $pajak, 'debit');
-            $this->m_laporan->insertJurnal('112', date('Y-m-d'), $this->input->post('jml_bayar'), 'kredit');
+            $this->m_laporan->insertJurnal('112', date('Y-m-d'), format_angka($this->input->post('jml_bayar')), 'kredit');
         } else {
             $status = 0;
             $this->m_laporan->insertJurnal('111', date('Y-m-d'), $this->input->post('jml_bayar'), 'debit');
@@ -126,7 +127,7 @@ class m_transaksi extends CI_model
             $this->m_laporan->insertJurnal('211', date('Y-m-d'), $nominal_bayar, 'kredit');
         }
         $data = [
-            'jml_bayar'         => $this->input->post('jml_bayar'),
+            'jml_bayar'         => format_angka($this->input->post('jml_bayar')),
             'sisa'              => $nominal_bayar,
             'status'            => $status,
             'tgl_pelunasan'     => $this->input->post('tgl_pelunasan'),

@@ -28,6 +28,7 @@
                                     <option value="<?= $row['id'] ?>" pelanggan="<?= $row['nama_pelanggan'] ?>"><?= $row['nama_pelanggan'] ?></option>
                                 <?php } ?>
                             </select>
+                            <b class="text-danger"></b>
                             <div class="text-danger"><?= form_error('kd_pelanggan', '<small class="text-danger pl-3">', '</small>') ?></div>
                         </div>
                     </div>
@@ -76,6 +77,7 @@
                                         <option value="<?= $row['id'] ?>" alat="<?= $row['nama_alber'] ?>"><?= $row['nama_alber'] ?></option>
                                     <?php } ?>
                                 </select>
+                                <b class="text-danger"></b>
                                 <input type="hidden" name="" value="" class="harga_umum">
                                 <input type="hidden" name="" value="" class="harga_khusus">
                                 <input type="hidden" name="" value="" class="nama_alat">
@@ -119,7 +121,7 @@
                                 <label for="">Harga Sewa Khusus</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control harga_khusus" id="harga_khusus" name="harga_khusus" required>
+                                <input type="text" class="form-control harga_khusus" id="harga_khusus" name="harga_khusus">
                             </div>
                         </div>
                     </div>
@@ -129,7 +131,7 @@
                                 <label for="">Nama Supir *</label>
                             </div>
                             <div class="col-sm-8">
-                                <select name="kd_pegawai" id="supir" class="form-control pegawai" required>
+                                <select name="kd_pegawai" id="supir" class="form-control pegawai">
                                     <option value="">--Pilih Nama Supir--</option>
                                     <option value="1">Tanpa supir</option>
                                     <?php foreach ($pegawai as $row) { ?>
@@ -144,6 +146,7 @@
                                     <?php } ?>
                                     <input type="hidden" class="nama_pegawai" value="">
                                 </select>
+                                <b class="text-danger"></b>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -171,10 +174,12 @@
                     <div class="col-sm-2">
                         <label for="bensin">Solar</label>
                         <input type="number" min="1" class="form-control" name="bensin" id="bensin">
+                        <b class="text-danger"></b>
                     </div>
                     <div class="col-sm-2">
                         <label for="harga_bensin">Harga per liter</label>
                         <input type="text" class="form-control rupiah" name="harga_bensin" id="harga_bensin">
+                        <b class="text-danger"></b>
                     </div>
                 </div>
             </div>
@@ -299,83 +304,95 @@
 
 
     $(document).on('click', '#simpan', function() {
-        var oneDay = 24 * 60 * 60 * 1000;
-        var firstDate = new Date($("#tgl_sewa").val());
-        var secondDate = new Date($("#tgl_expired").val());
-        var diffDays = Math.round(Math.round((secondDate.getTime() - firstDate.getTime()) / (oneDay)));
 
-        let pelanggan = $('option:selected', '#pelanggan').attr('pelanggan');
-        let alat = $('option:selected', '#alat').attr('alat');
-        let harga_umum = format_angka($('#harga_umum').val());
-        let harga_khusus = format_angka($('#harga_khusus').val());
-        let bensin = $('#bensin').val();
-        let harga_bensin = format_angka($('#harga_bensin').val());
-        let supir = $('option:selected', '#supir').attr('supir');
-        let biaya = format_angka($('#biaya').val());
-        let harga = '';
-        let harga_sewa = '';
+        let input = $(this).closest('#form').find('input[type="text"],input[type="number"],select');
+        console.log(input);
+        let valid = true;
+        for (i = 0; i < input.length; i++) {
+            if (!input[i].validity.valid) {
+                valid = false;
+                $(input[i]).closest(".form-group input").addClass("is-invalid");
+                $(input[i]).closest(".form-group select").addClass("is-invalid");
+                $(input[i]).closest(".form-group").find('b').text("Form tidak boleh kosong");
 
-        if (harga_khusus <= 0) {
-            harga = harga_umum;
-            harga_sewa = harga;
-            $('.khusus').css('display', 'none');
-            $('.umum').css('display', 'block');
-        } else {
-            $('.khusus').css('display', 'block');
-            $('.umum').css('display', 'none');
-            harga = harga_khusus;
-            harga_sewa = harga;
+            } else {
+                $(input[i]).closest(".form-group input").removeClass("is-invalid");
+                $(input[i]).closest(".form-group select").removeClass("is-invalid");
+                $(input[i]).closest(".form-group").find('b').text("");
+            }
         }
 
-        let set_pajak = 0;
-        if (Number(diffDays) > 7) {
-            set_pajak += (Number(harga_sewa) * 2 / 100) * Number(diffDays);
+        if (valid) {
+            var oneDay = 24 * 60 * 60 * 1000;
+            var firstDate = new Date($("#tgl_sewa").val());
+            var secondDate = new Date($("#tgl_expired").val());
+            var diffDays = Math.round(Math.round((secondDate.getTime() - firstDate.getTime()) / (oneDay)));
 
+            let pelanggan = $('option:selected', '#pelanggan').attr('pelanggan');
+            let alat = $('option:selected', '#alat').attr('alat');
+            let harga_umum = format_angka($('#harga_umum').val());
+            let harga_khusus = format_angka($('#harga_khusus').val());
+            let bensin = $('#bensin').val();
+            let harga_bensin = $('#harga_bensin').val();
+            let supir = $('option:selected', '#supir').attr('supir');
+            let biaya = $('#biaya').val();
+            let harga = '';
+            let harga_sewa = '';
+
+            if (harga_khusus <= 0) {
+                harga = harga_umum;
+                harga_sewa = harga;
+                $('.khusus').css('display', 'none');
+                $('.umum').css('display', 'block');
+            } else {
+                $('.khusus').css('display', 'block');
+                $('.umum').css('display', 'none');
+                harga = harga_khusus;
+                harga_sewa = harga;
+            }
+
+            let set_pajak = 0;
+            if (Number(diffDays) > 7) {
+                set_pajak += (Number(harga_sewa) * 2 / 100) * Number(diffDays);
+            }
+
+            let sewa = Number(harga) * Number(diffDays);
+
+            let harga_setelah_pajak = Number(sewa) + Number(set_pajak);
+
+            let tambahan = 0;
+            if (bensin != '' || bensin != 0 || harga_bensin != '' || harga_bensin != 0) {
+                tambahan += ((Number(bensin) * Number(format_angka(harga_bensin))) * Number(diffDays));
+
+            }
+            let sopir = 0;
+            if (biaya != '' || biaya != 0) {
+                sopir += Number(format_angka(biaya)) * Number(diffDays);
+            }
+            let subtotal = harga_setelah_pajak + tambahan + sopir;
+
+            // console.log(subtotal);
+
+            let min_bayar = subtotal * 50 / 100;
+
+            $('#jumlah_hari').html(diffDays + " hari");
+            $('#nama_pelanggan').html(pelanggan);
+            $('#alat_sewa').html(alat);
+            $('#sewa_umum').html(format_rp(harga_setelah_pajak));
+            $('#sewa_khusus').html(format_rp(harga_setelah_pajak));
+            $('#tambahan').html('Bensin ' + bensin + ' liter');
+            $('#harga_tambahan').html(format_rp(tambahan));
+            $('#nama_supir').html(supir);
+            $('#biaya_supir').html(format_rp(sopir));
+            $('#total').html(format_rp(subtotal));
+            $('#jumlah_bayarDP').val(format_rp(min_bayar));
+            $('#jumlah_bayarDP').attr('min', min_bayar);
+
+            $('#sewa1').css('display', 'none')
+            $('#sewa').css('display', 'block')
         }
 
-        let sewa = Number(harga) * Number(diffDays);
 
-        let harga_setelah_pajak = Number(sewa) + Number(set_pajak);
-
-        let tambahan = 0;
-        if (bensin != '') {
-            tambahan += ((Number(bensin) * Number(harga_bensin)) * Number(diffDays));
-
-        }
-        let sopir = 0;
-        if (biaya != '' || biaya != 0) {
-            sopir += Number(biaya) * Number(diffDays);
-        }
-
-        let subtotal = harga_setelah_pajak + tambahan + sopir;
-
-
-
-        let min_bayar = subtotal * 50 / 100;
-
-        // $subtotal = $subtotal + $set_pajak;
-        // $potongan = ($pegawai->pajak / 100) * $pegawai->biaya;
-        // let gaji = biaya * diffDays;
-        // let pajak = 25;
-        // let pajak_pegawai += gaji * 25 / 100;
-
-
-
-        $('#jumlah_hari').html(diffDays + " hari");
-        $('#nama_pelanggan').html(pelanggan);
-        $('#alat_sewa').html(alat);
-        $('#sewa_umum').html(format_rp(harga_setelah_pajak));
-        $('#sewa_khusus').html(format_rp(harga_setelah_pajak));
-        $('#tambahan').html('Bensin ' + bensin + ' liter');
-        $('#harga_tambahan').html(format_rp(tambahan));
-        $('#nama_supir').html(supir);
-        $('#biaya_supir').html(format_rp(sopir));
-        $('#total').html(format_rp(subtotal));
-        $('#jumlah_bayarDP').val(format_rp(min_bayar));
-        $('#jumlah_bayarDP').attr('min', min_bayar);
-
-        $('#sewa1').css('display', 'none')
-        $('#sewa').css('display', 'block')
     });
 
     $(document).on('click', '#save', function() {

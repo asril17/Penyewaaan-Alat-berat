@@ -16,6 +16,7 @@
                     <th>Kode Penyewaan</th>
                     <th>Tanggal Penyewaan</th>
                     <th>Tanggal Pengembalian</th>
+                    <th>Nama Alat Berat</th>
                     <th>Nominal</th>
                     <th>Uang Muka</th>
                     <th>Pajak</th>
@@ -26,13 +27,21 @@
             </thead>
             <tbody>
                 <?php $no = 0;
+                // dd($pny);
+                // die;
                 foreach ($pny as $row) {
-                    $no++; ?>
+                    $no++;
+
+                    $getAlber = $this->db->get_where('alat_berat', ['id' => $row['alat_berat_id']])->row_array();
+
+
+                ?>
                     <tr>
                         <th><?= $no ?></th>
                         <td><?= $row['kd_penyewaan'] ?></td>
                         <td><?= $row['tgl_mulai'] ?></td>
                         <td><?= $row['tgl_berakhir'] ?></td>
+                        <td><?= $getAlber['nama_alber'] ?></td>
                         <td class="text-right"><?= format_rp($row['nominal']) ?></td>
                         <td class="text-right"><?= format_rp($row['jml_bayar']) ?></td>
                         <td class="text-right"><?= format_rp($row['nominal_pajak']) ?></td>

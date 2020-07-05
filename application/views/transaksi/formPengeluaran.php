@@ -12,7 +12,7 @@
 	</div>
 	<div class="card-body">
 		<h5 class="card-title"><?= $subtitle ?></h5>
-		<form action="<?php echo base_url('transaksi/tambahpengeluaran') ?>" method="post">
+		<form action="<?php echo base_url('transaksi/tambahpengeluaran') ?>" method="post" id="form">
 			<div class="form-group row">
 				<div class="col-sm-3">
 					<label for="">Tanggal Pengeluaran *</label>
@@ -90,5 +90,57 @@
 			}
 		})
 
+	});
+	$(document).ready(function() {
+		$('#form').validate({
+			rules: {
+				tgl_pengeluaran: {
+					required: true
+				},
+				jenis_pengeluaran: {
+					required: true
+				},
+				jenis_beban: {
+					required: true
+				},
+				id_alatberat: {
+					required: true
+				},
+				deskripsi: {
+					required: true
+				},
+				nominal: {
+					required: true,
+					digits: true
+				}
+			},
+			messages: {
+				tgl_pengeluaran: {
+					required: "Inputan tidak boleh kosong"
+				},
+				jenis_pengeluaran: {
+					required: "Inputan tidak boleh kosong"
+				},
+				jenis_beban: {
+					required: "Inputan tidak boleh kosong"
+				},
+				id_alatberat: {
+					required: "Inputan tidak boleh kosong"
+				},
+				deskripsi: {
+					required: "Inputan tidak boleh kosong"
+				},
+				nominal: {
+					required: "Inputan tidak boleh kosong",
+					digits: "Inputan harus angka"
+				}
+			},
+			highlight: function(element) {
+				$(element).addClass('is-invalid');
+			},
+			unhighlight: function(element) {
+				$(element).removeClass('is-invalid');
+			}
+		});
 	});
 </script>

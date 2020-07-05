@@ -26,7 +26,8 @@
 					<label for="">Sisa</label>
 				</div>
 				<div class="col-sm-9">
-					<input type="number" class="form-control" name="jml_bayar" readonly="" value="<?php echo ($sisa == 0) ? $nominal : $sisa ?>">
+					<!-- <input type="number" class="form-control" name="jml_bayar" readonly="" value="<?php echo ($sisa == 0) ? $nominal : $sisa ?>"> -->
+					<input type="text" class="form-control" name="jml_bayar" readonly="" value="<?php echo format_rp($sisa) ?>">
 				</div>
 			</div>
 			<div class="form-group row">
