@@ -61,11 +61,11 @@
                         </tr>
                         <tr>
                             <td class="pl-5 text-left">Pendapatan Sewa Alat Berat</td>
-                            <td class="text-right"><?= format_rp($pendapatan_sewa['total_pendapatan']) ?></td>
+                            <td class="text-right"><?= format_rp($total_pendapatan) ?></td>
                         </tr>
                         <tr>
                             <th class="text-left">Laba Kotor</th>
-                            <td class="text-right"><?= format_rp($pendapatan_sewa['total_pendapatan']) ?></td>
+                            <td class="text-right"><?= format_rp($total_pendapatan) ?></td>
                         </tr>
                         <tr>
                             <th class="text-left">Beban Usaha</th>
@@ -96,7 +96,7 @@
                             <th class="text-left">Jumlah Beban Usaha</th>
                             <th class="text-right"><?= format_rp($total_pengeluaran) ?></th>
                         </tr>
-                        <?php $jumlah_laba_op = $pendapatan_sewa['total_pendapatan'] + $total_pengeluaran ?>
+                        <?php $jumlah_laba_op = $total_pendapatan + $total_pengeluaran ?>
                         <tr>
                             <th class="text-left">Jumlah Laba Operasi</th>
                             <th class="text-right"><?= format_rp($jumlah_laba_op) ?></th>

@@ -98,6 +98,14 @@
         $('#alamat').val(alamat);
         // $('#no_telp').val(no_telp);
         $('#no_telp_sebelum').val(no_telp);
+        $('#no_telp').rules("add", {
+            required: false,
+            digits: true,
+            messages: {
+                required: "",
+                digits: "Inputan Harus Angka"
+            }
+        });
     }
     $(function() {
         $('#example').DataTable();

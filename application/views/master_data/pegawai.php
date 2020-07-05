@@ -107,6 +107,14 @@
         // $('#no_telp').val(no_telp)
         $('#biaya').val(biaya)
         $('#no_telp_sebelum').val(no_telp);
+        $('#no_telp').rules("add", {
+            required: false,
+            digits: false,
+            messages: {
+                required: "",
+                digits: ""
+            }
+        });
 
     }
 

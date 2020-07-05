@@ -215,7 +215,9 @@
             ]);
             if ($this->form_validation->run() == true) {
                 $p = $this->input->post();
-                $response = $this->db->where('id', $p['id'])
+                // dd($p);
+                // die;
+                $response = $this->db->where('id_jenis', $p['id'])
                     ->update('jenis_alat_berat', ['jenis' => $p['jenis']]);
                 if ($response) {
                     $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
@@ -288,20 +290,24 @@
             $this->form_validation->set_rules('alamat', 'Alamat Pegawai', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
-            $this->form_validation->set_rules('no_telp', 'No Telfon Pegawai', 'required|numeric', [
-                'required' => 'kolom %s tidak boleh kosong'
-            ]);
             $this->form_validation->set_rules('biaya', 'Tarif Pegawai', 'required|numeric', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
             if ($this->form_validation->run() == false) {
                 redirect('master_data/pegawai');
             } else {
+                if ($_POST['no_telp'] == '') {
+                    $no_telp = $_POST['no_telp_sebelum'];
+                } else {
+                    $no_telp = $_POST['no_telp'] . ', ' . $_POST['no_telp_sebelum'];
+                }
+
+
                 $inputan = [
                     'kd_pegawai'     => $_POST['kd_pegawai'],
                     'nama_pegawai'     => $_POST['nama_pegawai'],
                     'biaya'    => $_POST['biaya'],
-                    'no_telp'    => $_POST['no_telp'] . ', ' . $_POST['no_telp_sebelum'],
+                    'no_telp'    => $no_telp,
                     'alamat'    => $_POST['alamat'],
                 ];
                 $this->db->where('id', $_POST['id'])
@@ -362,10 +368,16 @@
 
             $p = $this->input->post();
 
+            if ($p['no_telp'] == '') {
+                $no_telp = $p['no_telp_sebelum'];
+            } else {
+                $no_telp = $p['no_telp'] . ', ' . $p['no_telp_sebelum'];
+            }
+
             $data = [
                 'nama_pelanggan' => $p['nama_pelanggan'],
                 'alamat' => $p['alamat'],
-                'no_telp' => $p['no_telp'] . ', ' . $p['no_telp_sebelum']
+                'no_telp' => $no_telp
             ];
 
             $respone = $this->db->where('id', $p['id'])

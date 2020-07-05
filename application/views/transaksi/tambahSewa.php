@@ -362,7 +362,7 @@
 
             let tambahan = 0;
             if (bensin != '' || bensin != 0 || harga_bensin != '' || harga_bensin != 0) {
-                tambahan += ((Number(bensin) * Number(format_angka(harga_bensin))) * Number(diffDays));
+                tambahan += (Number(bensin) * Number(format_angka(harga_bensin)));
 
             }
             let sopir = 0;
@@ -490,6 +490,8 @@
                     }
                 }
             })
+        } else {
+            $('.harga_supir').val('');
         }
 
     });

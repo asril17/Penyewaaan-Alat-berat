@@ -128,7 +128,7 @@ class transaksi extends MY_Controller
                 }
 
                 if ($bensin != '' || $bensin != 0 || $harga_bensin != '' || $harga_bensin != 0) {
-                    $subtotal += ($bensin * format_angka($harga_bensin)) * $hari;
+                    $subtotal += $bensin * format_angka($harga_bensin);
                 }
                 // dd($subtotal);
                 // die;
@@ -161,8 +161,8 @@ class transaksi extends MY_Controller
                 $id = $this->db->insert_id();
                 $pajak_dp = $DP * 2 / 100;
                 $this->m_laporan->insertJurnal('111', date('Y-m-d'), ($this->input->post('DP') - $pajak_dp), 'debit');
-                $this->m_laporan->insertJurnal('112', date('Y-m-d'), ($subtotal - $DP), 'debit');
-                $this->m_laporan->insertJurnal('114', date('Y-m-d'), $pajak_dp, 'debit');
+                $this->m_laporan->insertJurnal('112', date('Y-m-d'), $DP, 'debit');
+                $this->m_laporan->insertJurnal('113', date('Y-m-d'), $pajak_dp, 'debit');
                 $this->m_laporan->insertJurnal('411', date('Y-m-d'), $subtotal, 'kredit');
 
                 // $id_biaya = $this->input->post('id_biaya');
@@ -210,32 +210,32 @@ class transaksi extends MY_Controller
         }
         $this->template->layout($pages, $data);
     }
-    public function selesaiPny()
-    {
-        $sisa = $_POST['nominal'] - $_POST['jml'];
-        if ($_POST['jml'] == $_POST['nominal']) {
-            $status = 1;
-            $this->m_laporan->insertJurnal('111', date('Y-m-d'), $_POST['nominal'], 'debit');
-            $this->m_laporan->insertJurnal('411', date('Y-m-d'), $_POST['nominal'], 'kredit');
-        } else {
-            $this->m_laporan->insertJurnal('111', date('Y-m-d'), $_POST['jml'], 'debit');
-            $this->m_laporan->insertJurnal('112', date('Y-m-d'), $sisa, 'debit');
-            $this->m_laporan->insertJurnal('411', date('Y-m-d'), $_POST['nominal'], 'kredit');
-            $status = 2;
-        }
-        $data = [
-            'kd_penyewaan' => $_POST['kd_penyewaan'],
-            'tgl_penyewaan' => date('Y-m-d'),
-            'tgl_expired' => $_POST['tgl_expired'],
-            'nominal' => $_POST['nominal'],
-            'jml_bayar' => $_POST['jml'],
-            'sisa' => $sisa,
-            'status'    => $status
-        ];
+    // public function selesaiPny()
+    // {
+    //     $sisa = $_POST['nominal'] - $_POST['jml'];
+    //     if ($_POST['jml'] == $_POST['nominal']) {
+    //         $status = 1;
+    //         $this->m_laporan->insertJurnal('111', date('Y-m-d'), $_POST['nominal'], 'debit');
+    //         $this->m_laporan->insertJurnal('411', date('Y-m-d'), $_POST['nominal'], 'kredit');
+    //     } else {
+    //         $this->m_laporan->insertJurnal('111', date('Y-m-d'), $_POST['jml'], 'debit');
+    //         $this->m_laporan->insertJurnal('112', date('Y-m-d'), $sisa, 'debit');
+    //         $this->m_laporan->insertJurnal('411', date('Y-m-d'), $_POST['nominal'], 'kredit');
+    //         $status = 2;
+    //     }
+    //     $data = [
+    //         'kd_penyewaan' => $_POST['kd_penyewaan'],
+    //         'tgl_penyewaan' => date('Y-m-d'),
+    //         'tgl_expired' => $_POST['tgl_expired'],
+    //         'nominal' => $_POST['nominal'],
+    //         'jml_bayar' => $_POST['jml'],
+    //         'sisa' => $sisa,
+    //         'status'    => $status
+    //     ];
 
-        $this->db->insert('penyewaan', $data);
-        redirect('transaksi/penyewaan_alber');
-    }
+    //     $this->db->insert('penyewaan', $data);
+    //     redirect('transaksi/penyewaan_alber');
+    // }
     public function jurnal()
     {
         $pages = 'laporan/jurnal';

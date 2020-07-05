@@ -127,10 +127,24 @@ class laporan extends CI_controller
             'title'         => 'Laporan',
             'subtitle'      => 'List Data Laba Rugi',
         ];
-        $data['pendapatan_sewa'] = $this->db->select('SUM(jml_bayar) AS total_pendapatan')
-            ->where('MONTH(tgl_transaksi)', $bulan)
-            ->where('YEAR(tgl_transaksi)', $tahun)
-            ->get('transaksi')->row_array();
+        // $data['pendapatan_sewa'] = $this->db->select('SUM(jml_bayar) AS total_pendapatan')
+        //     ->where('MONTH(tgl_transaksi)', $bulan)
+        //     ->where('YEAR(tgl_transaksi)', $tahun)
+        //     ->get('transaksi')->row_array();
+        $getPendapatan = $this->m_laporan->get_buku_besar('411', $bulan, $tahun);
+        $total_pendapatan = 0;
+        foreach ($getPendapatan as $ga) {
+            if ($ga['posisi_dr_cr'] == 'debit') {
+                $total_pendapatan += $ga['nominal'];
+            } else {
+                $total_pendapatan -= $ga['nominal'];
+            }
+        }
+        if ($total_pendapatan < 0) {
+            $data['total_pendapatan'] = str_replace('-', '', $total_pendapatan);
+        } else {
+            $data['total_pendapatan'] = $total_pendapatan;
+        }
         // $data['pengeluaran'] = $this->db->select('SUM(nominal) AS total_pengeluaran')
         //     ->where('MONTH(tgl_pengeluaran)', $bulan)
         //     ->where('YEAR(tgl_pengeluaran)', $tahun)
