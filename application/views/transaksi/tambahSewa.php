@@ -387,6 +387,7 @@
             $('#total').html(format_rp(subtotal));
             $('#jumlah_bayarDP').val(format_rp(min_bayar));
             $('#jumlah_bayarDP').attr('min', min_bayar);
+            $('#jumlah_bayarDP').attr('max', subtotal);
 
             $('#sewa1').css('display', 'none')
             $('#sewa').css('display', 'block')
@@ -408,14 +409,22 @@
     });
 
     $(document).on('keyup', '#jumlah_bayarDP', function() {
+        $('#save').attr('disabled', 'true')
         let min = $(this).attr('min');
+        let max = $(this).attr('max');
         let nominal = $(this).val();
-
-        if (nominal < min) {
-            $('#jumlah_bayarDP').val(min);
+        if (format_angka(nominal) < min) {
+            // $('#jumlah_bayarDP').val(min);
             $('#jumlah_bayarDP').addClass('is-invalid');
-            $('#err').html('Jumlah pembayaran minimal' + min);
-        } else {
+            $('#err').html('Jumlah pembayaran minimal ' + format_rp(min));
+            $('#save').attr('disabled', 'true')
+        } else if (format_angka(nominal) > max) {
+            $('#save').attr('disabled', 'true')
+            $('#jumlah_bayarDP').addClass('is-invalid');
+            $('#err').html('Jumlah pembayaran maksimal ' + format_rp(min));
+
+        } else if (format_angka(nominal) <= max && format_angka(nominal) >= min) {
+            $('#save').removeAttr('disabled');
             $('#jumlah_bayarDP').removeClass('is-invalid');
             $('#err').html('');
 

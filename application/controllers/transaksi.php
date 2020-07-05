@@ -135,6 +135,11 @@ class transaksi extends MY_Controller
                 // $nominal_pajak = $pajak_pegawai + $set_pajak;
                 $nominal_pajak = $set_pajak;
                 $DP = $subtotal - $this->input->post('DP');
+                if ($DP == 0) {
+                    $status_pelunasan = 1;
+                } else {
+                    $status_pelunasan = 0;
+                }
 
                 $transaksi = $this->db->where('kd_penyewaan', $this->input->post('kd_penyewaan'))->get('transaksi')->row();
 
@@ -148,7 +153,7 @@ class transaksi extends MY_Controller
                     'nominal'      => $subtotal,
                     'jml_bayar'      => $this->input->post('DP'),
                     'sisa'      => $DP,
-                    'status'       => 0,
+                    'status'       => $status_pelunasan,
                     'user_id'      => $this->session->userdata('userId'),
                 ];
 
