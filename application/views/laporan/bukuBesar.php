@@ -59,7 +59,7 @@
                 <strong>
                     <!-- <h2>Balai Latihan Kerja</h2> -->
                     <h3>Buku Besar</h3>
-                    <h4>Periode Bulan <?php echo $_POST['bulan'] . ' Tahun ' . $_POST['tahun'] ?></h4>
+                    <h4>Periode Bulan <?php echo get_monthname($_POST['bulan']) . ' Tahun ' . $_POST['tahun'] ?></h4>
                 </strong>
             </center>
             <div class="col-md-12">

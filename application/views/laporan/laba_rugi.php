@@ -49,7 +49,7 @@
                 <div class="col-lg-12">
                     <h3>CV. AINUN JAYA</h3>
                     <h3>LAPORAN LABA RUGI</h3>
-                    <h4>Periode : <?php echo 'Bulan ' . $_POST['bulan'] . ' Tahun ' . $_POST['tahun'] ?> </h4>
+                    <h4>Periode : <?php echo 'Bulan ' . get_monthname($_POST['bulan']) . ' Tahun ' . $_POST['tahun'] ?> </h4>
                 </div>
             </div>
             <div class="row justify-content-center">
@@ -58,17 +58,22 @@
                         <tr>
                             <th class="text-left">Pendapatan</th>
                             <th></th>
+                            <th></th>
                         </tr>
                         <tr>
                             <td class="pl-5 text-left">Pendapatan Sewa Alat Berat</td>
                             <td class="text-right"><?= format_rp($total_pendapatan) ?></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th class="text-left">Laba Kotor</th>
-                            <td class="text-right"><?= format_rp($total_pendapatan) ?></td>
+                            <th></th>
+                            <th class="text-right"><?= format_rp($total_pendapatan) ?></th>
                         </tr>
                         <tr>
                             <th class="text-left">Beban Usaha</th>
+                            <th></th>
+                            <th></th>
                         </tr>
 
                         <?php $total_pengeluaran = 0;
@@ -87,6 +92,7 @@
                                 <tr>
                                     <td class="pl-5 text-left"><?= $row['nama_akun'] ?></td>
                                     <td class="text-right"><?= format_rp($trans['nominal']) ?></td>
+                                    <td></td>
                                 </tr>
 
                         <?php }
@@ -94,35 +100,44 @@
 
                         <tr>
                             <th class="text-left">Jumlah Beban Usaha</th>
+                            <th></th>
                             <th class="text-right"><?= format_rp($total_pengeluaran) ?></th>
                         </tr>
                         <?php $jumlah_laba_op = $total_pendapatan + $total_pengeluaran ?>
                         <tr>
                             <th class="text-left">Jumlah Laba Operasi</th>
+                            <th></th>
                             <th class="text-right"><?= format_rp($jumlah_laba_op) ?></th>
                         </tr>
                         <tr>
                             <th class="text-left">Lain-lain</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                         <tr>
                             <td class="pl-5 text-left">Pendapatan Lain-lain</td>
-                            <td class="text-right"><?= format_rp($pendapatan_dll['total_dll']) ?></td>
+                            <td class="text-right"><?= format_rp($pendapatan_dll) ?></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th class="text-left">Jumlah Lain-lain</th>
-                            <th class="text-right"><?= format_rp($pendapatan_dll['total_dll']) ?></th>
+                            <th></th>
+                            <th class="text-right"><?= format_rp($pendapatan_dll) ?></th>
                         </tr>
-                        <?php $laba_sebelum_pajak = $jumlah_laba_op + $pendapatan_dll['total_dll'] ?>
+                        <?php $laba_sebelum_pajak = $jumlah_laba_op + $pendapatan_dll ?>
                         <tr>
                             <th class="text-left">Laba sebelum pajak penghasilan</th>
+                            <th></th>
                             <th class="text-right"><?= format_rp($laba_sebelum_pajak) ?></th>
                         </tr>
                         <tr>
                             <th class="text-left">Pajak sewa</th>
+                            <th></th>
                             <th class="text-right"><?= format_rp($pajak_sewa['pajak']) ?></th>
                         </tr>
                         <tr>
                             <th class="text-left">Laba bersih setelah pajak</th>
+                            <th></th>
                             <th class="text-right"><?= format_rp($laba_sebelum_pajak + $pajak_sewa['pajak']) ?></th>
                         </tr>
                     </table>

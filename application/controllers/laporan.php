@@ -155,11 +155,15 @@ class laporan extends CI_controller
         // die;
 
 
-        $data['pendapatan_dll'] = $this->db->select('SUM(daftar_pemasukan_pegawai.nominal) AS total_dll')
+        $pendapatan_dll = $this->db->select('SUM(daftar_pemasukan_pegawai.nominal) AS total_pemasukan, SUM(transaksi_detail_tambahan.total) AS total_bensin')
             ->join('daftar_pemasukan_pegawai', 'daftar_pemasukan_pegawai.transaksi_id = transaksi.id')
+            ->join('transaksi_detail_tambahan', 'transaksi_detail_tambahan.id_transaksi = transaksi.id')
             ->where('MONTH(tgl_transaksi)', $bulan)
             ->where('YEAR(tgl_transaksi)', $tahun)
             ->get('transaksi')->row_array();
+        $data['pendapatan_dll'] = $pendapatan_dll['total_pemasukan'] + $pendapatan_dll['total_bensin'];
+        // dd($pendapatan_dll['total_bensin']);
+        // die;
 
         $data['pajak_sewa'] = $this->db->select('SUM(daftar_pajak.nominal_pajak) as pajak')
             ->join('daftar_pajak', 'daftar_pajak.transaksi_id = transaksi.id')

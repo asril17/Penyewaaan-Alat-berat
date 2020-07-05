@@ -48,7 +48,7 @@
             <center>
                 <!-- <h2>Balai Latihan Kerja Bandung</h2> -->
                 <h3>Daftar Pajak</h3>
-                <h4>Periode : <?php echo 'Bulan ' . $_POST['bulan'] . ' Tahun ' . $_POST['tahun'] ?> </h4>
+                <h4>Periode : <?php echo 'Bulan ' . get_monthname($_POST['bulan']) . ' Tahun ' . $_POST['tahun'] ?> </h4>
             </center>
             <table class="table table-bordered table-hover">
                 <thead>
