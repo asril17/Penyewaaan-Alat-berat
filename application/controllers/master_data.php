@@ -199,9 +199,12 @@
             } else {
                 $inputan = [
                     'kode_jenis'       => $_POST['kode_jenis'],
-                    'jenis'    => $_POST['jenis']
+                    'jenis'    => $_POST['jenis'],
+                    // 'keterangan_jenis' => $_POST['keterangan']
                 ];
+                // QUERY TAMBAH JENIS ALAT BERAT
                 $this->m_master_data->insert_data('jenis_alat_berat', $inputan);
+                // END QUERY
                 $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
                 $this->session->set_flashdata('message', $alert);
                 redirect('master_data/jenis_alat_berat');
@@ -213,12 +216,18 @@
             $this->form_validation->set_rules('jenis', 'Jenis', 'required', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
+            // $this->form_validation->set_rules('keterangan', 'Keterangan', 'required', [
+            //     'required' => 'kolom %s tidak boleh kosong'
+            // ]);
             if ($this->form_validation->run() == true) {
                 $p = $this->input->post();
-                // dd($p);
-                // die;
+
+                // QUERY UPDATE JENIS ALAT BERAT
                 $response = $this->db->where('id_jenis', $p['id'])
                     ->update('jenis_alat_berat', ['jenis' => $p['jenis']]);
+                // ->update('jenis_alat_berat', ['jenis' => $p['jenis'], 'keterangan_jenis' => $p['keterangan']]);
+                // END QUERY
+
                 if ($response) {
                     $alert = $this->template->alert('check', 'berhasil', 'Data Berhasil Disimpan', 'success');
                     $this->session->set_flashdata('message', $alert);

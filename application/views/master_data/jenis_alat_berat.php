@@ -31,8 +31,11 @@
                         <th><?= $no ?></th>
                         <td><?= $row['kode_jenis'] ?></td>
                         <td><?= $row['jenis'] ?></td>
+                        <!-- contoh menampilkan data dari tabel di database : <?= $row['keterangan_jenis'] ?> -->
+                        <!-- untuk membuat rata kiri : class="text-right" -->
                         <td class="text-center">
-                            <a href="javascript:void(0)" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal" title="edit" onclick="edit(
+                            <!-- untuk merubah warna background : style="background-color: black; color:#fff " -->
+                            <a href="javascript:void(0)" class="btn btn-sm" data-toggle="modal" data-target="#exampleModal" title="edit" onclick="edit(
                                 '<?= $row['id_jenis'] ?>',
                                 '<?= $row['kode_jenis'] ?>',
                                 '<?= $row['jenis'] ?>',
@@ -65,6 +68,11 @@
                         <input type="text" class="form-control" id="jenis" name="jenis">
                     </div>
 
+                    <!-- <div class="form-group">
+                        <label>Keterangan</label>
+                        <input type="text" class="form-control" id="keterangan" name="keterangan">
+                    </div> -->
+
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Simpan Data</button>
@@ -80,6 +88,7 @@
         $('#id').val(id)
         $('#kode_jenis').val(kode_jenis)
         $('#jenis').val(jenis)
+        // $('#keterangan').val(keterangan)
     }
 
     function tambah() {

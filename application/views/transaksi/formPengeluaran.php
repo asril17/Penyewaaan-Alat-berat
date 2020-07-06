@@ -82,6 +82,7 @@
 			dataType: 'json',
 			success: function(res) {
 				if (res.status == true) {
+					// NAMPILIN DATA BEBAN BERDASARKAN JENIS YANG DIPILIH
 					for (i = 0; i < res.data.length; i++) {
 						$('#jenis_beban').append('<option class="bb" value="' + res.data[i].kode_akun + '">' + res.data[i].nama_akun + '</option>')
 					}

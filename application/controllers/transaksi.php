@@ -13,8 +13,8 @@ class transaksi extends MY_Controller
         $current = date('Y-m-d');
         $trans = $this->m_transaksi->getData('transaksi');
         $valid = true;
+        // KONDISI UNTUK STATUS ALAT BERAT DAN PEGAWAI PADA SAAT PENYEWAAN
         foreach ($trans as $row) {
-
 
             if (strtotime($current) < strtotime($row['tgl_berakhir'])) {
                 $valid = false;
@@ -35,8 +35,7 @@ class transaksi extends MY_Controller
                     ->update('alat_berat', ['status' => '1']);
             }
         }
-        // die;
-
+        // END KONDISI
 
         $pages = 'transaksi/penyewaanAlatBerat';
         $data = [
@@ -49,6 +48,7 @@ class transaksi extends MY_Controller
 
         $this->template->layout($pages, $data);
     }
+
     public function tambahPenyewaan()
     {
         $harga_sewa = intval(0);
@@ -88,6 +88,7 @@ class transaksi extends MY_Controller
                 $bensin = $this->input->post('bensin');
                 $harga_bensin = $this->input->post('harga_bensin');
 
+                // KONDISI PENGGUNAAN HARGA UMUM ATAU KHUSUS
                 if (format_angka($this->input->post('harga_khusus')) <= 0) {
                     $harga_umum  = format_angka($this->input->post('harga_umum'));
                     $harga_sewa = $harga_umum;
@@ -96,7 +97,10 @@ class transaksi extends MY_Controller
                     $harga_umum = $harga_khusus;
                     $harga_sewa = $harga_khusus;
                 }
+                // END KONDISI PENGGUNAAN HARGA UMUM ATAU KHUSUS
 
+
+                // KONDISI APABILA PEGAWAI DI PILIH ATAU TIDAK
                 $set_pajak = 0;
                 if ($this->input->post('kd_pegawai') != '') {
 
@@ -104,16 +108,13 @@ class transaksi extends MY_Controller
                     // $alber = $this->db->where('id', $this->input->post('id_alatberat'))->get('alat_berat')->row();
                     $pajak_pegawai = 0;
                     // if (!empty($pegawai->id !== 1)) {
-
+                    // KONDISI KENA PAJAK APABILA LEBIH DARI 7 HARI
                     if ($hari > 7) {
                         $set_pajak += ($harga_umum * 2 / 100) * $hari;
                     }
-
+                    // END KONDISI PAJAK
                     $subtotal = ($harga_sewa + $pegawai->biaya) * $hari + $set_pajak;
-                    // dd($pegawai->biaya);
-                    // die;
-                    // $subtotal = $subtotal + $set_pajak;
-                    // $potongan = ($pegawai->pajak / 100) * $pegawai->biaya;
+
                     $gaji  = $pegawai->biaya * $hari;
                     $pajak = 25;
                     $pajak_pegawai += $gaji * 25 / 100;
@@ -121,20 +122,25 @@ class transaksi extends MY_Controller
                     $this->db->where('id', $this->input->post('kd_pegawai'))
                         ->update('pegawai', ['status_sopir' => '1']);
                 } else {
+                    // KONDISI KENA PAJAK APABILA LEBIH DARI 7 HARI
                     if ($hari > 7) {
                         $set_pajak += ($harga_umum * 2 / 100) * $hari;
                     }
+                    // END KONDISI PAJAK
                     $subtotal = $harga_sewa  * $hari + $set_pajak;
                 }
+                // END KONDISI PEGAWAI
 
+                // KONDISI TAMBAHAN BENSIN
                 if ($bensin != '' || $bensin != 0 || $harga_bensin != '' || $harga_bensin != 0) {
                     $subtotal += $bensin * format_angka($harga_bensin);
                 }
-                // dd($subtotal);
-                // die;
+                // END BENSIN
+
                 // $nominal_pajak = $pajak_pegawai + $set_pajak;
                 $nominal_pajak = $set_pajak;
                 $DP = $subtotal - $this->input->post('DP');
+
                 if ($DP == 0) {
                     $status_pelunasan = 1;
                 } else {
@@ -142,7 +148,7 @@ class transaksi extends MY_Controller
                 }
 
                 $transaksi = $this->db->where('kd_penyewaan', $this->input->post('kd_penyewaan'))->get('transaksi')->row();
-
+                // INSERT PENYEWAAN KE TABEL TRANSAKSI
                 $transaksiPost = [
                     'alat_berat_id' => $this->input->post('id_alatberat'),
                     'kd_penyewaan' => $this->input->post('kd_penyewaan'),
@@ -158,34 +164,23 @@ class transaksi extends MY_Controller
                 ];
 
                 $saveTransaksi  = $this->db->insert('transaksi', $transaksiPost);
+                // END INSERT PENYEWAAN
                 $id = $this->db->insert_id();
+
+                // BUAT JURNAL PENYEWAAN
                 $pajak_dp = $DP * 2 / 100;
                 $this->m_laporan->insertJurnal('111', date('Y-m-d'), ($this->input->post('DP') - $pajak_dp), 'debit');
                 $this->m_laporan->insertJurnal('112', date('Y-m-d'), $DP, 'debit');
                 $this->m_laporan->insertJurnal('113', date('Y-m-d'), $pajak_dp, 'debit');
                 $this->m_laporan->insertJurnal('411', date('Y-m-d'), $subtotal, 'kredit');
+                // END JURNAL PENYEWAAN
 
-                // $id_biaya = $this->input->post('id_biaya');
-                // $biaya_operasional = $this->db->where_in('id', $id_biaya)->get('biaya_operasional')->result();
-
-                // $bensin = $this->input->post('bensin');
-                // $harga_bensin = $this->input->post('harga_bensin');
                 if ($saveTransaksi) {
                     $this->db->trans_start();
                     $totalBiaya = 0;
-                    // foreach ($biaya_operasional as $key => $value) {
-                    //     $totalBiaya += $biaya_operasional[$key]->harga;
 
-                    //     $postTransaksiDetail = [
-                    //         'transaksi_id' => $id,
-                    //         'biaya_operasional_id' => $value->id,
-                    //         'harga' => $value->harga,
-                    //         'total' => $totalBiaya,
-                    //     ];
-                    //     $this->db->insert('transaksi_detail', $postTransaksiDetail);
-                    // }
+                    // KONDISI TRANSAKSI TAMBAHAN LAIN LAIN
                     if ($bensin != '' || $bensin != 0 || $harga_bensin != '' || $harga_bensin != 0) {
-                        // $subtotal += ($bensin * $harga_bensin) * $hari;
                         $postTransaksiDetail = [
                             'id_transaksi' => $id,
                             'jumlah' => $bensin,
@@ -196,13 +191,17 @@ class transaksi extends MY_Controller
                         $upal = $this->db->where('id', $this->input->post('id_alatberat'))
                             ->update('alat_berat', ['status' => '1']);
                     }
+                    // END TAMBAHAN LAIN LAIN
 
-                    // var_dump($this->input->post('id_alatberat'));
-                    // die;
+                    // KONDISI TRANSAKSI GAJI ATAU PERSENAN PEGAWAI
                     if ($this->input->post('kd_pegawai') != '') {
                         $this->db->insert('daftar_pemasukan_pegawai', ['transaksi_id' => $id, 'nominal' => $gaji, 'persen' => $pajak]);
                     }
+                    // END KONDISI
+
+                    // INSERT PAJAK KEDALAM TABEL DAFTAR PAJAK
                     $this->db->insert('daftar_pajak', ['nominal_pajak' => $nominal_pajak, 'transaksi_id' => $id]);
+                    // END PAJAK
                     $this->db->trans_complete();
                     redirect('transaksi/penyewaan_alber');
                 }
@@ -354,9 +353,8 @@ class transaksi extends MY_Controller
     public function getJenisBeban()
     {
         $jenis = $this->input->post('jenis');
-        // var_dump($jenis);
-        // die;
-        // $query = '';
+
+        // KONDISI PENCARIAN BEBAN BERDASARKAN JENIS PENGELUARAN
         if ($jenis == 'Alat berat') {
             $this->db->where('kode_akun', '513');
             $this->db->or_where('kode_akun', '514');
@@ -369,6 +367,7 @@ class transaksi extends MY_Controller
             $this->db->or_where('kode_akun', '517');
         }
         $this->db->select('kode_akun, nama_akun');
+        // END KONDISI
         $query = $this->db->get('coa')->result_array();
 
         if ($query != '') {

@@ -371,8 +371,8 @@
             }
             let subtotal = harga_setelah_pajak + tambahan + sopir;
 
-            // console.log(subtotal);
 
+            // MENENTUKAN 50 PERSEN DARI TOTAL
             let min_bayar = subtotal * 50 / 100;
 
             $('#jumlah_hari').html(diffDays + " hari");
@@ -385,6 +385,8 @@
             $('#nama_supir').html(supir);
             $('#biaya_supir').html(format_rp(sopir));
             $('#total').html(format_rp(subtotal));
+
+            // MENAMPILKAN NOMINAL PEMBAYARAN DP
             $('#jumlah_bayarDP').val(format_rp(min_bayar));
             $('#jumlah_bayarDP').attr('min', min_bayar);
             $('#jumlah_bayarDP').attr('max', subtotal);

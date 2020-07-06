@@ -37,7 +37,7 @@
                                 $submenu = $this->db->query($querySubmenu)->result_array();
                                 if ($m['id'] == '2') : ?>
                                     <li class="active">
-                                        <a href="<?= base_url('dashboard') ?>" aria-expanded="true"><i class="ti-dashboard"></i><span>dashboard</span></a>
+                                        <a href="<?= base_url('dashboard') ?>" aria-expanded="true"><i class="fa fa-hand-lizard-o"></i><span>dashboard</span></a>
                                     </li>
                                 <?php elseif ($m['id'] == '5') : ?>
                                     <li>
