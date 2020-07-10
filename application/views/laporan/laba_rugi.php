@@ -114,17 +114,22 @@
                             <th></th>
                             <th></th>
                         </tr>
-                        <tr>
-                            <td class="pl-5 text-left">Pendapatan Lain-lain</td>
-                            <td class="text-right"><?= format_rp($pendapatan_dll) ?></td>
-                            <td></td>
-                        </tr>
+                        <?php $total_tambahan = 0;
+                        foreach ($pendapatan_dll as $row) :
+                            $total_tambahan += $row['total'];
+                        ?>
+                            <tr>
+                                <td class="pl-5 text-left"><?= $row['jenis_tambahan'] ?></td>
+                                <td class="text-right"><?= format_rp($row['total']) ?></td>
+                                <td></td>
+                            </tr>
+                        <?php endforeach; ?>
                         <tr>
                             <th class="text-left">Jumlah Lain-lain</th>
                             <th></th>
-                            <th class="text-right"><?= format_rp($pendapatan_dll) ?></th>
+                            <th class="text-right"><?= format_rp($total_tambahan) ?></th>
                         </tr>
-                        <?php $laba_sebelum_pajak = $jumlah_laba_op + $pendapatan_dll ?>
+                        <?php $laba_sebelum_pajak = $jumlah_laba_op + $total_tambahan ?>
                         <tr>
                             <th class="text-left">Laba sebelum pajak penghasilan</th>
                             <th></th>

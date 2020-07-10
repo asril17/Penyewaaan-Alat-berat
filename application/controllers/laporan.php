@@ -102,7 +102,7 @@ class laporan extends CI_controller
         $data['coa']         = $this->m_laporan->get_akun();
         $data['akun']         = $this->m_laporan->get_dataAkun($akun);
         $data['buku_besar'] = $this->m_laporan->get_buku_besar($akun, $bulan, $tahun);
-        // var_dump($data['akun']);
+        // dd($data['akun']);
         // die;
         $data['menu'] = 'ledger';
         $this->template->layout($pages, $data);
@@ -155,14 +155,21 @@ class laporan extends CI_controller
         // die;
 
 
-        $pendapatan_dll = $this->db->select('SUM(daftar_pemasukan_pegawai.nominal) AS total_pemasukan, SUM(transaksi_detail_tambahan.total) AS total_bensin')
-            ->join('daftar_pemasukan_pegawai', 'daftar_pemasukan_pegawai.transaksi_id = transaksi.id')
+        // $pendapatan_dll = $this->db->select('SUM(daftar_pemasukan_pegawai.nominal) AS total_pemasukan, SUM(transaksi_detail_tambahan.total) AS total_bensin')
+        //     ->join('daftar_pemasukan_pegawai', 'daftar_pemasukan_pegawai.transaksi_id = transaksi.id')
+        //     ->join('transaksi_detail_tambahan', 'transaksi_detail_tambahan.id_transaksi = transaksi.id')
+        //     ->where('MONTH(tgl_transaksi)', $bulan)
+        //     ->where('YEAR(tgl_transaksi)', $tahun)
+        //     ->get('transaksi')->row_array();
+
+        $pendapatan_dll = $this->db->select('jenis_tambahan, SUM(total) as total')
             ->join('transaksi_detail_tambahan', 'transaksi_detail_tambahan.id_transaksi = transaksi.id')
             ->where('MONTH(tgl_transaksi)', $bulan)
             ->where('YEAR(tgl_transaksi)', $tahun)
-            ->get('transaksi')->row_array();
-        $data['pendapatan_dll'] = $pendapatan_dll['total_pemasukan'] + $pendapatan_dll['total_bensin'];
-        // dd($pendapatan_dll['total_bensin']);
+            ->group_by('transaksi_detail_tambahan.jenis_tambahan')
+            ->get('transaksi')->result_array();
+        $data['pendapatan_dll'] = $pendapatan_dll;
+        // dd($pendapatan_dll);
         // die;
 
         $data['pajak_sewa'] = $this->db->select('SUM(daftar_pajak.nominal_pajak) as pajak')

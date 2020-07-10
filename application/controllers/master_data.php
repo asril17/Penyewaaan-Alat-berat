@@ -23,7 +23,7 @@
             $this->form_validation->set_rules('header_akun', 'Header Akun', 'required|numeric', [
                 'required' => 'kolom %s tidak boleh kosong'
             ]);
-            $this->form_validation->set_rules('kd_akun', 'Kode Akun', 'required|numeric|min_length[5]|is_unique[coa.kode_akun]', [
+            $this->form_validation->set_rules('kd_akun', 'Kode Akun', 'required|numeric|min_length[3]|is_unique[coa.kode_akun]', [
                 'required' => 'kolom %s tidak boleh kosong',
                 'numeric' => 'kolom %s harus angka',
                 'is_unique' => 'Nomor akun telah tersedia',

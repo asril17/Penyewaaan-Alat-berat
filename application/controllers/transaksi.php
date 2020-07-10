@@ -102,6 +102,7 @@ class transaksi extends MY_Controller
 
                 // KONDISI APABILA PEGAWAI DI PILIH ATAU TIDAK
                 $set_pajak = 0;
+                $gaji = 0;
                 if ($this->input->post('kd_pegawai') != '') {
 
                     $pegawai = $this->db->where('id', $this->input->post('kd_pegawai'))->get('pegawai')->row();
@@ -113,9 +114,10 @@ class transaksi extends MY_Controller
                         $set_pajak += ($harga_umum * 2 / 100) * $hari;
                     }
                     // END KONDISI PAJAK
-                    $subtotal = ($harga_sewa + $pegawai->biaya) * $hari + $set_pajak;
+                    // $subtotal = ($harga_sewa + $pegawai->biaya) * $hari + $set_pajak;
+                    $subtotal = ($harga_sewa * $hari) + $set_pajak;
 
-                    $gaji  = $pegawai->biaya * $hari;
+                    $gaji  += $pegawai->biaya * $hari;
                     $pajak = 25;
                     $pajak_pegawai += $gaji * 25 / 100;
 
@@ -132,8 +134,10 @@ class transaksi extends MY_Controller
                 // END KONDISI PEGAWAI
 
                 // KONDISI TAMBAHAN BENSIN
+                $total_bensin = 0;
                 if ($bensin != '' || $bensin != 0 || $harga_bensin != '' || $harga_bensin != 0) {
-                    $subtotal += $bensin * format_angka($harga_bensin);
+                    // $subtotal += $bensin * format_angka($harga_bensin);
+                    $total_bensin += $bensin * format_angka($harga_bensin);
                 }
                 // END BENSIN
 
@@ -180,17 +184,27 @@ class transaksi extends MY_Controller
                     $totalBiaya = 0;
 
                     // KONDISI TRANSAKSI TAMBAHAN LAIN LAIN
-                    if ($bensin != '' || $bensin != 0 || $harga_bensin != '' || $harga_bensin != 0) {
-                        $postTransaksiDetail = [
-                            'id_transaksi' => $id,
-                            'jumlah' => $bensin,
-                            'harga' => format_angka($harga_bensin),
-                            'total' => format_angka($harga_bensin) * $bensin,
-                        ];
-                        $this->db->insert('transaksi_detail_tambahan', $postTransaksiDetail);
-                        $upal = $this->db->where('id', $this->input->post('id_alatberat'))
-                            ->update('alat_berat', ['status' => '1']);
-                    }
+                    // if ($bensin != '' || $bensin != 0 || $harga_bensin != '' || $harga_bensin != 0) {
+                    $postdetailTambahanBensin = [
+                        'id_transaksi' => $id,
+                        'jenis_tambahan' => 'Bensin',
+                        'total' => $total_bensin,
+                    ];
+                    $this->db->insert('transaksi_detail_tambahan', $postdetailTambahanBensin);
+
+                    $postdetailTambahanPegawai = [
+                        'id_transaksi' => $id,
+                        'jenis_tambahan' => 'Sopir',
+                        'total' => $gaji,
+                    ];
+                    $this->db->insert('transaksi_detail_tambahan', $postdetailTambahanPegawai);
+                    $total_tambahan = $total_bensin + $gaji;
+                    $this->m_laporan->insertJurnal('111', date('Y-m-d'), $total_tambahan, 'debit');
+                    $this->m_laporan->insertJurnal('412', date('Y-m-d'), $total_tambahan, 'kredit');
+
+                    $upal = $this->db->where('id', $this->input->post('id_alatberat'))
+                        ->update('alat_berat', ['status' => '1']);
+                    // }
                     // END TAMBAHAN LAIN LAIN
 
                     // KONDISI TRANSAKSI GAJI ATAU PERSENAN PEGAWAI

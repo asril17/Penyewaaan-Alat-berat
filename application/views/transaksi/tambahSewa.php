@@ -369,7 +369,8 @@
             if (biaya != '' || biaya != 0) {
                 sopir += Number(format_angka(biaya)) * Number(diffDays);
             }
-            let subtotal = harga_setelah_pajak + tambahan + sopir;
+            // let subtotal = harga_setelah_pajak + tambahan + sopir;
+            let subtotal = harga_setelah_pajak;
 
 
             // MENENTUKAN 50 PERSEN DARI TOTAL
